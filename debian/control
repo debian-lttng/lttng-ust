@@ -3,9 +3,8 @@ Priority: extra
 Maintainer: Jon Bernard <jbernard@debian.org>
 Uploaders: Michael Jeanson <mjeanson@ubuntu.com>
 Build-Depends: debhelper (>= 9), dh-autoreconf, liburcu-dev (>= 0.8.4),
-  uuid-dev, texinfo, python3:any, dh-python, javahelper,
-  default-jdk | default-jdk-headless,
-  liblog4j1.2-java, python3-all-dev
+  uuid-dev, texinfo, python3, dh-python, javahelper,
+  default-jdk | default-jdk-headless, liblog4j1.2-java
 Standards-Version: 3.9.8
 Section: libs
 Vcs-Git: https://anonscm.debian.org/git/collab-maint/ust.git
