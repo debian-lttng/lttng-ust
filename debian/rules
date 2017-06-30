@@ -8,9 +8,7 @@ export CLASSPATH = /usr/share/java/log4j-1.2.jar
 
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
-# The option below causes the shared objects to contain a TEXTREL section,
-# triggering a non-PIC lintian error.
-#export DEB_BUILD_MAINT_OPTIONS := hardening=+all
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 %:
 	dh $@ --with autoreconf,javahelper,python3
