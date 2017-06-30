@@ -45,6 +45,7 @@ liblttng-ust-ctl.so.2 liblttng-ust-ctl2 #MINVER#
  lttng_crash_magic_xor@Base 2.7.0
  lttng_fixup_ringbuffer_tls@Base 2.5.0
  lttng_get_cpu@Base 2.7.0
+ lttng_getenv@Base 2.9.1
  lttng_ring_buffer_client_discard_exit@Base 2.5.0
  lttng_ring_buffer_client_discard_init@Base 2.5.0
  lttng_ring_buffer_client_discard_rt_exit@Base 2.5.0
@@ -73,6 +74,7 @@ liblttng-ust-ctl.so.2 liblttng-ust-ctl2 #MINVER#
  lttng_ust_fixup_fd_tracker_tls@Base 2.9.0
  lttng_ust_getcpu_init@Base 2.7.0
  lttng_ust_getcpu_override@Base 2.7.0
+ lttng_ust_getenv_init@Base 2.9.1
  lttng_ust_init_fd_tracker@Base 2.9.0
  lttng_ust_lock_fd_tracker@Base 2.9.0
  lttng_ust_safe_close_fd@Base 2.9.0
