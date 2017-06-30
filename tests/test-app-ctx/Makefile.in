@@ -186,6 +186,7 @@ CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
+AM_CFLAGS = @AM_CFLAGS@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
 ASCIIDOC = @ASCIIDOC@
@@ -229,6 +230,7 @@ JAVACFLAGS = @JAVACFLAGS@
 JAVAFLAGS = @JAVAFLAGS@
 JAVAH = @JAVAH@
 JAVAPREFIX = @JAVAPREFIX@
+JNI_CPPFLAGS = @JNI_CPPFLAGS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -342,7 +344,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
 hello_SOURCES = hello.c tp.c ust_tests_hello.h
 hello_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la \
 	$(am__append_1) $(am__append_2)
-hello_CFLAGS = -Werror=old-style-definition
+hello_CFLAGS = -Werror=old-style-definition $(AM_CFLAGS)
 all: all-am
 
 .SUFFIXES:

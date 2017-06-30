@@ -2,12 +2,12 @@
 .\"     Title: tracef
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
-.\"      Date: 11/29/2016
+.\"      Date: 06/12/2017
 .\"    Manual: LTTng Manual
-.\"    Source: LTTng 2.9.0-
+.\"    Source: LTTng 2.9.1
 .\"  Language: English
 .\"
-.TH "TRACEF" "3" "11/29/2016" "LTTng 2\&.9\&.0\-" "LTTng Manual"
+.TH "TRACEF" "3" "06/12/2017" "LTTng 2\&.9\&.1" "LTTng Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -85,7 +85,7 @@ This C source file, saved as \fBapp.c\fR, can be compiled into a program like th
 .RS 4
 .\}
 .nf
-cc \-o app app\&.c \-llttng\-ust
+$ cc \-o app app\&.c \-llttng\-ust
 .fi
 .if n \{\
 .RE
@@ -97,9 +97,9 @@ You can create an LTTng tracing session, enable the \fBtracef()\fR events, and s
 .RS 4
 .\}
 .nf
-lttng create my\-session
-lttng enable\-event \-\-userspace \*(Aqlttng_ust_tracef:*\*(Aq
-lttng start
+$ lttng create my\-session
+$ lttng enable\-event \-\-userspace \*(Aqlttng_ust_tracef:*\*(Aq
+$ lttng start
 .fi
 .if n \{\
 .RE
@@ -111,7 +111,7 @@ Next, start the program to be traced:
 .RS 4
 .\}
 .nf
-\&./app
+$ \&./app
 .fi
 .if n \{\
 .RE
@@ -123,8 +123,8 @@ Finally, stop the tracing session, and inspect the recorded events:
 .RS 4
 .\}
 .nf
-lttng stop
-lttng view
+$ lttng stop
+$ lttng view
 .fi
 .if n \{\
 .RE

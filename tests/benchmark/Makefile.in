@@ -194,6 +194,7 @@ CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
+AM_CFLAGS = @AM_CFLAGS@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
 ASCIIDOC = @ASCIIDOC@
@@ -237,6 +238,7 @@ JAVACFLAGS = @JAVACFLAGS@
 JAVAFLAGS = @JAVAFLAGS@
 JAVAH = @JAVAH@
 JAVAPREFIX = @JAVAPREFIX@
+JNI_CPPFLAGS = @JNI_CPPFLAGS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -353,7 +355,7 @@ bench1_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la \
 bench2_SOURCES = bench.c tp.c ust_tests_benchmark.h
 bench2_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la \
 	$(am__append_2) $(am__append_4)
-bench2_CFLAGS = -DTRACING
+bench2_CFLAGS = -DTRACING $(AM_CFLAGS)
 dist_noinst_SCRIPTS = test_benchmark ptime
 extra_DIST = README
 all: all-am
