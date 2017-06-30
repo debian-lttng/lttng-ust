@@ -185,6 +185,7 @@ CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
+AM_CFLAGS = @AM_CFLAGS@ -fno-strict-aliasing
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
 ASCIIDOC = @ASCIIDOC@
@@ -228,6 +229,7 @@ JAVACFLAGS = @JAVACFLAGS@
 JAVAFLAGS = @JAVAFLAGS@
 JAVAH = @JAVAH@
 JAVAPREFIX = @JAVAPREFIX@
+JNI_CPPFLAGS = @JNI_CPPFLAGS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -338,7 +340,6 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include
-AM_CFLAGS = -fno-strict-aliasing
 noinst_LTLIBRARIES = libringbuffer.la
 libringbuffer_la_SOURCES = \
 	smp.h smp.c getcpu.h \
@@ -354,7 +355,7 @@ libringbuffer_la_LIBADD = \
 	-lpthread \
 	-lrt
 
-libringbuffer_la_CFLAGS = -DUST_COMPONENT="libringbuffer" -fno-strict-aliasing
+libringbuffer_la_CFLAGS = -DUST_COMPONENT="libringbuffer" $(AM_CFLAGS)
 all: all-am
 
 .SUFFIXES:

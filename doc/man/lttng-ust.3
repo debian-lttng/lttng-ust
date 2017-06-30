@@ -2,12 +2,12 @@
 .\"     Title: lttng-ust
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
-.\"      Date: 11/29/2016
+.\"      Date: 06/12/2017
 .\"    Manual: LTTng Manual
-.\"    Source: LTTng 2.9.0-
+.\"    Source: LTTng 2.9.1
 .\"  Language: English
 .\"
-.TH "LTTNG\-UST" "3" "11/29/2016" "LTTng 2\&.9\&.0\-" "LTTng Manual"
+.TH "LTTNG\-UST" "3" "06/12/2017" "LTTng 2\&.9\&.1" "LTTng Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -876,7 +876,7 @@ Create the tracepoint provider object file:
 .RS 4
 .\}
 .nf
-cc \-c \-I\&. tp\&.c
+$ cc \-c \-I\&. tp\&.c
 .fi
 .if n \{\
 .RE
@@ -905,7 +905,7 @@ At this point, you \fIcan\fR archive this tracepoint provider object file, possi
 .RS 4
 .\}
 .nf
-ar rc tp\&.a tp\&.o
+$ ar rc tp\&.a tp\&.o
 .fi
 .if n \{\
 .RE
@@ -919,7 +919,7 @@ Then, link your application with this object file (or with the static library co
 .RS 4
 .\}
 .nf
-cc \-o app tp\&.o app\&.o \-llttng\-ust \-ldl
+$ cc \-o app tp\&.o app\&.o \-llttng\-ust \-ldl
 .fi
 .if n \{\
 .RE
@@ -980,7 +980,7 @@ The tracepoint provider object file used to create the shared library is built l
 .RS 4
 .\}
 .nf
-cc \-c \-fpic \-I\&. tp\&.c
+$ cc \-c \-fpic \-I\&. tp\&.c
 .fi
 .if n \{\
 .RE
@@ -992,7 +992,7 @@ It is then linked as a shared library like this:
 .RS 4
 .\}
 .nf
-cc \-shared \-Wl,\-\-no\-as\-needed \-o tp\&.so tp\&.o \-llttng\-ust
+$ cc \-shared \-Wl,\-\-no\-as\-needed \-o tp\&.so tp\&.o \-llttng\-ust
 .fi
 .if n \{\
 .RE
@@ -1004,7 +1004,7 @@ This tracepoint provider shared object isn\(cqt linked with the user application
 .RS 4
 .\}
 .nf
-cc \-o app app\&.o tp\-define\&.o \-ldl
+$ cc \-o app app\&.o tp\-define\&.o \-ldl
 .fi
 .if n \{\
 .RE
@@ -1542,9 +1542,9 @@ You can compile the source files and link them together statically like this:
 .RS 4
 .\}
 .nf
-cc \-c \-I\&. tp\&.c
-cc \-c app\&.c
-cc \-o app tp\&.o app\&.o \-llttng\-ust \-ldl
+$ cc \-c \-I\&. tp\&.c
+$ cc \-c app\&.c
+$ cc \-o app tp\&.o app\&.o \-llttng\-ust \-ldl
 .fi
 .if n \{\
 .RE
@@ -1556,9 +1556,9 @@ Using the \fBlttng\fR(1) tool, create an LTTng tracing session, enable all the e
 .RS 4
 .\}
 .nf
-lttng create my\-session
-lttng enable\-event \-\-userspace \*(Aqmy_provider:*\*(Aq
-lttng start
+$ lttng create my\-session
+$ lttng enable\-event \-\-userspace \*(Aqmy_provider:*\*(Aq
+$ lttng start
 .fi
 .if n \{\
 .RE
@@ -1570,8 +1570,8 @@ You may also enable specific events:
 .RS 4
 .\}
 .nf
-lttng enable\-event \-\-userspace my_provider:big_event
-lttng enable\-event \-\-userspace my_provider:event_instance2
+$ lttng enable\-event \-\-userspace my_provider:big_event
+$ lttng enable\-event \-\-userspace my_provider:event_instance2
 .fi
 .if n \{\
 .RE
@@ -1583,7 +1583,7 @@ Run the application:
 .RS 4
 .\}
 .nf
-\&./app some arguments
+$ \&./app some arguments
 .fi
 .if n \{\
 .RE
@@ -1595,8 +1595,8 @@ Stop the current tracing session and inspect the recorded events:
 .RS 4
 .\}
 .nf
-lttng stop
-lttng view
+$ lttng stop
+$ lttng view
 .fi
 .if n \{\
 .RE

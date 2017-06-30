@@ -2,12 +2,12 @@
 .\"     Title: lttng-ust-dl
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
-.\"      Date: 11/29/2016
+.\"      Date: 06/12/2017
 .\"    Manual: LTTng Manual
-.\"    Source: LTTng 2.9.0-
+.\"    Source: LTTng 2.9.1
 .\"  Language: English
 .\"
-.TH "LTTNG\-UST\-DL" "3" "11/29/2016" "LTTng 2\&.9\&.0\-" "LTTng Manual"
+.TH "LTTNG\-UST\-DL" "3" "06/12/2017" "LTTng 2\&.9\&.1" "LTTng Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -36,13 +36,13 @@ Compile your application with compiler option \fB-finstrument-functions\fR\&.
 Launch your application by preloading \fBliblttng-ust-cyg-profile-fast.so\fR for fast function tracing:
 .sp
 .nf
-\fBLD_PRELOAD=liblttng\-ust\-cyg\-profile\-fast\&.so\fR my\-app
+$ \fBLD_PRELOAD=liblttng\-ust\-cyg\-profile\-fast\&.so\fR my\-app
 .fi
 .sp
 Launch your application by preloading \fBliblttng-ust-cyg-profile.so\fR for slower, more verbose function tracing:
 .sp
 .nf
-\fBLD_PRELOAD=liblttng\-ust\-cyg\-profile\&.so\fR my\-app
+$ \fBLD_PRELOAD=liblttng\-ust\-cyg\-profile\&.so\fR my\-app
 .fi
 .SH "DESCRIPTION"
 .sp

@@ -4,7 +4,7 @@ dnl Process this file with autoconf to produce a configure script.
 dnl Version infos
 m4_define([V_MAJOR], [2])
 m4_define([V_MINOR], [9])
-m4_define([V_PATCH], [0])
+m4_define([V_PATCH], [1])
 dnl m4_define([V_EXTRA], [])
 m4_define([V_STRING], [V_MAJOR.V_MINOR.V_PATCH])
 m4_ifdef([V_EXTRA], [m4_append([V_STRING], [-V_EXTRA])])
@@ -125,14 +125,22 @@ AS_IF([test "x${ax_cv_sys_weak_alias}" = "xno"], [
 # Checks for libraries.
 AC_CHECK_LIB([dl], [dlopen], [
 	have_libdl=yes
+	libdl_name=dl
 ], [
 	#libdl not found, check for dlopen in libc.
 	AC_CHECK_LIB([c], [dlopen], [
 		have_libc_dl=yes
+		libdl_name=c
 	], [
 		AC_MSG_ERROR([Cannot find dlopen in libdl nor libc. Use [LDFLAGS]=-Ldir to specify their location.])
 	])
 ])
+
+# Check if libdl has dlmopen support.
+AH_TEMPLATE([HAVE_DLMOPEN], ["Define to 1 if dlmopen is available."])
+AC_CHECK_LIB([$libdl_name], [dlmopen],
+	[AC_DEFINE([HAVE_DLMOPEN], [1])]
+)
 
 AM_CONDITIONAL([LTTNG_UST_BUILD_WITH_LIBDL], [test "x$have_libdl" = "xyes"])
 AM_CONDITIONAL([LTTNG_UST_BUILD_WITH_LIBC_DL], [test "x$have_libc_dl" = "xyes"])
@@ -178,8 +186,6 @@ dnl AC_CHECK_TYPES([ptrdiff_t])
 # Checks for library functions.
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([gettimeofday munmap socket strerror strtol sched_getcpu sysconf])
-
-CFLAGS="-Wall $CFLAGS"
 
 # URCU
 
@@ -298,10 +304,13 @@ AS_IF([test "x$jni_interface" = "xyes" || test "x$java_agent_jul" = "xyes" || te
 	AX_JNI_INCLUDE_DIR
 	for JNI_INCLUDE_DIR in $JNI_INCLUDE_DIRS
 	do
-		CPPFLAGS="$CPPFLAGS -I$JNI_INCLUDE_DIR"
+		JNI_CPPFLAGS="$JNI_CPPFLAGS -I$JNI_INCLUDE_DIR"
 	done
 
+	saved_CPPFLAGS="$CPPFLAGS"
+	CPPFLAGS="$CPPFLAGS $JNI_CPPFLAGS"
 	AX_PROG_JAVAH
+	CPPFLAGS="$saved_CPPFLAGS"
 ])
 
 AS_IF([test "x$java_agent_log4j" = "xyes"], [
@@ -435,6 +444,10 @@ AC_DEFUN([_AC_DEFINE_AND_SUBST], [
 ])
 
 _AC_DEFINE_AND_SUBST([LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS], [3000])
+
+AM_CFLAGS="-Wall"
+AC_SUBST(AM_CFLAGS)
+AC_SUBST(JNI_CPPFLAGS)
 
 AC_CONFIG_FILES([
 	Makefile

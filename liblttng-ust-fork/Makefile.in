@@ -215,6 +215,7 @@ CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
+AM_CFLAGS = @AM_CFLAGS@ -fno-strict-aliasing
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
 ASCIIDOC = @ASCIIDOC@
@@ -258,6 +259,7 @@ JAVACFLAGS = @JAVACFLAGS@
 JAVAFLAGS = @JAVAFLAGS@
 JAVAH = @JAVAH@
 JAVAPREFIX = @JAVAPREFIX@
+JNI_CPPFLAGS = @JNI_CPPFLAGS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -368,13 +370,12 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = -I$(top_srcdir)/include
-AM_CFLAGS = -fno-strict-aliasing
 lib_LTLIBRARIES = liblttng-ust-fork.la
 liblttng_ust_fork_la_SOURCES = ustfork.c
 liblttng_ust_fork_la_LIBADD =  \
 	$(top_builddir)/liblttng-ust/liblttng-ust.la $(am__append_1) \
 	$(am__append_2)
-liblttng_ust_fork_la_CFLAGS = -DUST_COMPONENT=liblttng-ust-fork -fno-strict-aliasing
+liblttng_ust_fork_la_CFLAGS = -DUST_COMPONENT=liblttng-ust-fork $(AM_CFLAGS)
 all: all-am
 
 .SUFFIXES:

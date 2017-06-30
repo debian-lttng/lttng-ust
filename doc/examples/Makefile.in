@@ -201,6 +201,7 @@ am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
+AM_CFLAGS = @AM_CFLAGS@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
 ASCIIDOC = @ASCIIDOC@
@@ -244,6 +245,7 @@ JAVACFLAGS = @JAVACFLAGS@
 JAVAFLAGS = @JAVAFLAGS@
 JAVAH = @JAVAH@
 JAVAPREFIX = @JAVAPREFIX@
+JNI_CPPFLAGS = @JNI_CPPFLAGS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -985,30 +987,32 @@ uninstall-am: uninstall-dist_doc_examplesDATA \
 @NO_SHARED_FALSE@		rel_build_subdir="../"; \
 @NO_SHARED_FALSE@	fi; \
 @NO_SHARED_FALSE@	for subdir in $(SUBDIRS_PROXY); do \
-@NO_SHARED_FALSE@		(cd $$subdir && $(MAKE) AM_CC="$(CC)" AM_CPPFLAGS="$(CPPFLAGS) -I$$rel_src_subdir$(top_srcdir)/include/ -I$$rel_build_subdir$(top_builddir)/include/" AM_CFLAGS='$(CFLAGS)' AM_LDFLAGS='$(LDFLAGS) -L../../../liblttng-ust/.libs -Wl,-rpath="$(PWD)/../../liblttng-ust/.libs/" -Wl,-rpath-link="$(PWD)/../../liblttng-ust/.libs/"' LTTNG_GEN_TP_PATH="../../../tools/" $(AM_MAKEFLAGS) all && cd ..) || exit 1; \
+@NO_SHARED_FALSE@		(cd $$subdir && $(MAKE) CC="$(CC)" CPPFLAGS="$(CPPFLAGS)" AM_CPPFLAGS="$(AM_CPPFLAGS) -I$$rel_src_subdir$(top_srcdir)/include/ -I$$rel_build_subdir$(top_builddir)/include/" CFLAGS='$(CFLAGS)' AM_CFLAGS='$(AM_CFLAGS)' LDFLAGS="$(LDFLAGS)" AM_LDFLAGS='$(AM_LDFLAGS) -L../../../liblttng-ust/.libs -Wl,-rpath="$(PWD)/../../liblttng-ust/.libs/" -Wl,-rpath-link="$(PWD)/../../liblttng-ust/.libs/"' LTTNG_GEN_TP_PATH="../../../tools/" $(AM_MAKEFLAGS) all && cd ..) || exit 1; \
 @NO_SHARED_FALSE@	done; \
 @NO_SHARED_FALSE@	if [ x"$(SUBDIRS_JUL)" != x"" ]; then \
 @NO_SHARED_FALSE@		for subdir in $(SUBDIRS_JUL); do \
-@NO_SHARED_FALSE@			(cd $(SUBDIRS_JUL) && $(MAKE) JAVA_CLASSPATH_OVERRIDE_JUL="../../../liblttng-ust-java-agent/java/lttng-ust-agent-jul" JAVA_CLASSPATH_OVERRIDE_COMMON="../../../liblttng-ust-java-agent/java/lttng-ust-agent-common" $(AM_MAKEFLAGS) all && cd ..) || exit 1; \
+@NO_SHARED_FALSE@			(cd $$subdir && $(MAKE) JAVA_CLASSPATH_OVERRIDE_JUL="../../../liblttng-ust-java-agent/java/lttng-ust-agent-jul" JAVA_CLASSPATH_OVERRIDE_COMMON="../../../liblttng-ust-java-agent/java/lttng-ust-agent-common" $(AM_MAKEFLAGS) all && cd ..) || exit 1; \
 @NO_SHARED_FALSE@		done; \
 @NO_SHARED_FALSE@	fi; \
 @NO_SHARED_FALSE@	if [ x"$(SUBDIRS_LOG4J)" != x"" ]; then \
 @NO_SHARED_FALSE@		for subdir in $(SUBDIRS_LOG4J); do \
-@NO_SHARED_FALSE@			(cd $(SUBDIRS_LOG4J) && $(MAKE) JAVA_CLASSPATH_OVERRIDE_LOG4J="../../../liblttng-ust-java-agent/java/lttng-ust-agent-log4j" JAVA_CLASSPATH_OVERRIDE_COMMON="../../../liblttng-ust-java-agent/java/lttng-ust-agent-common" $(AM_MAKEFLAGS) all && cd ..) || exit 1; \
+@NO_SHARED_FALSE@			(cd $$subdir && $(MAKE) JAVA_CLASSPATH_OVERRIDE_LOG4J="../../../liblttng-ust-java-agent/java/lttng-ust-agent-log4j" JAVA_CLASSPATH_OVERRIDE_COMMON="../../../liblttng-ust-java-agent/java/lttng-ust-agent-common" $(AM_MAKEFLAGS) all && cd ..) || exit 1; \
 @NO_SHARED_FALSE@		done; \
-@NO_SHARED_FALSE@	fi;
+@NO_SHARED_FALSE@	fi; \
 @NO_SHARED_FALSE@	if [ x"$(SUBDIRS_CMAKE)" != x"" ]; then \
 @NO_SHARED_FALSE@		for subdir in $(SUBDIRS_CMAKE); do \
 @NO_SHARED_FALSE@			( \
-@NO_SHARED_FALSE@				cd $(SUBDIRS_CMAKE) && \
+@NO_SHARED_FALSE@				cd $$subdir && \
 @NO_SHARED_FALSE@				$(MKDIR_P) build && \
 @NO_SHARED_FALSE@				cd build && \
+@NO_SHARED_FALSE@				CC="$(CC)" \
+@NO_SHARED_FALSE@				CXX="$(CXX)" \
 @NO_SHARED_FALSE@				cmake \
 @NO_SHARED_FALSE@				-DCMAKE_INCLUDE_PATH="$(abs_top_srcdir)/include;$(abs_top_builddir)/include" \
 @NO_SHARED_FALSE@				-DCMAKE_LIBRARY_PATH="$(abs_top_builddir)/liblttng-ust/.libs" \
-@NO_SHARED_FALSE@				-DCMAKE_C_FLAGS="$(CFLAGS) $(CPPFLAGS)" \
-@NO_SHARED_FALSE@				-DCMAKE_CXX_FLAGS="$(CXXFLAGS) $(CPPFLAGS)" \
-@NO_SHARED_FALSE@				-DCMAKE_EXE_LINKER_FLAGS="$(LDFLAGS)" \
+@NO_SHARED_FALSE@				-DCMAKE_C_FLAGS="$(AM_CFLAGS) $(AM_CPPFLAGS) $(CPPFLAGS) $(CFLAGS)" \
+@NO_SHARED_FALSE@				-DCMAKE_CXX_FLAGS="$(AM_CXXFLAGS) $(AM_CPPFLAGS) $(CXXFLAGS) $(CPPFLAGS)" \
+@NO_SHARED_FALSE@				-DCMAKE_EXE_LINKER_FLAGS="$(AM_LDFLAGS) $(LDFLAGS)" \
 @NO_SHARED_FALSE@				.. && \
 @NO_SHARED_FALSE@				$(MAKE) && \
 @NO_SHARED_FALSE@				cd .. \

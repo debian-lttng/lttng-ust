@@ -174,7 +174,7 @@ am__v_lt_0 = --silent
 am__v_lt_1 = 
 liblttng_ust_support_la_DEPENDENCIES =  \
 	$(top_builddir)/libringbuffer/libringbuffer.la
-am_liblttng_ust_support_la_OBJECTS = ust-core.lo \
+am_liblttng_ust_support_la_OBJECTS = ust-core.lo getenv.lo \
 	lttng-ust-dynamic-type.lo lttng-ring-buffer-client-discard.lo \
 	lttng-ring-buffer-client-discard-rt.lo \
 	lttng-ring-buffer-client-overwrite.lo \
@@ -274,6 +274,7 @@ CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
+AM_CFLAGS = @AM_CFLAGS@ -fno-strict-aliasing
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
 ASCIIDOC = @ASCIIDOC@
@@ -317,6 +318,7 @@ JAVACFLAGS = @JAVACFLAGS@
 JAVAFLAGS = @JAVAFLAGS@
 JAVAH = @JAVAH@
 JAVAPREFIX = @JAVAPREFIX@
+JNI_CPPFLAGS = @JNI_CPPFLAGS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -427,7 +429,6 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include
-AM_CFLAGS = -fno-strict-aliasing
 noinst_LTLIBRARIES = liblttng-ust-runtime.la liblttng-ust-support.la
 lib_LTLIBRARIES = liblttng-ust-tracepoint.la liblttng-ust.la
 liblttng_ust_tracepoint_la_SOURCES = \
@@ -444,7 +445,7 @@ liblttng_ust_tracepoint_la_LIBADD = \
 	$(top_builddir)/snprintf/libustsnprintf.la
 
 liblttng_ust_tracepoint_la_LDFLAGS = -no-undefined -version-info $(LTTNG_UST_LIBRARY_VERSION)
-liblttng_ust_tracepoint_la_CFLAGS = -DUST_COMPONENT="liblttng_ust_tracepoint" -fno-strict-aliasing
+liblttng_ust_tracepoint_la_CFLAGS = -DUST_COMPONENT="liblttng_ust_tracepoint" $(AM_CFLAGS)
 liblttng_ust_runtime_la_SOURCES = lttng-ust-comm.c lttng-ust-abi.c \
 	lttng-probes.c lttng-context-provider.c lttng-context-vtid.c \
 	lttng-context-vpid.c lttng-context-pthread-id.c \
@@ -463,6 +464,8 @@ liblttng_ust_support_la_SOURCES = \
 	lttng-tracer.h \
 	lttng-tracer-core.h \
 	ust-core.c \
+	getenv.h \
+	getenv.c \
 	lttng-ust-dynamic-type.c \
 	lttng-rb-clients.h \
 	lttng-ring-buffer-client.h \
@@ -489,7 +492,7 @@ liblttng_ust_la_LIBADD = \
 	liblttng-ust-tracepoint.la \
 	liblttng-ust-runtime.la liblttng-ust-support.la
 
-liblttng_ust_la_CFLAGS = -DUST_COMPONENT="liblttng_ust" -fno-strict-aliasing
+liblttng_ust_la_CFLAGS = -DUST_COMPONENT="liblttng_ust" $(AM_CFLAGS)
 all: all-am
 
 .SUFFIXES:
@@ -589,6 +592,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getenv.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_tracepoint_la-tracepoint-weak-test.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_tracepoint_la-tracepoint.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-clock.Plo@am__quote@
