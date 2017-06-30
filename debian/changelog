@@ -1,3 +1,15 @@
+ust (2.9.1-1) unstable; urgency=medium
+
+  * [dfb524d] Do not consider rc versions in watch file
+  * [c14b0be] New upstream version 2.9.1
+  * [18e7752] Refreshed patches for 2.9.1
+  * [40eaada] Remove python3 -dev build-depends (Closes: #866535)
+  * [b575fa7] Update symbols for 2.9.1
+  * [be69e6c] Enable hardening flags
+  * [3ff18c8] Bump standards version to 4.0.0
+
+ -- Michael Jeanson <mjeanson@ubuntu.com>  Fri, 30 Jun 2017 15:01:07 -0400
+
 ust (2.9.0-2) unstable; urgency=medium
 
   * [b8d4e77] Add missing liblttng-ust-fd.so.* (Closes: #857166)
