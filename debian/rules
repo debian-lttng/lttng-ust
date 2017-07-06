@@ -16,6 +16,7 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 override_dh_auto_configure:
 	PYTHON=python3 \
 	dh_auto_configure -- \
+		--includedir=/usr/include/$(DEB_HOST_MULTIARCH) \
 		--enable-python-agent \
 		--enable-jni-interface \
 		--enable-java-agent-all \
