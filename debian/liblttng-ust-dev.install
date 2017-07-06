@@ -1,5 +1,4 @@
 usr/include
-usr/lib/*/liblttng-ust*.a
 usr/lib/*/liblttng-ust*.so
 usr/lib/*/pkgconfig
 usr/bin
