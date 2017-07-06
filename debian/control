@@ -1,4 +1,4 @@
-Source: ust
+Source: lttng-ust
 Priority: extra
 Maintainer: Jon Bernard <jbernard@debian.org>
 Uploaders: Michael Jeanson <mjeanson@ubuntu.com>
@@ -7,8 +7,8 @@ Build-Depends: debhelper (>= 9), dh-autoreconf, liburcu-dev (>= 0.8.4),
   default-jdk | default-jdk-headless, liblog4j1.2-java
 Standards-Version: 4.0.0
 Section: libs
-Vcs-Git: https://anonscm.debian.org/git/collab-maint/ust.git
-Vcs-Browser: https://anonscm.debian.org/gitweb/?p=collab-maint/ust.git;a=summary
+Vcs-Git: https://anonscm.debian.org/git/collab-maint/lttng-ust.git
+Vcs-Browser: https://anonscm.debian.org/git/collab-maint/lttng-ust.git
 Homepage: https://lttng.org/
 X-Python3-Version: >= 3.0
 
