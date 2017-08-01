@@ -65,7 +65,8 @@ struct lttng_ust_shm_handle *channel_create(const struct lttng_ust_lib_ring_buff
 				size_t subbuf_size, size_t num_subbuf,
 				unsigned int switch_timer_interval,
 				unsigned int read_timer_interval,
-				const int *stream_fds, int nr_stream_fds);
+				const int *stream_fds, int nr_stream_fds,
+				int64_t blocking_timeout);
 
 /*
  * channel_destroy finalizes all channel's buffers, waits for readers to
@@ -128,6 +129,11 @@ void lib_ringbuffer_signal_init(void);
  * Read sequence: snapshot, many get_subbuf/put_subbuf, move_consumer.
  */
 extern int lib_ring_buffer_snapshot(struct lttng_ust_lib_ring_buffer *buf,
+				    unsigned long *consumed,
+				    unsigned long *produced,
+				    struct lttng_ust_shm_handle *handle);
+extern int lib_ring_buffer_snapshot_sample_positions(
+				    struct lttng_ust_lib_ring_buffer *buf,
 				    unsigned long *consumed,
 				    unsigned long *produced,
 				    struct lttng_ust_shm_handle *handle);

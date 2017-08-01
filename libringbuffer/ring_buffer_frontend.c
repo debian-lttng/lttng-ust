@@ -60,6 +60,7 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <time.h>
+#include <stdbool.h>
 #include <urcu/compiler.h>
 #include <urcu/ref.h>
 #include <urcu/tls-compat.h>
@@ -72,7 +73,7 @@
 #include "backend.h"
 #include "frontend.h"
 #include "shm.h"
-#include "tlsfixup.h"
+#include "rb-init.h"
 #include "../liblttng-ust/compat.h"	/* For ENODATA */
 
 /* Print DBG() messages about events lost only every 1048576 hits */
@@ -84,6 +85,7 @@
 #define CLOCKID		CLOCK_MONOTONIC
 #define LTTNG_UST_RING_BUFFER_GET_RETRY		10
 #define LTTNG_UST_RING_BUFFER_RETRY_DELAY_MS	10
+#define RETRY_DELAY_MS				100	/* 100 ms. */
 
 /*
  * Non-static to ensure the compiler does not optimize away the xor.
@@ -148,6 +150,21 @@ static struct timer_signal_data timer_signal = {
 	.qs_done = 0,
 	.lock = PTHREAD_MUTEX_INITIALIZER,
 };
+
+static bool lttng_ust_allow_blocking;
+
+void lttng_ust_ringbuffer_set_allow_blocking(void)
+{
+	lttng_ust_allow_blocking = true;
+}
+
+/* Get blocking timeout, in ms */
+static int lttng_ust_ringbuffer_get_timeout(struct channel *chan)
+{
+	if (!lttng_ust_allow_blocking)
+		return 0;
+	return chan->u.s.blocking_timeout_ms;
+}
 
 /**
  * lib_ring_buffer_reset - Reset ring buffer to initial values.
@@ -941,7 +958,8 @@ struct lttng_ust_shm_handle *channel_create(const struct lttng_ust_lib_ring_buff
 		   void *buf_addr, size_t subbuf_size,
 		   size_t num_subbuf, unsigned int switch_timer_interval,
 		   unsigned int read_timer_interval,
-		   const int *stream_fds, int nr_stream_fds)
+		   const int *stream_fds, int nr_stream_fds,
+		   int64_t blocking_timeout)
 {
 	int ret;
 	size_t shmsize, chansize;
@@ -949,6 +967,7 @@ struct lttng_ust_shm_handle *channel_create(const struct lttng_ust_lib_ring_buff
 	struct lttng_ust_shm_handle *handle;
 	struct shm_object *shmobj;
 	unsigned int nr_streams;
+	int64_t blocking_timeout_ms;
 
 	if (config->alloc == RING_BUFFER_ALLOC_PER_CPU)
 		nr_streams = num_possible_cpus();
@@ -957,6 +976,19 @@ struct lttng_ust_shm_handle *channel_create(const struct lttng_ust_lib_ring_buff
 
 	if (nr_stream_fds != nr_streams)
 		return NULL;
+
+	if (blocking_timeout < -1) {
+		return NULL;
+	}
+	/* usec to msec */
+	if (blocking_timeout == -1) {
+		blocking_timeout_ms = -1;
+	} else {
+		blocking_timeout_ms = blocking_timeout / 1000;
+		if (blocking_timeout_ms != (int32_t) blocking_timeout_ms) {
+			return NULL;
+		}
+	}
 
 	if (lib_ring_buffer_check_config(config, switch_timer_interval,
 					 read_timer_interval))
@@ -1010,6 +1042,8 @@ struct lttng_ust_shm_handle *channel_create(const struct lttng_ust_lib_ring_buff
 		if (priv_data)
 			*priv_data = NULL;
 	}
+
+	chan->u.s.blocking_timeout_ms = (int32_t) blocking_timeout_ms;
 
 	ret = channel_backend_init(&chan->backend, name, config,
 				   subbuf_size, num_subbuf, handle,
@@ -1293,6 +1327,43 @@ nodata:
 		return -ENODATA;
 	else
 		return -EAGAIN;
+}
+
+/**
+ * Performs the same function as lib_ring_buffer_snapshot(), but the positions
+ * are saved regardless of whether the consumed and produced positions are
+ * in the same subbuffer.
+ * @buf: ring buffer
+ * @consumed: consumed byte count indicating the last position read
+ * @produced: produced byte count indicating the last position written
+ *
+ * This function is meant to provide information on the exact producer and
+ * consumer positions without regard for the "snapshot" feature.
+ */
+int lib_ring_buffer_snapshot_sample_positions(
+			     struct lttng_ust_lib_ring_buffer *buf,
+			     unsigned long *consumed, unsigned long *produced,
+			     struct lttng_ust_shm_handle *handle)
+{
+	struct channel *chan;
+	const struct lttng_ust_lib_ring_buffer_config *config;
+
+	chan = shmp(handle, buf->backend.chan);
+	if (!chan)
+		return -EPERM;
+	config = &chan->backend.config;
+	cmm_smp_rmb();
+	*consumed = uatomic_read(&buf->consumed);
+	/*
+	 * No need to issue a memory barrier between consumed count read and
+	 * write offset read, because consumed count can only change
+	 * concurrently in overwrite mode, and we keep a sequence counter
+	 * identifier derived from the write offset to check we are getting
+	 * the same sub-buffer we are expecting (the sub-buffers are atomically
+	 * "tagged" upon writes, tags are checked upon read).
+	 */
+	*produced = v_read(config, &buf->offset);
+	return 0;
 }
 
 /**
@@ -1985,6 +2056,23 @@ void lib_ring_buffer_switch_slow(struct lttng_ust_lib_ring_buffer *buf, enum swi
 	lib_ring_buffer_switch_old_end(buf, chan, &offsets, tsc, handle);
 }
 
+static
+bool handle_blocking_retry(int *timeout_left_ms)
+{
+	int timeout = *timeout_left_ms, delay;
+
+	if (caa_likely(!timeout))
+		return false;	/* Do not retry, discard event. */
+	if (timeout < 0)	/* Wait forever. */
+		delay = RETRY_DELAY_MS;
+	else
+		delay = min_t(int, timeout, RETRY_DELAY_MS);
+	(void) poll(NULL, 0, delay);
+	if (timeout > 0)
+		*timeout_left_ms -= delay;
+	return true;	/* Retry. */
+}
+
 /*
  * Returns :
  * 0 if ok
@@ -2001,6 +2089,7 @@ int lib_ring_buffer_try_reserve_slow(struct lttng_ust_lib_ring_buffer *buf,
 	const struct lttng_ust_lib_ring_buffer_config *config = &chan->backend.config;
 	struct lttng_ust_shm_handle *handle = ctx->handle;
 	unsigned long reserve_commit_diff, offset_cmp;
+	int timeout_left_ms = lttng_ust_ringbuffer_get_timeout(chan);
 
 retry:
 	offsets->begin = offset_cmp = v_read(config, &buf->offset);
@@ -2082,6 +2171,9 @@ retry:
 				     uatomic_read(&buf->consumed), chan)
 				>= chan->backend.buf_size)) {
 				unsigned long nr_lost;
+
+				if (handle_blocking_retry(&timeout_left_ms))
+					goto retry;
 
 				/*
 				 * We do not overwrite non consumed buffers

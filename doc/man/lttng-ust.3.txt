@@ -1292,6 +1292,24 @@ LTTng session and consumer daemons (part of the LTTng-tools project)
 are located in a specific directory under `$LTTNG_HOME` (or `$HOME` if
 `$LTTNG_HOME` is not set).
 
+`LTTNG_UST_ALLOW_BLOCKING`::
+    If set, allow the application to retry event tracing when there's
+    no space left for the event record in the sub-buffer, therefore
+    effectively blocking the application until space is made available
+    or the configured timeout is reached.
++
+To allow an application to block during tracing, you also need to
+specify a blocking timeout when you create a channel with the
+nloption:--blocking-timeout option of the man:lttng-enable-channel(1)
+command.
++
+This option can be useful in workloads generating very large trace data
+throughput, where blocking the application is an acceptable trade-off to
+prevent discarding event records.
++
+WARNING: Setting this environment variable may significantly
+affect application timings.
+
 `LTTNG_UST_CLOCK_PLUGIN`::
     Path to the shared object which acts as the clock override plugin.
     An example of such a plugin can be found in the LTTng-UST
@@ -1299,7 +1317,7 @@ are located in a specific directory under `$LTTNG_HOME` (or `$HOME` if
     https://github.com/lttng/lttng-ust/tree/master/doc/examples/clock-override[`examples/clock-override`].
 
 `LTTNG_UST_DEBUG`::
-    Activates `liblttng-ust`'s debug and error output if set to `1`.
+    If set, enable `liblttng-ust`'s debug and error output.
 
 `LTTNG_UST_GETCPU_PLUGIN`::
     Path to the shared object which acts as the `getcpu()` override
@@ -1318,9 +1336,8 @@ with time constraints on the process startup time.
 Default: {lttng_ust_register_timeout}.
 
 `LTTNG_UST_WITHOUT_BADDR_STATEDUMP`::
-    Prevents `liblttng-ust` from performing a base address state dump
-    (see the <<state-dump,LTTng-UST state dump>> section above) if
-    set to `1`.
+    If set, prevents `liblttng-ust` from performing a base address state
+    dump (see the <<state-dump,LTTng-UST state dump>> section above).
 
 
 include::common-footer.txt[]

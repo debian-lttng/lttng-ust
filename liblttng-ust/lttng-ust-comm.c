@@ -35,6 +35,7 @@
 #include <time.h>
 #include <assert.h>
 #include <signal.h>
+#include <limits.h>
 #include <urcu/uatomic.h>
 #include <urcu/futex.h>
 #include <urcu/compiler.h>
@@ -52,7 +53,7 @@
 #include "tracepoint-internal.h"
 #include "lttng-tracer-core.h"
 #include "compat.h"
-#include "../libringbuffer/tlsfixup.h"
+#include "../libringbuffer/rb-init.h"
 #include "lttng-ust-statedump.h"
 #include "clock.h"
 #include "../libringbuffer/getcpu.h"
@@ -531,6 +532,19 @@ int get_constructor_timeout(struct timespec *constructor_timeout)
 	}
 	/* Timeout wait (constructor_delay_ms). */
 	return 1;
+}
+
+static
+void get_allow_blocking(void)
+{
+	const char *str_allow_blocking =
+		lttng_getenv("LTTNG_UST_ALLOW_BLOCKING");
+
+	if (str_allow_blocking) {
+		DBG("%s environment variable is set",
+			"LTTNG_UST_ALLOW_BLOCKING");
+		lttng_ust_ringbuffer_set_allow_blocking();
+	}
 }
 
 static
@@ -1672,6 +1686,8 @@ void __attribute__((constructor)) lttng_ust_init(void)
 	lttng_ust_malloc_wrapper_init();
 
 	timeout_mode = get_constructor_timeout(&constructor_timeout);
+
+	get_allow_blocking();
 
 	ret = sem_init(&constructor_wait, 0, 0);
 	if (ret) {

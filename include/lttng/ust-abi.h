@@ -43,7 +43,7 @@
 
 /* Version for ABI between liblttng-ust, sessiond, consumerd */
 #define LTTNG_UST_ABI_MAJOR_VERSION		7
-#define LTTNG_UST_ABI_MINOR_VERSION		1
+#define LTTNG_UST_ABI_MINOR_VERSION		2
 
 enum lttng_ust_instrumentation {
 	LTTNG_UST_TRACEPOINT		= 0,
@@ -177,7 +177,12 @@ struct lttng_ust_channel_attr {
 	unsigned int switch_timer_interval;	/* usec */
 	unsigned int read_timer_interval;	/* usec */
 	enum lttng_ust_output output;		/* splice, mmap */
-	char padding[LTTNG_UST_CHANNEL_ATTR_PADDING];
+	union {
+		struct {
+			int64_t blocking_timeout;	/* Blocking timeout (usec) */
+		} s;
+		char padding[LTTNG_UST_CHANNEL_ATTR_PADDING];
+	} u;
 } LTTNG_PACKED;
 
 #define LTTNG_UST_TRACEPOINT_ITER_PADDING	16

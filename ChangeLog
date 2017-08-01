@@ -1,18 +1,42 @@
-2017-06-12 (National Peanut Butter Cookie Day) lttng-ust 2.9.1
+2017-08-01 (World Wide Web Day) lttng-ust 2.10.0
+	* lttng-ust(3): reword and fix style of `LTTNG_UST_ALLOW_BLOCKING` variable
+	* lttng-ust(3): specify "If set" instead of "if set to 1" for some variables
+	* Fix: doc/man: use a single XSL file and match local names
+	* Fix: Expand the shmobj size for the sequence number
+
+2017-06-12 (National Peanut Butter Cookie Day) lttng-ust 2.10.0-rc2
+	* Introduce LTTNG_UST_ALLOW_BLOCKING env. var.
 	* Fix: lttng-ust-elf.c: define NT_GNU_BUILD_ID if not defined
 	* Fix: Quote CMAKE variable assignment in Makefile
+	* Rework configure script
 	* Fix: Typo in doc/examples/Makefile.am
 	* Fix: Don't override user variables within the build system
+	* Move m4 scripts to m4 dir
+	* doc: remove duplicate LTTNG_UST_BLOCKING_RETRY_TIMEOUT man page entry
+
+2017-05-05 (International Tuba Day) lttng-ust 2.10.0-rc1
+	* Clean-up: remove unused variables to silence gcc warning
+	* Add ustctl_snapshot_sample_positions ustctl command
+	* Cleanup: formatting in strutils_star_glob_match explanation
+	* doc/man: add typical `$` and `#` prompts to command lines
 	* Fix: add missing getenv.h include to ustctl.c
 	* Fix: race between lttng-ust getenv() and application setenv()
-	* doc/man: add typical `$` and `#` prompts to command lines
+	* Use SIZE_MAX instead of -1ULL for size_t parameter
+	* filter: use SIZE_MAX rather than UINT_MAX and tuncating -1ULL
+	* Fix: out of bound array access in filter code
+	* Correctly clean all generated JAR files
+	* Fix: List missing file in Java agent's Makefile
+	* Support generic globbing patterns in the Java agent
+	* Log more information in the Java TCP client
+	* Cleanup: Remove unused import in JUL Java agent
+	* Add support for star globbing patterns in event names
+	* Filtering: add support for star-only globbing patterns
+	* Add string utilities
 	* Fix: (un)install targets of Python agent
 	* Fix: include config.h to resolve HAVE_DLMOPEN
 	* Validate the presence of dlmopen at configure time
 	* Fix: CMake examples integration
 	* doc/examples/Makefile.am: define C and C++ compilers for CMake
-
-2016-11-29 (National Square Dance Day) lttng-ust 2.9.0
 	* lttng-ust(3): document `lttng_ust_loaded` symbol
 	* lttng-ust(3): document `perf:thread:raw:rN:NAME` context
 	* lttng-ust-dl(3): update documentation
@@ -23,7 +47,10 @@
 	* lttng-ust(3): sort ctf_*() macro parameter definitions
 	* lttng-ust(3): fix alignment and indentation
 	* lttng-ust(3): document new ctf_*() array/sequence network/hex macros
+	* Filter code relicensing to MIT license
 	* Performance: add missing "caa_unlikely" on fast-path
+	* Fix: blocking mode: add missing stdbool.h include
+	* Implement LTTNG_UST_BLOCKING_RETRY_TIMEOUT
 	* Fix: loglevel and model_emf_uri build fix
 	* Fix: loglevel and model_emf_uri with g++ compiled probes
 	* Fix: Out of tree build of liblttng-ust-java

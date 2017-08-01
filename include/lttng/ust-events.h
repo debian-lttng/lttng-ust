@@ -342,7 +342,7 @@ struct lttng_probe_desc {
 /* Data structures used by the tracer. */
 
 enum lttng_enabler_type {
-	LTTNG_ENABLER_WILDCARD,
+	LTTNG_ENABLER_STAR_GLOB,
 	LTTNG_ENABLER_EVENT,
 };
 
@@ -489,7 +489,8 @@ struct lttng_channel_ops {
 			unsigned int read_timer_interval,
 			unsigned char *uuid,
 			uint32_t chan_id,
-			const int *stream_fds, int nr_stream_fds);
+			const int *stream_fds, int nr_stream_fds,
+			int64_t blocking_timeout);
 	void (*channel_destroy)(struct lttng_channel *chan);
 	union {
 		void *_deprecated1;

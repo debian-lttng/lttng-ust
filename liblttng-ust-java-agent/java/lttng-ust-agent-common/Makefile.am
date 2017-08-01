@@ -11,6 +11,7 @@ jardir = $(datadir)/java
 jnioutdir = ../../jni/common
 
 dist_noinst_JAVA = $(pkgpath)/AbstractLttngAgent.java \
+				   $(pkgpath)/EventNamePattern.java \
 				   $(pkgpath)/ILttngAgent.java \
 				   $(pkgpath)/ILttngHandler.java \
 				   $(pkgpath)/LTTngAgent.java \
@@ -61,10 +62,12 @@ install-data-hook:
 uninstall-hook:
 	cd $(DESTDIR)/$(jardir) && rm -f $(jarfile_symlink)
 
-CLEANFILES = $(jarfile) $(pkgpath)/*.class \
+CLEANFILES = *.jar \
+			 $(pkgpath)/*.class \
 			 $(pkgpath)/client/*.class \
 			 $(pkgpath)/context/*.class \
 			 $(pkgpath)/filter/*.class \
 			 $(pkgpath)/session/*.class \
 			 $(pkgpath)/utils/*.class \
-			 $(juljniout)/org_lttng_ust_agent_context_LttngContextApi.h
+			 context-jni-header.stamp \
+			 $(jnioutdir)/org_lttng_ust_agent_context_LttngContextApi.h

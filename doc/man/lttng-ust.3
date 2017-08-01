@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: lttng-ust
 .\"    Author: [see the "AUTHORS" section]
-.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
-.\"      Date: 06/12/2017
+.\" Generator: DocBook XSL Stylesheets v1.79.1 <http://docbook.sf.net/>
+.\"      Date: 08/01/2017
 .\"    Manual: LTTng Manual
-.\"    Source: LTTng 2.9.1
+.\"    Source: LTTng 2.10.0-
 .\"  Language: English
 .\"
-.TH "LTTNG\-UST" "3" "06/12/2017" "LTTng 2\&.9\&.1" "LTTng Manual"
+.TH "LTTNG\-UST" "3" "08/01/2017" "LTTng 2\&.10\&.0\-" "LTTng Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -166,7 +166,7 @@ Creating a tracepoint provider is the first step of using \fBliblttng-ust\fR\&. 
 .sp -1
 .IP \(bu 2.3
 .\}
-\fIInstrumenting your application with tracepoint() calls\fR
+\fIInstrumenting your application with \fBtracepoint()\fR calls\fR
 .RE
 .sp
 .RS 4
@@ -216,7 +216,7 @@ To create a tracepoint provider, start with the following \fItracepoint provider
 .RE
 .\}
 .sp
-In this template, the tracepoint provider is named \fBmy_provider\fR (\fBTRACEPOINT_PROVIDER\fR definition)\&. The file needs to bear the name of the \fBTRACEPOINT_INCLUDE\fR definition (\fBtp.h\fR in this case)\&. Between \fB#include <lttng/tracepoint.h>\fR and \fB#endif\fR go the invocations of the \fITRACEPOINT_EVENT()\fR, \fITRACEPOINT_EVENT_CLASS()\fR, \fITRACEPOINT_EVENT_INSTANCE()\fR, \fITRACEPOINT_LOGLEVEL()\fR, and \fITRACEPOINT_ENUM()\fR macros\&.
+In this template, the tracepoint provider is named \fBmy_provider\fR (\fBTRACEPOINT_PROVIDER\fR definition)\&. The file needs to bear the name of the \fBTRACEPOINT_INCLUDE\fR definition (\fBtp.h\fR in this case)\&. Between \fB#include <lttng/tracepoint.h>\fR and \fB#endif\fR go the invocations of the \fI\fBTRACEPOINT_EVENT()\fR\fR, \fI\fBTRACEPOINT_EVENT_CLASS()\fR\fR, \fI\fBTRACEPOINT_EVENT_INSTANCE()\fR\fR, \fI\fBTRACEPOINT_LOGLEVEL()\fR\fR, and \fI\fBTRACEPOINT_ENUM()\fR\fR macros\&.
 .if n \{\
 .sp
 .\}
@@ -252,10 +252,10 @@ Together, those two files (let\(cqs call them \fBtp.h\fR and \fBtp.c\fR) form th
 .sp
 You can create multiple tracepoint providers to be used in a single application, but each one must have its own header file\&.
 .sp
-The \fITRACEPOINT_EVENT() usage\fR section below shows how to use the \fBTRACEPOINT_EVENT()\fR macro to define the actual tracepoints in the tracepoint provider header file\&.
+The \fI\fBTRACEPOINT_EVENT()\fR usage\fR section below shows how to use the \fBTRACEPOINT_EVENT()\fR macro to define the actual tracepoints in the tracepoint provider header file\&.
 .sp
 See the \fIEXAMPLE\fR section below for a complete example\&.
-.SS "TRACEPOINT_EVENT() usage"
+.SS "\fBTRACEPOINT_EVENT()\fR usage"
 .sp
 The \fBTRACEPOINT_EVENT()\fR macro is used in a template provider header file (see the \fICreating a tracepoint provider\fR section above) to define LTTng\-UST tracepoints\&.
 .sp
@@ -309,10 +309,10 @@ TP_ARGS(
 .sp
 The \fBTP_FIELDS()\fR macro contains the output fields of the tracepoint, that is, the actual data that can be recorded in the payload of an event emitted by this tracepoint\&.
 .sp
-The \fBTP_FIELDS()\fR macro contains a list of \fBctf_*()\fR macros NOT separated by commas\&. The available macros are documented in the \fIAvailable ctf_*() field type macros\fR section below\&.
-.SS "Available ctf_*() field type macros"
+The \fBTP_FIELDS()\fR macro contains a list of \fBctf_*()\fR macros NOT separated by commas\&. The available macros are documented in the \fIAvailable \fBctf_*()\fR field type macros\fR section below\&.
+.SS "Available \fBctf_*()\fR field type macros"
 .sp
-This section documents the available \fBctf_*()\fR macros that can be inserted in the \fBTP_FIELDS()\fR macro of the \fITRACEPOINT_EVENT() macro\fR\&.
+This section documents the available \fBctf_*()\fR macros that can be inserted in the \fBTP_FIELDS()\fR macro of the \fI\fBTRACEPOINT_EVENT()\fR macro\fR\&.
 .sp
 Standard integer, displayed in base 10:
 .sp
@@ -457,7 +457,7 @@ Dynamically\-sized array, displayed as text; no need to be null\-terminated:
 .RE
 .\}
 .sp
-Enumeration\&. The enumeration field must be defined before using this macro with the \fBTRACEPOINT_ENUM()\fR macro\&. See the \fITRACEPOINT_ENUM() usage\fR section for more information\&.
+Enumeration\&. The enumeration field must be defined before using this macro with the \fBTRACEPOINT_ENUM()\fR macro\&. See the \fI\fBTRACEPOINT_ENUM()\fR usage\fR section for more information\&.
 .sp
 .if n \{\
 .RS 4
@@ -482,7 +482,7 @@ Number of elements in array/sequence\&. This must be known at compile time\&.
 Name of an enumeration field previously defined with the
 \fBTRACEPOINT_ENUM()\fR
 macro\&. See the
-\fITRACEPOINT_ENUM() usage\fR
+\fI\fBTRACEPOINT_ENUM()\fR usage\fR
 section for more information\&.
 .RE
 .PP
@@ -530,7 +530,7 @@ Tracepoint provider name\&. This must be the same as the tracepoint provider nam
 The \fB_nowrite\fR versions omit themselves from the recorded trace, but are otherwise identical\&. Their primary purpose is to make some of the event context available to the event filters without having to commit the data to sub\-buffers\&. See \fBlttng-enable-event\fR(1) to learn more about dynamic event filtering\&.
 .sp
 See the \fIEXAMPLE\fR section below for a complete example\&.
-.SS "TRACEPOINT_ENUM() usage"
+.SS "\fBTRACEPOINT_ENUM()\fR usage"
 .sp
 An enumeration field is a list of mappings between an integers, or a range of integers, and strings (sometimes called \fIlabels\fR or \fIenumerators\fR)\&. Enumeration fields can be used to have a more compact trace when the possible values for a field are limited\&.
 .sp
@@ -588,7 +588,7 @@ This macro maps the given \fIlabel\fR string to the value \fIvalue\fR\&.
 This macro maps the given \fIlabel\fR string to the range of integers from \fIstart\fR to \fIend\fR, inclusively\&. Range mappings may overlap, but the behaviour is implementation\-defined: each trace reader handles overlapping ranges as it wishes\&.
 .sp
 See the \fIEXAMPLE\fR section below for a complete example\&.
-.SS "TRACEPOINT_EVENT_CLASS() usage"
+.SS "\fBTRACEPOINT_EVENT_CLASS()\fR usage"
 .sp
 A \fBtracepoint class\fR is a class of tracepoints sharing the same field types and names\&. A tracepoint instance is one instance of such a declared tracepoint class, with its own event name\&.
 .sp
@@ -651,7 +651,7 @@ TRACEPOINT_EVENT_INSTANCE(
 As you can see, the \fBTRACEPOINT_EVENT_INSTANCE()\fR does not contain the \fBTP_FIELDS()\fR macro, because they are defined at the \fBTRACEPOINT_EVENT_CLASS()\fR level\&.
 .sp
 See the \fIEXAMPLE\fR section below for a complete example\&.
-.SS "TRACEPOINT_LOGLEVEL() usage"
+.SS "\fBTRACEPOINT_LOGLEVEL()\fR usage"
 .sp
 Optionally, a \fBlog level\fR can be assigned to a defined tracepoint\&. Assigning different levels of severity to tracepoints can be useful: when controlling tracing sessions, you can choose to only enable events falling into a specific log level range using the \fB--loglevel\fR and \fB--loglevel-only\fR options of the \fBlttng-enable-event\fR(1) command\&.
 .sp
@@ -1307,7 +1307,7 @@ T}
 .RE
 .SS "Shared library load/unload tracking"
 .sp
-The \fILTTng-UST state dump\fR and the LTTng\-UST helper library to instrument the dynamic linker (see \fBliblttng-ust-dl\fR(3)) can emit \fBshared library load/unload tracking\fR events\&.
+The \fILTTng\-UST state dump\fR and the LTTng\-UST helper library to instrument the dynamic linker (see \fBliblttng-ust-dl\fR(3)) can emit \fBshared library load/unload tracking\fR events\&.
 .sp
 The following shared library load/unload tracking events exist and must be enabled to track the loading and unloading of shared libraries:
 .PP
@@ -1841,6 +1841,34 @@ if
 is not set)\&.
 .RE
 .PP
+\fBLTTNG_UST_ALLOW_BLOCKING\fR
+.RS 4
+If set, allow the application to retry event tracing when there\(cqs no space left for the event record in the sub\-buffer, therefore effectively blocking the application until space is made available or the configured timeout is reached\&.
+.sp
+To allow an application to block during tracing, you also need to specify a blocking timeout when you create a channel with the
+\fB--blocking-timeout\fR
+option of the
+\fBlttng-enable-channel\fR(1)
+command\&.
+.sp
+This option can be useful in workloads generating very large trace data throughput, where blocking the application is an acceptable trade\-off to prevent discarding event records\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBWarning\fR
+.ps -1
+.br
+Setting this environment variable may significantly affect application timings\&.
+.sp .5v
+.RE
+.RE
+.PP
 \fBLTTNG_UST_CLOCK_PLUGIN\fR
 .RS 4
 Path to the shared object which acts as the clock override plugin\&. An example of such a plugin can be found in the LTTng\-UST documentation under
@@ -1849,9 +1877,8 @@ Path to the shared object which acts as the clock override plugin\&. An example 
 .PP
 \fBLTTNG_UST_DEBUG\fR
 .RS 4
-Activates
-\fBliblttng-ust\fR\*(Aqs debug and error output if set to
-\fB1\fR\&.
+If set, enable
+\fBliblttng-ust\fR\*(Aqs debug and error output\&.
 .RE
 .PP
 \fBLTTNG_UST_GETCPU_PLUGIN\fR
@@ -1883,12 +1910,11 @@ Default: 3000\&.
 .PP
 \fBLTTNG_UST_WITHOUT_BADDR_STATEDUMP\fR
 .RS 4
-Prevents
+If set, prevents
 \fBliblttng-ust\fR
 from performing a base address state dump (see the
-\fILTTng-UST state dump\fR
-section above) if set to
-\fB1\fR\&.
+\fILTTng\-UST state dump\fR
+section above)\&.
 .RE
 .SH "BUGS"
 .sp
