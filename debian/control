@@ -17,7 +17,7 @@ Architecture: linux-any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends},
-  liblttng-ust-ctl2 (= ${binary:Version})
+  liblttng-ust-ctl4 (= ${binary:Version})
 Conflicts: liblttng-ust2
 Replaces: liblttng-ust2
 Description: LTTng 2.0 Userspace Tracer (tracing libraries)
@@ -29,7 +29,7 @@ Description: LTTng 2.0 Userspace Tracer (tracing libraries)
  This package contains the actual userspace tracing library that must be linked
  to the instrumented programs.
 
-Package: liblttng-ust-ctl2
+Package: liblttng-ust-ctl4
 Architecture: linux-any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
@@ -50,7 +50,7 @@ Section: libdevel
 Architecture: linux-any
 Multi-Arch: same
 Depends: ${misc:Depends},
-  liblttng-ust0 (= ${binary:Version}), liblttng-ust-ctl2 (= ${binary:Version}),
+  liblttng-ust0 (= ${binary:Version}), liblttng-ust-ctl4 (= ${binary:Version}),
   liblttng-ust-python-agent0 (= ${binary:Version}), liburcu-dev (>= 0.8.4),
   uuid-dev
 Recommends: python3
