@@ -201,6 +201,7 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  lib_ring_buffer_reserve_slow@Base 2.5.0
  lib_ring_buffer_reset@Base 2.5.0
  lib_ring_buffer_snapshot@Base 2.5.0
+ lib_ring_buffer_snapshot_sample_positions@Base 2.10.0
  lib_ring_buffer_switch_slow@Base 2.5.0
  lib_ringbuffer_signal_init@Base 2.5.0
  local_apps@Base 2.5.0
@@ -333,6 +334,7 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  lttng_ust_objd_table_owner_cleanup@Base 2.5.0
  lttng_ust_objd_unref@Base 2.5.0
  lttng_ust_read@Base 2.8.0
+ lttng_ust_ringbuffer_set_allow_blocking@Base 2.10.0
  lttng_ust_safe_close_fd@Base 2.9.0
  lttng_ust_safe_closefrom_fd@Base 2.9.0
  lttng_ust_sockinfo_session_enabled@Base 2.5.0
@@ -359,6 +361,9 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  shm_object_table_append_shm@Base 2.5.0
  shm_object_table_create@Base 2.5.0
  shm_object_table_destroy@Base 2.5.0
+ strutils_is_star_at_the_end_only_glob_pattern@Base 2.10.0
+ strutils_is_star_glob_pattern@Base 2.10.0
+ strutils_star_glob_match@Base 2.10.0
  synchronize_trace@Base 2.5.0
  ust_after_fork_child@Base 2.5.0
  ust_after_fork_parent@Base 2.5.0
