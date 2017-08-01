@@ -3,26 +3,32 @@
  *
  * LTTng UST filter interpreter.
  *
- * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+ * Copyright (C) 2010-2016 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; only
- * version 2.1 of the License.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 #define _LGPL_SOURCE
 #include <urcu-pointer.h>
+#include <stdint.h>
 #include "lttng-filter.h"
+#include "string-utils.h"
 
 /*
  * -1: wildcard found.
@@ -50,6 +56,42 @@ int parse_char(const char **p)
 	}
 }
 
+/*
+ * Returns SIZE_MAX if the string is null-terminated, or the number of
+ * characters if not.
+ */
+static
+size_t get_str_or_seq_len(const struct estack_entry *entry)
+{
+	return entry->u.s.seq_len;
+}
+
+static
+int stack_star_glob_match(struct estack *stack, int top, const char *cmp_type)
+{
+	const char *pattern;
+	const char *candidate;
+	size_t pattern_len;
+	size_t candidate_len;
+
+	/* Find out which side is the pattern vs. the candidate. */
+	if (estack_ax(stack, top)->u.s.literal_type == ESTACK_STRING_LITERAL_TYPE_STAR_GLOB) {
+		pattern = estack_ax(stack, top)->u.s.str;
+		pattern_len = get_str_or_seq_len(estack_ax(stack, top));
+		candidate = estack_bx(stack, top)->u.s.str;
+		candidate_len = get_str_or_seq_len(estack_bx(stack, top));
+	} else {
+		pattern = estack_bx(stack, top)->u.s.str;
+		pattern_len = get_str_or_seq_len(estack_bx(stack, top));
+		candidate = estack_ax(stack, top)->u.s.str;
+		candidate_len = get_str_or_seq_len(estack_ax(stack, top));
+	}
+
+	/* Perform the match. Returns 0 when the result is true. */
+	return !strutils_star_glob_match(pattern, pattern_len, candidate,
+		candidate_len);
+}
+
 static
 int stack_strcmp(struct estack *stack, int top, const char *cmp_type)
 {
@@ -64,7 +106,8 @@ int stack_strcmp(struct estack *stack, int top, const char *cmp_type)
 			if (q - estack_ax(stack, top)->u.s.str >= estack_ax(stack, top)->u.s.seq_len || *q == '\0') {
 				return 0;
 			} else {
-				if (estack_ax(stack, top)->u.s.literal) {
+				if (estack_ax(stack, top)->u.s.literal_type ==
+						ESTACK_STRING_LITERAL_TYPE_PLAIN) {
 					ret = parse_char(&q);
 					if (ret == -1)
 						return 0;
@@ -73,14 +116,16 @@ int stack_strcmp(struct estack *stack, int top, const char *cmp_type)
 			}
 		}
 		if (unlikely(q - estack_ax(stack, top)->u.s.str >= estack_ax(stack, top)->u.s.seq_len || *q == '\0')) {
-			if (estack_bx(stack, top)->u.s.literal) {
+			if (estack_bx(stack, top)->u.s.literal_type ==
+					ESTACK_STRING_LITERAL_TYPE_PLAIN) {
 				ret = parse_char(&p);
 				if (ret == -1)
 					return 0;
 			}
 			return 1;
 		}
-		if (estack_bx(stack, top)->u.s.literal) {
+		if (estack_bx(stack, top)->u.s.literal_type ==
+				ESTACK_STRING_LITERAL_TYPE_PLAIN) {
 			ret = parse_char(&p);
 			if (ret == -1) {
 				return 0;
@@ -89,7 +134,8 @@ int stack_strcmp(struct estack *stack, int top, const char *cmp_type)
 			}
 			/* else compare both char */
 		}
-		if (estack_ax(stack, top)->u.s.literal) {
+		if (estack_ax(stack, top)->u.s.literal_type ==
+				ESTACK_STRING_LITERAL_TYPE_PLAIN) {
 			ret = parse_char(&q);
 			if (ret == -1) {
 				return 0;
@@ -224,6 +270,10 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 		[ FILTER_OP_GE_STRING ] = &&LABEL_FILTER_OP_GE_STRING,
 		[ FILTER_OP_LE_STRING ] = &&LABEL_FILTER_OP_LE_STRING,
 
+		/* globbing pattern binary comparator */
+		[ FILTER_OP_EQ_STAR_GLOB_STRING ] = &&LABEL_FILTER_OP_EQ_STAR_GLOB_STRING,
+		[ FILTER_OP_NE_STAR_GLOB_STRING ] = &&LABEL_FILTER_OP_NE_STAR_GLOB_STRING,
+
 		/* s64 binary comparator */
 		[ FILTER_OP_EQ_S64 ] = &&LABEL_FILTER_OP_EQ_S64,
 		[ FILTER_OP_NE_S64 ] = &&LABEL_FILTER_OP_NE_S64,
@@ -279,6 +329,7 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 
 		/* load from immediate operand */
 		[ FILTER_OP_LOAD_STRING ] = &&LABEL_FILTER_OP_LOAD_STRING,
+		[ FILTER_OP_LOAD_STAR_GLOB_STRING ] = &&LABEL_FILTER_OP_LOAD_STAR_GLOB_STRING,
 		[ FILTER_OP_LOAD_S64 ] = &&LABEL_FILTER_OP_LOAD_S64,
 		[ FILTER_OP_LOAD_DOUBLE ] = &&LABEL_FILTER_OP_LOAD_DOUBLE,
 
@@ -339,7 +390,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					JUMP_TO(FILTER_OP_EQ_S64);
 				case REG_DOUBLE:
 					JUMP_TO(FILTER_OP_EQ_DOUBLE_S64);
-				case REG_STRING:
+				case REG_STRING: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				default:
@@ -355,7 +407,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					JUMP_TO(FILTER_OP_EQ_S64_DOUBLE);
 				case REG_DOUBLE:
 					JUMP_TO(FILTER_OP_EQ_DOUBLE);
-				case REG_STRING:
+				case REG_STRING: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				default:
@@ -373,6 +426,26 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					goto end;
 				case REG_STRING:
 					JUMP_TO(FILTER_OP_EQ_STRING);
+				case REG_STAR_GLOB_STRING:
+					JUMP_TO(FILTER_OP_EQ_STAR_GLOB_STRING);
+				default:
+					ERR("Unknown filter register type (%d)",
+						(int) estack_bx_t);
+					ret = -EINVAL;
+					goto end;
+				}
+				break;
+			case REG_STAR_GLOB_STRING:
+				switch (estack_bx_t) {
+				case REG_S64:	/* Fall-through */
+				case REG_DOUBLE:
+					ret = -EINVAL;
+					goto end;
+				case REG_STRING:
+					JUMP_TO(FILTER_OP_EQ_STAR_GLOB_STRING);
+				case REG_STAR_GLOB_STRING:
+					ret = -EINVAL;
+					goto end;
 				default:
 					ERR("Unknown filter register type (%d)",
 						(int) estack_bx_t);
@@ -397,7 +470,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					JUMP_TO(FILTER_OP_NE_S64);
 				case REG_DOUBLE:
 					JUMP_TO(FILTER_OP_NE_DOUBLE_S64);
-				case REG_STRING:
+				case REG_STRING: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				default:
@@ -413,7 +487,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					JUMP_TO(FILTER_OP_NE_S64_DOUBLE);
 				case REG_DOUBLE:
 					JUMP_TO(FILTER_OP_NE_DOUBLE);
-				case REG_STRING:
+				case REG_STRING: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				default:
@@ -431,6 +506,26 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					goto end;
 				case REG_STRING:
 					JUMP_TO(FILTER_OP_NE_STRING);
+				case REG_STAR_GLOB_STRING:
+					JUMP_TO(FILTER_OP_NE_STAR_GLOB_STRING);
+				default:
+					ERR("Unknown filter register type (%d)",
+						(int) estack_bx_t);
+					ret = -EINVAL;
+					goto end;
+				}
+				break;
+			case REG_STAR_GLOB_STRING:
+				switch (estack_bx_t) {
+				case REG_S64:	/* Fall-through */
+				case REG_DOUBLE:
+					ret = -EINVAL;
+					goto end;
+				case REG_STRING:
+					JUMP_TO(FILTER_OP_NE_STAR_GLOB_STRING);
+				case REG_STAR_GLOB_STRING:
+					ret = -EINVAL;
+					goto end;
 				default:
 					ERR("Unknown filter register type (%d)",
 						(int) estack_bx_t);
@@ -455,7 +550,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					JUMP_TO(FILTER_OP_GT_S64);
 				case REG_DOUBLE:
 					JUMP_TO(FILTER_OP_GT_DOUBLE_S64);
-				case REG_STRING:
+				case REG_STRING: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				default:
@@ -471,7 +567,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					JUMP_TO(FILTER_OP_GT_S64_DOUBLE);
 				case REG_DOUBLE:
 					JUMP_TO(FILTER_OP_GT_DOUBLE);
-				case REG_STRING:
+				case REG_STRING: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				default:
@@ -484,7 +581,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 			case REG_STRING:
 				switch (estack_bx_t) {
 				case REG_S64:	/* Fall-through */
-				case REG_DOUBLE:
+				case REG_DOUBLE: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				case REG_STRING:
@@ -513,7 +611,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					JUMP_TO(FILTER_OP_LT_S64);
 				case REG_DOUBLE:
 					JUMP_TO(FILTER_OP_LT_DOUBLE_S64);
-				case REG_STRING:
+				case REG_STRING: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				default:
@@ -529,7 +628,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					JUMP_TO(FILTER_OP_LT_S64_DOUBLE);
 				case REG_DOUBLE:
 					JUMP_TO(FILTER_OP_LT_DOUBLE);
-				case REG_STRING:
+				case REG_STRING: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				default:
@@ -542,7 +642,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 			case REG_STRING:
 				switch (estack_bx_t) {
 				case REG_S64:	/* Fall-through */
-				case REG_DOUBLE:
+				case REG_DOUBLE: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				case REG_STRING:
@@ -571,7 +672,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					JUMP_TO(FILTER_OP_GE_S64);
 				case REG_DOUBLE:
 					JUMP_TO(FILTER_OP_GE_DOUBLE_S64);
-				case REG_STRING:
+				case REG_STRING: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				default:
@@ -587,7 +689,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					JUMP_TO(FILTER_OP_GE_S64_DOUBLE);
 				case REG_DOUBLE:
 					JUMP_TO(FILTER_OP_GE_DOUBLE);
-				case REG_STRING:
+				case REG_STRING: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				default:
@@ -600,7 +703,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 			case REG_STRING:
 				switch (estack_bx_t) {
 				case REG_S64:	/* Fall-through */
-				case REG_DOUBLE:
+				case REG_DOUBLE: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				case REG_STRING:
@@ -629,7 +733,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					JUMP_TO(FILTER_OP_LE_S64);
 				case REG_DOUBLE:
 					JUMP_TO(FILTER_OP_LE_DOUBLE_S64);
-				case REG_STRING:
+				case REG_STRING: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				default:
@@ -645,7 +750,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					JUMP_TO(FILTER_OP_LE_S64_DOUBLE);
 				case REG_DOUBLE:
 					JUMP_TO(FILTER_OP_LE_DOUBLE);
-				case REG_STRING:
+				case REG_STRING: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				default:
@@ -658,7 +764,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 			case REG_STRING:
 				switch (estack_bx_t) {
 				case REG_S64:	/* Fall-through */
-				case REG_DOUBLE:
+				case REG_DOUBLE: /* Fall-through */
+				case REG_STAR_GLOB_STRING:
 					ret = -EINVAL;
 					goto end;
 				case REG_STRING:
@@ -738,6 +845,29 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 			int res;
 
 			res = (stack_strcmp(stack, top, "<=") <= 0);
+			estack_pop(stack, top, ax, bx, ax_t, bx_t);
+			estack_ax_v = res;
+			estack_ax_t = REG_S64;
+			next_pc += sizeof(struct binary_op);
+			PO;
+		}
+
+		OP(FILTER_OP_EQ_STAR_GLOB_STRING):
+		{
+			int res;
+
+			res = (stack_star_glob_match(stack, top, "==") == 0);
+			estack_pop(stack, top, ax, bx, ax_t, bx_t);
+			estack_ax_v = res;
+			estack_ax_t = REG_S64;
+			next_pc += sizeof(struct binary_op);
+			PO;
+		}
+		OP(FILTER_OP_NE_STAR_GLOB_STRING):
+		{
+			int res;
+
+			res = (stack_star_glob_match(stack, top, "!=") != 0);
 			estack_pop(stack, top, ax, bx, ax_t, bx_t);
 			estack_ax_v = res;
 			estack_ax_t = REG_S64;
@@ -1023,7 +1153,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 				JUMP_TO(FILTER_OP_UNARY_PLUS_S64);
 			case REG_DOUBLE:
 				JUMP_TO(FILTER_OP_UNARY_PLUS_DOUBLE);
-			case REG_STRING:
+			case REG_STRING: /* Fall-through */
+			case REG_STAR_GLOB_STRING:
 				ret = -EINVAL;
 				goto end;
 			default:
@@ -1041,7 +1172,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 				JUMP_TO(FILTER_OP_UNARY_MINUS_S64);
 			case REG_DOUBLE:
 				JUMP_TO(FILTER_OP_UNARY_MINUS_DOUBLE);
-			case REG_STRING:
+			case REG_STRING: /* Fall-through */
+			case REG_STAR_GLOB_STRING:
 				ret = -EINVAL;
 				goto end;
 			default:
@@ -1059,7 +1191,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 				JUMP_TO(FILTER_OP_UNARY_NOT_S64);
 			case REG_DOUBLE:
 				JUMP_TO(FILTER_OP_UNARY_NOT_DOUBLE);
-			case REG_STRING:
+			case REG_STRING: /* Fall-through */
+			case REG_STAR_GLOB_STRING:
 				ret = -EINVAL;
 				goto end;
 			default:
@@ -1164,8 +1297,9 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 				ret = -EINVAL;
 				goto end;
 			}
-			estack_ax(stack, top)->u.s.seq_len = UINT_MAX;
-			estack_ax(stack, top)->u.s.literal = 0;
+			estack_ax(stack, top)->u.s.seq_len = SIZE_MAX;
+			estack_ax(stack, top)->u.s.literal_type =
+				ESTACK_STRING_LITERAL_TYPE_NONE;
 			estack_ax_t = REG_STRING;
 			dbg_printf("ref load string %s\n", estack_ax(stack, top)->u.s.str);
 			next_pc += sizeof(struct load_op) + sizeof(struct field_ref);
@@ -1191,7 +1325,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 				ret = -EINVAL;
 				goto end;
 			}
-			estack_ax(stack, top)->u.s.literal = 0;
+			estack_ax(stack, top)->u.s.literal_type =
+				ESTACK_STRING_LITERAL_TYPE_NONE;
 			next_pc += sizeof(struct load_op) + sizeof(struct field_ref);
 			PO;
 		}
@@ -1236,9 +1371,25 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 			dbg_printf("load string %s\n", insn->data);
 			estack_push(stack, top, ax, bx, ax_t, bx_t);
 			estack_ax(stack, top)->u.s.str = insn->data;
-			estack_ax(stack, top)->u.s.seq_len = UINT_MAX;
-			estack_ax(stack, top)->u.s.literal = 1;
+			estack_ax(stack, top)->u.s.seq_len = SIZE_MAX;
+			estack_ax(stack, top)->u.s.literal_type =
+				ESTACK_STRING_LITERAL_TYPE_PLAIN;
 			estack_ax_t = REG_STRING;
+			next_pc += sizeof(struct load_op) + strlen(insn->data) + 1;
+			PO;
+		}
+
+		OP(FILTER_OP_LOAD_STAR_GLOB_STRING):
+		{
+			struct load_op *insn = (struct load_op *) pc;
+
+			dbg_printf("load globbing pattern %s\n", insn->data);
+			estack_push(stack, top, ax, bx, ax_t, bx_t);
+			estack_ax(stack, top)->u.s.str = insn->data;
+			estack_ax(stack, top)->u.s.seq_len = SIZE_MAX;
+			estack_ax(stack, top)->u.s.literal_type =
+				ESTACK_STRING_LITERAL_TYPE_STAR_GLOB;
+			estack_ax_t = REG_STAR_GLOB_STRING;
 			next_pc += sizeof(struct load_op) + strlen(insn->data) + 1;
 			PO;
 		}
@@ -1279,7 +1430,8 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 				JUMP_TO(FILTER_OP_CAST_NOP);
 			case REG_DOUBLE:
 				JUMP_TO(FILTER_OP_CAST_DOUBLE_TO_S64);
-			case REG_STRING:
+			case REG_STRING: /* Fall-through */
+			case REG_STAR_GLOB_STRING:
 				ret = -EINVAL;
 				goto end;
 			default:
@@ -1340,8 +1492,9 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 					ret = -EINVAL;
 					goto end;
 				}
-				estack_ax(stack, top)->u.s.seq_len = UINT_MAX;
-				estack_ax(stack, top)->u.s.literal = 0;
+				estack_ax(stack, top)->u.s.seq_len = SIZE_MAX;
+				estack_ax(stack, top)->u.s.literal_type =
+					ESTACK_STRING_LITERAL_TYPE_NONE;
 				dbg_printf("ref get context dynamic string %s\n", estack_ax(stack, top)->u.s.str);
 				estack_ax_t = REG_STRING;
 				break;
@@ -1374,8 +1527,9 @@ uint64_t lttng_filter_interpret_bytecode(void *filter_data,
 				ret = -EINVAL;
 				goto end;
 			}
-			estack_ax(stack, top)->u.s.seq_len = UINT_MAX;
-			estack_ax(stack, top)->u.s.literal = 0;
+			estack_ax(stack, top)->u.s.seq_len = SIZE_MAX;
+			estack_ax(stack, top)->u.s.literal_type =
+				ESTACK_STRING_LITERAL_TYPE_NONE;
 			estack_ax_t = REG_STRING;
 			dbg_printf("ref get context string %s\n", estack_ax(stack, top)->u.s.str);
 			next_pc += sizeof(struct load_op) + sizeof(struct field_ref);

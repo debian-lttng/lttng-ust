@@ -53,6 +53,7 @@ struct ustctl_consumer_channel_attr {
 	enum lttng_ust_output output;		/* splice, mmap */
 	uint32_t chan_id;			/* channel ID */
 	unsigned char uuid[LTTNG_UST_UUID_LEN]; /* Trace session unique ID */
+	int64_t blocking_timeout;			/* Blocking timeout (usec) */
 } LTTNG_PACKED;
 
 /*
@@ -226,6 +227,7 @@ int ustctl_put_next_subbuf(struct ustctl_consumer_stream *stream);
 /* snapshot */
 
 int ustctl_snapshot(struct ustctl_consumer_stream *stream);
+int ustctl_snapshot_sample_positions(struct ustctl_consumer_stream *stream);
 int ustctl_snapshot_get_consumed(struct ustctl_consumer_stream *stream,
 		unsigned long *pos);
 int ustctl_snapshot_get_produced(struct ustctl_consumer_stream *stream,
