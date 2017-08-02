@@ -1,4 +1,4 @@
-Source: lttng-ust
+Source: ust
 Priority: extra
 Maintainer: Jon Bernard <jbernard@debian.org>
 Uploaders: Michael Jeanson <mjeanson@ubuntu.com>
