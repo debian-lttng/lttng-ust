@@ -1,3 +1,21 @@
+ust (2.10.0-1) unstable; urgency=medium
+
+  [ Michael Jeanson ]
+  * [f34755c] Move to DEP-14 branch naming
+  * [01efc7c] Rename source package to lttng-ust
+  * [a4bb887] Don't ship static lib, it's broken and useless
+  * [bfa2833] Install headers in multiarch path (Closes: #687460)
+  * [668fa1d] New upstream version 2.10.0
+  * [13a4c58] Bump soname of liblttng-ust-ctl from 2 to 4
+  * [5f3f693] Update symbols for 2.10.0
+  * [99fea0d] Updated debian copyright
+  * [56d0c0e] Revert source package rename
+
+  [ Jon Bernard ]
+  * [cfa34cd] Include missing symbols from previous update
+
+ -- Jon Bernard <jbernard@debian.org>  Thu, 14 Sep 2017 16:15:02 -0400
+
 ust (2.9.1-1) unstable; urgency=medium
 
   * [dfb524d] Do not consider rc versions in watch file
