@@ -1,4 +1,6 @@
 liblttng-ust-python-agent.so.0 liblttng-ust-python-agent0 #MINVER#
+ __start___tracepoints_ptrs@Base 2.10.0
+ __stop___tracepoints_ptrs@Base 2.10.0
  __tracepoint_lttng_python___event@Base 2.7.0
  __tracepoint_provider_lttng_python@Base 2.7.0
  __tracepoints__disable_destructors@Base 2.8.0
