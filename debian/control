@@ -2,9 +2,17 @@ Source: ust
 Priority: extra
 Maintainer: Jon Bernard <jbernard@debian.org>
 Uploaders: Michael Jeanson <mjeanson@ubuntu.com>
-Build-Depends: debhelper (>= 9), dh-autoreconf, liburcu-dev (>= 0.8.4),
-  uuid-dev, texinfo, python3, dh-python, javahelper,
-  default-jdk | default-jdk-headless, liblog4j1.2-java
+Build-Depends: debhelper (>= 9),
+  default-jdk <!nojava> | default-jdk-headless <!nojava>,
+  dh-autoreconf,
+  dh-python,
+  dpkg-dev (>= 1.16.1),
+  javahelper <!nojava>,
+  liblog4j1.2-java <!nojava>,
+  liburcu-dev (>= 0.8.4),
+  python3,
+  texinfo,
+  uuid-dev
 Standards-Version: 4.0.0
 Section: libs
 Vcs-Git: https://anonscm.debian.org/git/collab-maint/lttng-ust.git
@@ -70,6 +78,7 @@ Package: liblttng-ust-java
 Section: java
 Architecture: all
 Multi-Arch: foreign
+Build-Profiles: <!nojava>
 Depends: liblttng-ust-java-jni (<< ${source:Version}.1~),
          liblttng-ust-java-jni (>= ${source:Version}),
          ${java:Depends}, ${misc:Depends}
@@ -86,6 +95,7 @@ Package: liblttng-ust-java-jni
 Section: java
 Architecture: linux-any
 Multi-Arch: same
+Build-Profiles: <!nojava>
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Recommends: liblttng-ust-java (= ${source:Version})
@@ -101,6 +111,7 @@ Package: liblttng-ust-agent-java
 Section: java
 Architecture: all
 Multi-Arch: foreign
+Build-Profiles: <!nojava>
 Depends: liblttng-ust-agent-java-jni (<< ${source:Version}.1~),
          liblttng-ust-agent-java-jni (>= ${source:Version}),
          ${java:Depends}, ${misc:Depends}
@@ -117,6 +128,7 @@ Package: liblttng-ust-agent-java-jni
 Section: java
 Architecture: linux-any
 Multi-Arch: same
+Build-Profiles: <!nojava>
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Recommends: liblttng-ust-java (= ${source:Version})
