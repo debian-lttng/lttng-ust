@@ -8,6 +8,13 @@ include /usr/share/dpkg/architecture.mk
 EXTRA_CONF_OPTS =
 EXTRA_DH_OPTS =
 
+# Disable java packages on architecture that don't have
+# an openjdk port.
+nojava_archs = hppa
+ifneq (,$(filter $(DEB_HOST_ARCH), $(nojava_archs)))
+export DEB_BUILD_PROFILES += nojava
+endif
+
 ifeq ($(filter nojava,$(DEB_BUILD_PROFILES)),)
 export JAVA_HOME = /usr/lib/jvm/default-java
 export CLASSPATH = /usr/share/java/log4j-1.2.jar
