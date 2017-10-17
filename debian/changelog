@@ -1,3 +1,11 @@
+ust (2.10.0-2) unstable; urgency=medium
+
+  * [4e2e3ec] Add a 'nojava' build profile
+  * [b60dc6d] Update symbols for m68k arch (Closes: #876149)
+  * [0432f3b] Disable java on hppa. (Closes: #876148)
+
+ -- Michael Jeanson <mjeanson@ubuntu.com>  Mon, 16 Oct 2017 14:13:09 -0400
+
 ust (2.10.0-1) unstable; urgency=medium
 
   [ Michael Jeanson ]
