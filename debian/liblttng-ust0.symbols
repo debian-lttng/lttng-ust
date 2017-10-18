@@ -222,7 +222,7 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  lttng_abi_map_channel@Base 2.5.0
  lttng_add_cpu_id_to_ctx@Base 2.7.0
  lttng_add_ip_to_ctx@Base 2.5.0
- (arch=i386 amd64 m68k)lttng_add_perf_counter_to_ctx@Base 2.5.0
+ lttng_add_perf_counter_to_ctx@Base 2.5.0
  lttng_add_procname_to_ctx@Base 2.5.0
  lttng_add_pthread_id_to_ctx@Base 2.5.0
  lttng_add_vpid_to_ctx@Base 2.5.0
@@ -272,8 +272,8 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  lttng_get_probe_list_head@Base 2.5.0
  lttng_getenv@Base 2.9.1
  lttng_handle_pending_statedump@Base 2.5.0
- (arch=i386 amd64 m68k)lttng_perf_counter_exit@Base 2.5.0
- (arch=i386 amd64 m68k)lttng_perf_counter_init@Base 2.5.0
+ lttng_perf_counter_exit@Base 2.5.0
+ lttng_perf_counter_init@Base 2.5.0
  lttng_probe_register@Base 2.5.0
  lttng_probe_unregister@Base 2.5.0
  lttng_probes_get_event_list@Base 2.5.0
