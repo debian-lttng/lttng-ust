@@ -1,3 +1,3 @@
 version=3
 opts=pgpsigurlmangle=s/$/.asc/ \
-    http://lttng.org/files/lttng-ust/lttng-ust-([\d\.]*)\.tar\.(?:gz|bz2)
+    https://lttng.org/files/lttng-ust/lttng-ust-([\d\.]*)\.tar\.(?:gz|bz2)
