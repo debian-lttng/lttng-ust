@@ -3,6 +3,7 @@ liblttng-ust-ctl.so.4 liblttng-ust-ctl4 #MINVER#
  __sflush@Base 2.10.0
  __sfvwrite@Base 2.10.0
  __swsetup@Base 2.10.0
+ (arch=m68k)__tls_access_lib_ring_buffer_nesting@Base 2.10.0
  _get_num_possible_cpus@Base 2.10.0
  align_shm@Base 2.10.0
  channel_backend_free@Base 2.10.0
@@ -23,7 +24,7 @@ liblttng-ust-ctl.so.4 liblttng-ust-ctl4 #MINVER#
  lib_ring_buffer_create@Base 2.10.0
  lib_ring_buffer_get_subbuf@Base 2.10.0
  lib_ring_buffer_move_consumer@Base 2.10.0
- lib_ring_buffer_nesting@Base 2.10.0
+ (arch=!m68k)lib_ring_buffer_nesting@Base 2.10.0
  lib_ring_buffer_offset_address@Base 2.10.0
  lib_ring_buffer_open_read@Base 2.10.0
  lib_ring_buffer_put_subbuf@Base 2.10.0
