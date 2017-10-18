@@ -1,3 +1,13 @@
+ust (2.10.0-3) unstable; urgency=medium
+
+  * [68cef23] Add perf symbols to all archs
+  * [af1103b] Forgot m68k symbols in liblttng-ust-ctl4
+  * [7960048] Change priority to optional, as per policy
+  * [d5b199b] Bump standards version to 4.1.1
+  * [38c2762] Use https url in watch file
+
+ -- Michael Jeanson <mjeanson@ubuntu.com>  Wed, 18 Oct 2017 11:22:14 -0400
+
 ust (2.10.0-2) unstable; urgency=medium
 
   * [4e2e3ec] Add a 'nojava' build profile
