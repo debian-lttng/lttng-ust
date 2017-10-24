@@ -1,3 +1,9 @@
+ust (2.10.0-3~xenial1) xenial; urgency=medium
+
+  * Source backport to xenial
+
+ -- Michael Jeanson <mjeanson@ubuntu.com>  Tue, 24 Oct 2017 16:44:27 -0400
+
 ust (2.10.0-3) unstable; urgency=medium
 
   * [68cef23] Add perf symbols to all archs
