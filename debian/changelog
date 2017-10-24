@@ -1,3 +1,9 @@
+ust (2.10.0-3~trusty1) trusty; urgency=medium
+
+  * Source backport to trusty
+
+ -- Michael Jeanson <mjeanson@ubuntu.com>  Tue, 24 Oct 2017 16:47:14 -0400
+
 ust (2.10.0-3) unstable; urgency=medium
 
   * [68cef23] Add perf symbols to all archs
