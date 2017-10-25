@@ -1,0 +1,72 @@
+From d575543e2a8f575b395706379881896dfe7f436c Mon Sep 17 00:00:00 2001
+From: Michael Jeanson <mjeanson@efficios.com>
+Date: Wed, 25 Oct 2017 14:22:06 -0400
+Subject: [PATCH] Fix: build example SO when PIE is enabled
+
+In the example Makefiles, when building shared object libraires, make sure
+we set the custom linker options after the CFLAGS/LDFLAGS so that it
+overrides them. This is useful when the build system set some hardening
+features like PIE in the CFLAGS.
+
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ doc/examples/clock-override/Makefile  | 4 ++--
+ doc/examples/demo/Makefile            | 8 ++++----
+ doc/examples/getcpu-override/Makefile | 4 ++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/doc/examples/clock-override/Makefile b/doc/examples/clock-override/Makefile
+index 5433427c..22e5dffb 100644
+--- a/doc/examples/clock-override/Makefile
++++ b/doc/examples/clock-override/Makefile
+@@ -26,8 +26,8 @@ lttng-ust-clock-override-example.o: lttng-ust-clock-override-example.c
+ 		$(CFLAGS) -fpic -c -o $@ $<
+ 
+ lttng-ust-clock-override-example.so: lttng-ust-clock-override-example.o
+-	$(CC) -shared -Wl,--no-as-needed -o $@ $(LDFLAGS) $(AM_CFLAGS) \
+-		$(AM_LDFLAGS) $(CFLAGS) lttng-ust-clock-override-example.o
++	$(CC) -Wl,--no-as-needed -o $@ $(LDFLAGS) $(AM_CFLAGS) \
++		$(AM_LDFLAGS) $(CFLAGS) -shared -fpic lttng-ust-clock-override-example.o
+ 
+ .PHONY: clean
+ clean:
+diff --git a/doc/examples/demo/Makefile b/doc/examples/demo/Makefile
+index 6272a2ba..bb7fc173 100644
+--- a/doc/examples/demo/Makefile
++++ b/doc/examples/demo/Makefile
+@@ -29,16 +29,16 @@ tp2.o: tp2.c ust_tests_demo2.h
+ 		$(CFLAGS) -fpic -c -o $@ $<
+ 
+ lttng-ust-provider-ust-tests-demo.so: tp.o tp2.o
+-	$(CC) -shared -Wl,--no-as-needed -o $@ $(LDFLAGS) $(AM_CFLAGS) \
+-		$(AM_LDFLAGS) $(CFLAGS) -llttng-ust tp.o tp2.o
++	$(CC) -Wl,--no-as-needed -o $@ $(LDFLAGS) $(AM_CFLAGS) \
++		$(AM_LDFLAGS) $(CFLAGS) -shared -fpic tp.o tp2.o $(LIBS) -llttng-ust
+ 
+ tp3.o: tp3.c ust_tests_demo3.h
+ 	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(AM_CFLAGS) $(AM_CPPFLAGS) \
+ 		$(CFLAGS) -fpic -c -o $@ $<
+ 
+ lttng-ust-provider-ust-tests-demo3.so: tp3.o
+-	$(CC) -shared -Wl,--no-as-needed -o $@ $(LDFLAGS) $(AM_CFLAGS) \
+-		$(AM_LDFLAGS) $(CFLAGS) -llttng-ust tp3.o
++	$(CC) -Wl,--no-as-needed -o $@ $(LDFLAGS) $(AM_CFLAGS) \
++		$(AM_LDFLAGS) $(CFLAGS) -shared -fpic tp3.o $(LIBS) -llttng-ust
+ 
+ demo.o: demo.c
+ 	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(AM_CFLAGS) $(AM_CPPFLAGS) \
+diff --git a/doc/examples/getcpu-override/Makefile b/doc/examples/getcpu-override/Makefile
+index de295c66..e1e4892c 100644
+--- a/doc/examples/getcpu-override/Makefile
++++ b/doc/examples/getcpu-override/Makefile
+@@ -26,8 +26,8 @@ lttng-ust-getcpu-override-example.o: lttng-ust-getcpu-override-example.c
+ 		$(CFLAGS) -fpic -c -o $@ $<
+ 
+ lttng-ust-getcpu-override-example.so: lttng-ust-getcpu-override-example.o
+-	$(CC) -shared -Wl,--no-as-needed -o $@ $(LDFLAGS) $(AM_CFLAGS) \
+-		$(AM_LDFLAGS) $(CFLAGS) lttng-ust-getcpu-override-example.o
++	$(CC) -Wl,--no-as-needed -o $@ $(LDFLAGS) $(AM_CFLAGS) \
++		$(AM_LDFLAGS) $(CFLAGS) -shared -fpic lttng-ust-getcpu-override-example.o
+ 
+ .PHONY: clean
+ clean:
