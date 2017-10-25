@@ -1,3 +1,9 @@
+ust (2.10.0-3~trusty2) trusty; urgency=medium
+
+  * [da5484b] Fix build with PIE hardening
+
+ -- Michael Jeanson <mjeanson@ubuntu.com>  Wed, 25 Oct 2017 14:34:00 -0400
+
 ust (2.10.0-3~trusty1) trusty; urgency=medium
 
   * Source backport to trusty
