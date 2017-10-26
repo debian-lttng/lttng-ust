@@ -1,3 +1,9 @@
+ust (2.10.0-3~trusty4) trusty; urgency=medium
+
+  * [b57c823] Newer gcc makes these symbols public
+
+ -- Michael Jeanson <mjeanson@ubuntu.com>  Thu, 26 Oct 2017 13:37:04 -0400
+
 ust (2.10.0-3~trusty2) trusty; urgency=medium
 
   * [da5484b] Fix build with PIE hardening
