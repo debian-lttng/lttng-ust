@@ -2,8 +2,6 @@ liblttng-ust-cyg-profile-fast.so.0 liblttng-ust0 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  __cyg_profile_func_enter@Base 2.5.0
  __cyg_profile_func_exit@Base 2.5.0
- __start___tracepoints_ptrs@Base 2.10.0
- __stop___tracepoints_ptrs@Base 2.10.0
  __tracepoint_lttng_ust_cyg_profile_fast___func_entry@Base 2.5.0
  __tracepoint_lttng_ust_cyg_profile_fast___func_exit@Base 2.5.0
  __tracepoint_provider_lttng_ust_cyg_profile_fast@Base 2.5.0
@@ -11,15 +9,11 @@ liblttng-ust-cyg-profile.so.0 liblttng-ust0 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  __cyg_profile_func_enter@Base 2.5.0
  __cyg_profile_func_exit@Base 2.5.0
- __start___tracepoints_ptrs@Base 2.10.0
- __stop___tracepoints_ptrs@Base 2.10.0
  __tracepoint_lttng_ust_cyg_profile___func_entry@Base 2.5.0
  __tracepoint_lttng_ust_cyg_profile___func_exit@Base 2.5.0
  __tracepoint_provider_lttng_ust_cyg_profile@Base 2.5.0
 liblttng-ust-dl.so.0 liblttng-ust0 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
- __start___tracepoints_ptrs@Base 2.10.0
- __stop___tracepoints_ptrs@Base 2.10.0
  __tracepoint_lttng_ust_dl___build_id@Base 2.8.0
  __tracepoint_lttng_ust_dl___debug_link@Base 2.8.0
  __tracepoint_lttng_ust_dl___dlclose@Base 2.7.0
@@ -41,8 +35,6 @@ liblttng-ust-fork.so.0 liblttng-ust0 #MINVER#
  fork@Base 2.5.0
 liblttng-ust-libc-wrapper.so.0 liblttng-ust0 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
- __start___tracepoints_ptrs@Base 2.10.0
- __stop___tracepoints_ptrs@Base 2.10.0
  __tracepoint_lttng_ust_libc___calloc@Base 2.7.0
  __tracepoint_lttng_ust_libc___free@Base 2.7.0
  __tracepoint_lttng_ust_libc___malloc@Base 2.7.0
@@ -59,8 +51,6 @@ liblttng-ust-libc-wrapper.so.0 liblttng-ust0 #MINVER#
  realloc@Base 2.5.0
 liblttng-ust-pthread-wrapper.so.0 liblttng-ust0 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
- __start___tracepoints_ptrs@Base 2.10.0
- __stop___tracepoints_ptrs@Base 2.10.0
  __tracepoint_lttng_ust_pthread___pthread_mutex_lock_acq@Base 2.7.0
  __tracepoint_lttng_ust_pthread___pthread_mutex_lock_req@Base 2.7.0
  __tracepoint_lttng_ust_pthread___pthread_mutex_trylock@Base 2.7.0
