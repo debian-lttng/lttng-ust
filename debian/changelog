@@ -1,3 +1,9 @@
+ust (2.10.0-3~xenial4) xenial; urgency=medium
+
+  * [34fe897] Newer gcc makes these symbols public
+
+ -- Michael Jeanson <mjeanson@ubuntu.com>  Thu, 26 Oct 2017 12:02:34 -0400
+
 ust (2.10.0-3~xenial2) xenial; urgency=medium
 
   * [b70eea1] Fix build with PIE hardening
