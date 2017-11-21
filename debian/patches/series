@@ -1,3 +1,4 @@
 fix-incompatible-java-bytecode-format.patch
 use-python3.patch
 javah-doesnt-generate-class-files.patch
+fix-specify-soname-in-python-lttngust-loadlibrary.patch
