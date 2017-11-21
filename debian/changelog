@@ -1,3 +1,9 @@
+ust (2.10.0-4) unstable; urgency=medium
+
+  * [cae46a9] Fix python3-lttngust load un-versioned library (Closes: #882366)
+
+ -- Michael Jeanson <mjeanson@ubuntu.com>  Tue, 21 Nov 2017 15:49:13 -0500
+
 ust (2.10.0-3) unstable; urgency=medium
 
   * [68cef23] Add perf symbols to all archs
