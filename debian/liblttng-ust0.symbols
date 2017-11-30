@@ -25,6 +25,7 @@ liblttng-ust-dl.so.0 liblttng-ust0 #MINVER#
  dlopen@Base 2.5.0
 liblttng-ust-fd.so.0 liblttng-ust0 #MINVER#
  close@Base 2.9.0
+ fclose@Base 2.10.1
  lttng_ust_add_fd_to_tracker@Base 2.9.0
  lttng_ust_delete_fd_from_tracker@Base 2.9.0
  lttng_ust_fixup_fd_tracker_tls@Base 2.9.0
@@ -32,6 +33,7 @@ liblttng-ust-fd.so.0 liblttng-ust0 #MINVER#
  lttng_ust_lock_fd_tracker@Base 2.9.0
  lttng_ust_safe_close_fd@Base 2.9.0
  lttng_ust_safe_closefrom_fd@Base 2.9.0
+ lttng_ust_safe_fclose_stream@Base 2.10.1
  lttng_ust_strerror@Base 2.9.0
  lttng_ust_unlock_fd_tracker@Base 2.9.0
  ust_loglevel@Base 2.9.0
@@ -338,6 +340,7 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  lttng_ust_ringbuffer_set_allow_blocking@Base 2.10.0
  lttng_ust_safe_close_fd@Base 2.9.0
  lttng_ust_safe_closefrom_fd@Base 2.9.0
+ lttng_ust_safe_fclose_stream@Base 2.10.1
  lttng_ust_sockinfo_session_enabled@Base 2.5.0
  lttng_ust_statedump_destroy@Base 2.7.0
  lttng_ust_statedump_init@Base 2.7.0
