@@ -82,6 +82,7 @@ liblttng-ust-ctl.so.4 liblttng-ust-ctl4 #MINVER#
  lttng_ust_ringbuffer_set_allow_blocking@Base 2.10.0
  lttng_ust_safe_close_fd@Base 2.10.0
  lttng_ust_safe_closefrom_fd@Base 2.10.0
+ lttng_ust_safe_fclose_stream@Base 2.10.1
  lttng_ust_strerror@Base 2.10.0
  lttng_ust_trace_clock_set_description_cb@Base 2.10.0
  lttng_ust_trace_clock_set_freq_cb@Base 2.10.0
