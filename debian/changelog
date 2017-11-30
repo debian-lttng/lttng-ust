@@ -1,3 +1,10 @@
+ust (2.10.1-1~ubuntu16.04.1) xenial; urgency=medium
+
+  * [cd47deb] New upstream version 2.10.1
+  * [8fa461f] Update symbols for 2.10.1
+
+ -- Michael Jeanson <mjeanson@debian.org>  Thu, 30 Nov 2017 14:28:18 -0500
+
 ust (2.10.0-3~xenial4) xenial; urgency=medium
 
   * [34fe897] Newer gcc makes these symbols public
