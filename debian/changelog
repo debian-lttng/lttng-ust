@@ -1,3 +1,12 @@
+ust (2.10.1-2) unstable; urgency=medium
+
+  * [4561e9b] Moved VCS to salsa.debian.org
+  * [9132150] Add python3-distutils builddep (Closes: #896794)
+  * [f47371c] Bump standard to 4.1.4, no changes necessary
+  * [ef662e3] Use salsa canonical uri in VCS-Browser
+
+ -- Michael Jeanson <mjeanson@debian.org>  Tue, 24 Apr 2018 11:09:27 -0400
+
 ust (2.10.1-1) unstable; urgency=medium
 
   * [cd47deb] New upstream version 2.10.1
