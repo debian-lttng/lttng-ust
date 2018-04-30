@@ -1,3 +1,9 @@
+ust (2.10.1-1~ubuntu16.04.2) xenial; urgency=medium
+
+  * Rebuild for new ppa architectures.
+
+ -- Michael Jeanson <mjeanson@debian.org>  Mon, 30 Apr 2018 17:14:47 -0400
+
 ust (2.10.1-1~ubuntu16.04.1) xenial; urgency=medium
 
   * [cd47deb] New upstream version 2.10.1
