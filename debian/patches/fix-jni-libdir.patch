@@ -3,13 +3,7 @@ Author: Michael Jeanson <mjeanson@ubuntu.com>
 
 --- a/liblttng-ust-java/Makefile.am
 +++ b/liblttng-ust-java/Makefile.am
-@@ -1,4 +1,5 @@
- JAVAROOT = .
-+AM_JAVACFLAGS = -source 1.6 -target 1.6
- jarfile = liblttng-ust-java.jar
- jardir = $(datadir)/java
- pkgpath = org/lttng/ust
-@@ -8,7 +9,8 @@
+@@ -8,7 +8,8 @@
  BUILT_SOURCES = org_lttng_ust_LTTngUst.h
  
  AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include $(JNI_CPPFLAGS)
@@ -40,14 +34,6 @@ Author: Michael Jeanson <mjeanson@ubuntu.com>
 +jnilibdir = $(libdir)/jni
  liblttng_ust_log4j_jni_la_SOURCES = lttng_ust_log4j.c \
  	lttng_ust_log4j.h
- 
---- a/liblttng-ust-java-agent/java/lttng-ust-agent-common/Makefile.am
-+++ b/liblttng-ust-java-agent/java/lttng-ust-agent-common/Makefile.am
-@@ -1,4 +1,5 @@
- JAVAROOT = .
-+AM_JAVACFLAGS = -source 1.6 -target 1.6
- 
- pkgpath = org/lttng/ust/agent
  
 --- a/liblttng-ust-java-agent/jni/common/Makefile.am
 +++ b/liblttng-ust-java-agent/jni/common/Makefile.am
