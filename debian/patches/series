@@ -1,4 +1,4 @@
-fix-incompatible-java-bytecode-format.patch
+fix-jni-libdir.patch
 use-python3.patch
 javah-doesnt-generate-class-files.patch
 build-example-SO-when-PIE-is-enabled.patch
