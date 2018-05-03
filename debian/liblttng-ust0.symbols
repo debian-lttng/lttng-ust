@@ -132,7 +132,7 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  __sflush@Base 2.5.0
  __sfvwrite@Base 2.5.0
  __swsetup@Base 2.5.0
- (arch=m68k)__tls_access_lib_ring_buffer_nesting@Base 2.10.0
+ (arch=m68k,riscv64)__tls_access_lib_ring_buffer_nesting@Base 2.10.0
  __tracepoint_lttng_ust_lib___build_id@Base 2.9.0
  __tracepoint_lttng_ust_lib___debug_link@Base 2.9.0
  __tracepoint_lttng_ust_lib___load@Base 2.9.0
@@ -203,7 +203,7 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  lib_ring_buffer_create@Base 2.5.0
  lib_ring_buffer_get_subbuf@Base 2.5.0
  lib_ring_buffer_move_consumer@Base 2.5.0
- (arch=!m68k)lib_ring_buffer_nesting@Base 2.5.0
+ (arch=!m68k,riscv64)lib_ring_buffer_nesting@Base 2.5.0
  lib_ring_buffer_offset_address@Base 2.5.0
  lib_ring_buffer_open_read@Base 2.5.0
  lib_ring_buffer_put_subbuf@Base 2.5.0
