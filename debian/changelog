@@ -1,3 +1,12 @@
+ust (2.10.1-3) unstable; urgency=medium
+
+  * [6798480] Update symbols for new riscv64 architecture
+  * [f81465e] Drop patch forcing obsolete java bytecode version 1.6
+  * [26128f4] Drop gcj compat patch
+  * [ca241ec] Fix build failure with openjdk >= 10 (Closes: #897483)
+
+ -- Michael Jeanson <mjeanson@debian.org>  Fri, 04 May 2018 10:46:44 -0400
+
 ust (2.10.1-2) unstable; urgency=medium
 
   * [4561e9b] Moved VCS to salsa.debian.org
