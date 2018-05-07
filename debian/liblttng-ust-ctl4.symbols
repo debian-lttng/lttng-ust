@@ -24,7 +24,7 @@ liblttng-ust-ctl.so.4 liblttng-ust-ctl4 #MINVER#
  lib_ring_buffer_create@Base 2.10.0
  lib_ring_buffer_get_subbuf@Base 2.10.0
  lib_ring_buffer_move_consumer@Base 2.10.0
- (arch=!m68k,riscv64)lib_ring_buffer_nesting@Base 2.10.0
+ (arch=!m68k,!riscv64)lib_ring_buffer_nesting@Base 2.10.0
  lib_ring_buffer_offset_address@Base 2.10.0
  lib_ring_buffer_open_read@Base 2.10.0
  lib_ring_buffer_put_subbuf@Base 2.10.0
