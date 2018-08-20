@@ -1,7 +1,7 @@
 dnl Version infos
 m4_define([V_MAJOR], [2])
 m4_define([V_MINOR], [10])
-m4_define([V_PATCH], [1])
+m4_define([V_PATCH], [2])
 dnl m4_define([V_EXTRA], [])
 m4_define([V_NAME], [[KeKriek]])
 m4_define([V_DESC], [[From Brasserie Dunham, a sour mashed golden wheat ale fermented with local sour cherries from Tougas orchards. Fresh sweet cherry notes with some tartness, lively carbonation with a dry finish.]])
@@ -344,6 +344,8 @@ AS_IF([test "x$jni_interface" = "xyes" || test "x$java_agent_jul" = "xyes" || te
 	AX_PROG_JAVAH
 	CPPFLAGS="$saved_CPPFLAGS"
 ])
+
+AM_CONDITIONAL([HAVE_JAVAH], [test "x$JAVAH" != "x"])
 
 AS_IF([test "x$java_agent_log4j" = "xyes"], [
 	AX_CHECK_CLASSPATH
