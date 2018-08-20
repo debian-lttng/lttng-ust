@@ -1,3 +1,15 @@
+ust (2.10.2-1) unstable; urgency=medium
+
+  * [6ee169b] Fix symbols for riscv64
+  * [29a5184] New upstream version 2.10.2
+  * [9cea2f8] Drop patch applied upstream
+  * [b312339] Remove symbols erroneously exported by liblttng-ust-fd.so.0
+  * [ed3731f] Drop x-python3-version
+  * [0acbf69] Drop removed files from copyright
+  * [8bd76e8] Bump standard to 4.2.0, no changes necessary
+
+ -- Michael Jeanson <mjeanson@debian.org>  Mon, 20 Aug 2018 16:58:24 -0400
+
 ust (2.10.1-3) unstable; urgency=medium
 
   * [6798480] Update symbols for new riscv64 architecture
