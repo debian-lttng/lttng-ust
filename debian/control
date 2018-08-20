@@ -19,7 +19,6 @@ Section: libs
 Vcs-Git: https://salsa.debian.org/debian/ust.git
 Vcs-Browser: https://salsa.debian.org/debian/ust
 Homepage: https://lttng.org/
-X-Python3-Version: >= 3.0
 
 Package: liblttng-ust0
 Architecture: linux-any
