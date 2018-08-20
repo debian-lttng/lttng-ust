@@ -26,37 +26,7 @@ liblttng-ust-dl.so.0 liblttng-ust0 #MINVER#
 liblttng-ust-fd.so.0 liblttng-ust0 #MINVER#
  close@Base 2.9.0
  fclose@Base 2.10.1
- lttng_ust_add_fd_to_tracker@Base 2.9.0
- lttng_ust_delete_fd_from_tracker@Base 2.9.0
- lttng_ust_fixup_fd_tracker_tls@Base 2.9.0
- lttng_ust_init_fd_tracker@Base 2.9.0
- lttng_ust_lock_fd_tracker@Base 2.9.0
- lttng_ust_safe_close_fd@Base 2.9.0
- lttng_ust_safe_closefrom_fd@Base 2.9.0
- lttng_ust_safe_fclose_stream@Base 2.10.1
- lttng_ust_strerror@Base 2.9.0
- lttng_ust_unlock_fd_tracker@Base 2.9.0
  ust_loglevel@Base 2.9.0
- ustcomm_accept_unix_sock@Base 2.9.0
- ustcomm_close_unix_sock@Base 2.9.0
- ustcomm_connect_unix_sock@Base 2.9.0
- ustcomm_create_unix_sock@Base 2.9.0
- ustcomm_listen_unix_sock@Base 2.9.0
- ustcomm_recv_app_reply@Base 2.9.0
- ustcomm_recv_channel_from_sessiond@Base 2.9.0
- ustcomm_recv_fds_unix_sock@Base 2.9.0
- ustcomm_recv_stream_from_sessiond@Base 2.9.0
- ustcomm_recv_unix_sock@Base 2.9.0
- ustcomm_register_channel@Base 2.9.0
- ustcomm_register_enum@Base 2.9.0
- ustcomm_register_event@Base 2.9.0
- ustcomm_send_app_cmd@Base 2.9.0
- ustcomm_send_app_msg@Base 2.9.0
- ustcomm_send_fds_unix_sock@Base 2.9.0
- ustcomm_send_reg_msg@Base 2.9.0
- ustcomm_send_unix_sock@Base 2.9.0
- ustcomm_setsockopt_rcv_timeout@Base 2.9.0
- ustcomm_setsockopt_snd_timeout@Base 2.9.0
 liblttng-ust-fork.so.0 liblttng-ust0 #MINVER#
  clone@Base 2.5.0
  daemon@Base 2.5.0
