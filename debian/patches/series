@@ -1,3 +1,2 @@
 fix-jni-libdir.patch
-fix-jni-openjdk-10.patch
 use-python3.patch
