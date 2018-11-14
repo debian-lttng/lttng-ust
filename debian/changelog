@@ -1,3 +1,10 @@
+ust (2.10.2-1~ubuntu18.04.1) bionic; urgency=medium
+
+  * Source backport to bionic
+  * [f66bfce] Update gbp config
+
+ -- Michael Jeanson <mjeanson@debian.org>  Wed, 14 Nov 2018 15:43:53 -0500
+
 ust (2.10.2-1) unstable; urgency=medium
 
   * [6ee169b] Fix symbols for riscv64
