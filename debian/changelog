@@ -1,3 +1,15 @@
+ust (2.10.2-1~ubuntu14.04.1) trusty; urgency=medium
+
+  * [29a5184] New upstream version 2.10.2
+  * [9610754] Update symbols for new riscv64 architecture
+  * [a61fbcf] Drop patch forcing obsolete java bytecode version 1.6
+  * [017b734] Drop gcj compat patch
+  * [de01ea1] Fix symbols for riscv64
+  * [a3f8c31] Remove symbols erroneously exported by liblttng-ust-fd.so.0
+  * [f26ee8a] Drop removed files from copyright
+
+ -- Michael Jeanson <mjeanson@debian.org>  Wed, 14 Nov 2018 16:31:25 -0500
+
 ust (2.10.1-1~ubuntu14.04.2) trusty; urgency=medium
 
   * Rebuild for new ppa architectures.
