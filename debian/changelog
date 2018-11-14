@@ -1,3 +1,15 @@
+ust (2.10.2-1~ubuntu16.04.1) xenial; urgency=medium
+
+  * [29a5184] New upstream version 2.10.2
+  * [fdeb80e] Update symbols for new riscv64 architecture
+  * [9d16cfe] Drop patch forcing obsolete java bytecode version 1.6
+  * [e359bf7] Drop gcj compat patch
+  * [2ef3ec0] Fix symbols for riscv64
+  * [9fa870e] Remove symbols erroneously exported by liblttng-ust-fd.so.0
+  * [db678cc] Drop removed files from copyright
+
+ -- Michael Jeanson <mjeanson@debian.org>  Wed, 14 Nov 2018 16:16:25 -0500
+
 ust (2.10.1-1~ubuntu16.04.2) xenial; urgency=medium
 
   * Rebuild for new ppa architectures.
