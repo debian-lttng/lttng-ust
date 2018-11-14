@@ -89,10 +89,14 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-@HAVE_PERF_EVENT_TRUE@am__append_1 = \
+@LTTNG_UST_BUILD_WITH_LIBDL_TRUE@am__append_1 = -ldl
+@LTTNG_UST_BUILD_WITH_LIBC_DL_TRUE@am__append_2 = -lc
+@HAVE_PERF_EVENT_TRUE@am__append_3 = \
 @HAVE_PERF_EVENT_TRUE@	lttng-context-perf-counters.c \
 @HAVE_PERF_EVENT_TRUE@	perf_event.h
 
+@LTTNG_UST_BUILD_WITH_LIBDL_TRUE@am__append_4 = -ldl
+@LTTNG_UST_BUILD_WITH_LIBC_DL_TRUE@am__append_5 = -lc
 subdir = liblttng-ust
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_c___attribute__.m4 \
@@ -108,11 +112,13 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/ax_c___attribute__.m4 \
 	$(top_srcdir)/m4/ax_prog_javah.m4 \
 	$(top_srcdir)/m4/ax_sys_weak_alias.m4 \
 	$(top_srcdir)/m4/ax_try_compile_java.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/pprint.m4 \
+	$(top_srcdir)/m4/pprint.m4 \
 	$(top_srcdir)/m4/rw_prog_cxx_works.m4 \
-	$(top_srcdir)/configure.ac
+	$(top_srcdir)/config/libtool.m4 \
+	$(top_srcdir)/config/ltoptions.m4 \
+	$(top_srcdir)/config/ltsugar.m4 \
+	$(top_srcdir)/config/ltversion.m4 \
+	$(top_srcdir)/config/lt~obsolete.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
@@ -193,8 +199,10 @@ am_liblttng_ust_support_la_OBJECTS = ust-core.lo getenv.lo \
 	lttng-getcpu.lo
 liblttng_ust_support_la_OBJECTS =  \
 	$(am_liblttng_ust_support_la_OBJECTS)
+am__DEPENDENCIES_1 =
 liblttng_ust_tracepoint_la_DEPENDENCIES =  \
-	$(top_builddir)/snprintf/libustsnprintf.la
+	$(top_builddir)/snprintf/libustsnprintf.la \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 am_liblttng_ust_tracepoint_la_OBJECTS =  \
 	liblttng_ust_tracepoint_la-tracepoint.lo \
 	liblttng_ust_tracepoint_la-tracepoint-weak-test.lo
@@ -208,7 +216,8 @@ liblttng_ust_la_DEPENDENCIES =  \
 	$(top_builddir)/snprintf/libustsnprintf.la \
 	$(top_builddir)/liblttng-ust-comm/liblttng-ust-comm.la \
 	liblttng-ust-tracepoint.la liblttng-ust-runtime.la \
-	liblttng-ust-support.la
+	liblttng-ust-support.la $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
 am_liblttng_ust_la_OBJECTS =
 liblttng_ust_la_OBJECTS = $(am_liblttng_ust_la_OBJECTS)
 liblttng_ust_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
@@ -453,11 +462,9 @@ liblttng_ust_tracepoint_la_SOURCES = \
 	jhash.h \
 	error.h
 
-liblttng_ust_tracepoint_la_LIBADD = \
-	-lurcu-bp \
-	-lpthread \
-	$(top_builddir)/snprintf/libustsnprintf.la
-
+liblttng_ust_tracepoint_la_LIBADD = -lurcu-bp -lpthread \
+	$(top_builddir)/snprintf/libustsnprintf.la $(am__append_1) \
+	$(am__append_2)
 liblttng_ust_tracepoint_la_LDFLAGS = -no-undefined -version-info $(LTTNG_UST_LIBRARY_VERSION)
 liblttng_ust_tracepoint_la_CFLAGS = -DUST_COMPONENT="liblttng_ust_tracepoint" $(AM_CFLAGS)
 liblttng_ust_runtime_la_SOURCES = lttng-ust-comm.c lttng-ust-abi.c \
@@ -473,7 +480,7 @@ liblttng_ust_runtime_la_SOURCES = lttng-ust-comm.c lttng-ust-abi.c \
 	tracepoint-internal.h clock.h compat.h wait.h jhash.h \
 	lttng-ust-uuid.h error.h tracef.c lttng-ust-tracef-provider.h \
 	tracelog.c lttng-ust-tracelog-provider.h getenv.h \
-	string-utils.c string-utils.h $(am__append_1)
+	string-utils.c string-utils.h $(am__append_3)
 liblttng_ust_support_la_SOURCES = \
 	lttng-tracer.h \
 	lttng-tracer-core.h \
@@ -496,16 +503,11 @@ liblttng_ust_la_LDFLAGS = -no-undefined -version-info $(LTTNG_UST_LIBRARY_VERSIO
 liblttng_ust_support_la_LIBADD = \
 	$(top_builddir)/libringbuffer/libringbuffer.la
 
-liblttng_ust_la_LIBADD = \
-	-lpthread \
-	-lrt \
-	-lurcu-cds \
-	-ldl \
+liblttng_ust_la_LIBADD = -lpthread -lrt -lurcu-cds \
 	$(top_builddir)/snprintf/libustsnprintf.la \
 	$(top_builddir)/liblttng-ust-comm/liblttng-ust-comm.la \
-	liblttng-ust-tracepoint.la \
-	liblttng-ust-runtime.la liblttng-ust-support.la
-
+	liblttng-ust-tracepoint.la liblttng-ust-runtime.la \
+	liblttng-ust-support.la $(am__append_4) $(am__append_5)
 liblttng_ust_la_CFLAGS = -DUST_COMPONENT="liblttng_ust" $(AM_CFLAGS)
 all: all-am
 
