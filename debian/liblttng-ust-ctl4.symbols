@@ -1,4 +1,5 @@
 liblttng-ust-ctl.so.4 liblttng-ust-ctl4 #MINVER#
+* Build-Depends-Package: liblttng-ust-dev
  __num_possible_cpus@Base 2.10.0
  __sflush@Base 2.10.0
  __sfvwrite@Base 2.10.0
