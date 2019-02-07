@@ -1,3 +1,21 @@
+ust (2.10.3-1) unstable; urgency=medium
+
+  [ Ondřej Nový ]
+  * [33735c4] d/copyright: Change Format URL to correct one
+
+  [ Michael Jeanson ]
+  * [1e46cac] Add Salsa CI configuration
+  * [259748c] Remove partial changelog entry
+  * [b5cc43a] New upstream version 2.10.3
+  * [69b1488] Bump debhelper from old 9 to 10.
+  * [01e08c4] Re-export upstream signing key without extra signatures.
+  * [f655798] Drop unnecessary dependency on dh-autoconf.
+  * [9050194] Add Build-Depends-Package to symbols file
+  * [62988f4] Bump standards version to 4.3.0
+  * [550936c] Add upstream metadata file
+
+ -- Michael Jeanson <mjeanson@debian.org>  Thu, 07 Feb 2019 15:49:06 -0500
+
 ust (2.10.2-1) unstable; urgency=medium
 
   * [6ee169b] Fix symbols for riscv64
