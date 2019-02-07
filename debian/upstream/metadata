@@ -1,0 +1,7 @@
+Name: lttng-ust
+Bug-Database: https://bugs.lttng.org
+Contact: https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Documentation: https://lttng.org/docs
+Homepage: https://lttng.org
+Repository: git://git.lttng.org/lttng-ust.git
+Repository-Browse: https://git.lttng.org/?p=lttng-ust.git
