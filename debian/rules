@@ -29,7 +29,7 @@ endif
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 %:
-	dh $@ --with autoreconf,python3 $(EXTRA_DH_OPTS)
+	dh $@ --with=python3 $(EXTRA_DH_OPTS)
 
 override_dh_auto_configure:
 	PYTHON=python3 \
