@@ -2,7 +2,7 @@ Source: ust
 Priority: optional
 Maintainer: Jon Bernard <jbernard@debian.org>
 Uploaders: Michael Jeanson <mjeanson@debian.org>
-Build-Depends: debhelper (>= 9),
+Build-Depends: debhelper (>= 10~),
   default-jdk <!nojava> | default-jdk-headless <!nojava>,
   dh-autoreconf,
   dh-python,
