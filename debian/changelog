@@ -1,3 +1,9 @@
+ust (2.10.3-1~ubuntu18.04.1) bionic; urgency=medium
+
+  * [964b598] New upstream version 2.10.3
+
+ -- Michael Jeanson <mjeanson@debian.org>  Tue, 12 Mar 2019 15:58:50 -0400
+
 ust (2.10.2-1~ubuntu18.04.1) bionic; urgency=medium
 
   * Source backport to bionic
