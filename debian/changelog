@@ -1,3 +1,9 @@
+ust (2.10.3-1~ubuntu14.04.1) trusty; urgency=medium
+
+  * [964b598] New upstream version 2.10.3
+
+ -- Michael Jeanson <mjeanson@debian.org>  Tue, 12 Mar 2019 16:04:45 -0400
+
 ust (2.10.2-1~ubuntu14.04.1) trusty; urgency=medium
 
   * [29a5184] New upstream version 2.10.2
