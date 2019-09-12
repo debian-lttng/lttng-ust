@@ -1,3 +1,9 @@
+ust (2.10.5-1~ubuntu16.04.1) xenial; urgency=medium
+
+  * [c3cb3c7] New upstream version 2.10.5
+
+ -- Michael Jeanson <mjeanson@debian.org>  Thu, 12 Sep 2019 13:54:41 -0400
+
 ust (2.10.4-1~ubuntu16.04.1) xenial; urgency=medium
 
   * [11113ed] New upstream version 2.10.4
