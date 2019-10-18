@@ -1,0 +1,22 @@
+Fix typo 'acces' -> 'access', submitted upstream.
+
+--- a/liblttng-ust-dl/lttng-ust-dl.c
++++ b/liblttng-ust-dl/lttng-ust-dl.c
+@@ -107,7 +107,7 @@
+ 
+ 	elf = lttng_ust_elf_create(resolved_path);
+ 	if (!elf) {
+-		ERR("could not acces file %s", resolved_path);
++		ERR("could not access file %s", resolved_path);
+ 		return;
+ 	}
+ 
+@@ -169,7 +169,7 @@
+ 
+ 	elf = lttng_ust_elf_create(resolved_path);
+ 	if (!elf) {
+-		ERR("could not acces file %s", resolved_path);
++		ERR("could not access file %s", resolved_path);
+ 		return;
+ 	}
+ 
