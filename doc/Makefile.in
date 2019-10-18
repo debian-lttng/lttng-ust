@@ -89,6 +89,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
+@ENABLE_EXAMPLES_TRUE@am__append_1 = examples
 subdir = doc
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_c___attribute__.m4 \
@@ -201,7 +202,7 @@ am__define_uniq_tagged_files = \
   done | $(am__uniquify_input)`
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = $(SUBDIRS)
+DIST_SUBDIRS = . man examples
 am__DIST_COMMON = $(srcdir)/Makefile.in
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 am__relativize = \
@@ -287,6 +288,7 @@ LTLIBOBJS = @LTLIBOBJS@
 LTTNG_UST_CTL_LIBRARY_VERSION = @LTTNG_UST_CTL_LIBRARY_VERSION@
 LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS = @LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS@
 LTTNG_UST_LIBRARY_VERSION = @LTTNG_UST_LIBRARY_VERSION@
+LTTNG_UST_LIBRARY_VERSION_MAJOR = @LTTNG_UST_LIBRARY_VERSION_MAJOR@
 LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAINT = @MAINT@
 MAJOR_VERSION = @MAJOR_VERSION@
@@ -388,7 +390,7 @@ target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = . man examples
+SUBDIRS = . man $(am__append_1)
 dist_doc_DATA = java-agent.txt
 all: all-recursive
 

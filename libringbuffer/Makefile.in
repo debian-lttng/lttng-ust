@@ -89,6 +89,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
+@HAVE_LIBNUMA_TRUE@am__append_1 = -lnuma
 subdir = libringbuffer
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_c___attribute__.m4 \
@@ -118,7 +119,8 @@ CONFIG_HEADER = $(top_builddir)/config.h \
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libringbuffer_la_DEPENDENCIES =
+am__DEPENDENCIES_1 =
+libringbuffer_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_libringbuffer_la_OBJECTS = libringbuffer_la-smp.lo \
 	libringbuffer_la-shm.lo \
 	libringbuffer_la-ring_buffer_backend.lo \
@@ -252,6 +254,7 @@ LTLIBOBJS = @LTLIBOBJS@
 LTTNG_UST_CTL_LIBRARY_VERSION = @LTTNG_UST_CTL_LIBRARY_VERSION@
 LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS = @LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS@
 LTTNG_UST_LIBRARY_VERSION = @LTTNG_UST_LIBRARY_VERSION@
+LTTNG_UST_LIBRARY_VERSION_MAJOR = @LTTNG_UST_LIBRARY_VERSION_MAJOR@
 LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAINT = @MAINT@
 MAJOR_VERSION = @MAJOR_VERSION@
@@ -360,15 +363,12 @@ libringbuffer_la_SOURCES = \
 	shm.c shm.h shm_types.h shm_internal.h \
 	ring_buffer_backend.c \
 	ring_buffer_frontend.c \
-	api.h \
+	api.h mmap.h \
 	backend.h backend_internal.h backend_types.h \
 	frontend_api.h frontend.h frontend_internal.h frontend_types.h \
 	nohz.h vatomic.h rb-init.h
 
-libringbuffer_la_LIBADD = \
-	-lpthread \
-	-lrt
-
+libringbuffer_la_LIBADD = -lpthread -lrt $(am__append_1)
 libringbuffer_la_CFLAGS = -DUST_COMPONENT="libringbuffer" $(AM_CFLAGS)
 all: all-am
 

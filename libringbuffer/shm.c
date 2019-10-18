@@ -19,6 +19,7 @@
  */
 
 #define _LGPL_SOURCE
+#include <config.h>
 #include "shm.h"
 #include <unistd.h>
 #include <fcntl.h>
@@ -32,8 +33,14 @@
 #include <dirent.h>
 #include <lttng/align.h>
 #include <limits.h>
+#include <stdbool.h>
+#ifdef HAVE_LIBNUMA
+#include <numa.h>
+#include <numaif.h>
+#endif
 #include <helper.h>
 #include <ust-fd.h>
+#include "mmap.h"
 
 /*
  * Ensure we have the required amount of space available by writing 0
@@ -148,7 +155,7 @@ struct shm_object *_shm_object_table_alloc_shm(struct shm_object_table *table,
 
 	/* memory_map: mmap */
 	memory_map = mmap(NULL, memory_map_size, PROT_READ | PROT_WRITE,
-			  MAP_SHARED, shmfd, 0);
+			  MAP_SHARED | LTTNG_MAP_POPULATE, shmfd, 0);
 	if (memory_map == MAP_FAILED) {
 		PERROR("mmap");
 		goto error_mmap;
@@ -240,21 +247,63 @@ alloc_error:
 	return NULL;
 }
 
+/*
+ * libnuma prints errors on the console even for numa_available().
+ * Work-around this limitation by using get_mempolicy() directly to
+ * check whether the kernel supports mempolicy.
+ */
+#ifdef HAVE_LIBNUMA
+static bool lttng_is_numa_available(void)
+{
+	int ret;
+
+	ret = get_mempolicy(NULL, NULL, 0, NULL, 0);
+	if (ret && errno == ENOSYS) {
+		return false;
+	}
+	return numa_available() > 0;
+}
+#endif
+
 struct shm_object *shm_object_table_alloc(struct shm_object_table *table,
 			size_t memory_map_size,
 			enum shm_object_type type,
-			int stream_fd)
+			int stream_fd,
+			int cpu)
 {
+	struct shm_object *shm_object;
+#ifdef HAVE_LIBNUMA
+	int oldnode = 0, node;
+	bool numa_avail;
+
+	numa_avail = lttng_is_numa_available();
+	if (numa_avail) {
+		oldnode = numa_preferred();
+		if (cpu >= 0) {
+			node = numa_node_of_cpu(cpu);
+			if (node >= 0)
+				numa_set_preferred(node);
+		}
+		if (cpu < 0 || node < 0)
+			numa_set_localalloc();
+	}
+#endif /* HAVE_LIBNUMA */
 	switch (type) {
 	case SHM_OBJECT_SHM:
-		return _shm_object_table_alloc_shm(table, memory_map_size,
+		shm_object = _shm_object_table_alloc_shm(table, memory_map_size,
 				stream_fd);
+		break;
 	case SHM_OBJECT_MEM:
-		return _shm_object_table_alloc_mem(table, memory_map_size);
+		shm_object = _shm_object_table_alloc_mem(table, memory_map_size);
+		break;
 	default:
 		assert(0);
 	}
-	return NULL;
+#ifdef HAVE_LIBNUMA
+	if (numa_avail)
+		numa_set_preferred(oldnode);
+#endif /* HAVE_LIBNUMA */
+	return shm_object;
 }
 
 struct shm_object *shm_object_table_append_shm(struct shm_object_table *table,
@@ -293,7 +342,7 @@ struct shm_object *shm_object_table_append_shm(struct shm_object_table *table,
 
 	/* memory_map: mmap */
 	memory_map = mmap(NULL, memory_map_size, PROT_READ | PROT_WRITE,
-			  MAP_SHARED, shm_fd, 0);
+			  MAP_SHARED | LTTNG_MAP_POPULATE, shm_fd, 0);
 	if (memory_map == MAP_FAILED) {
 		PERROR("mmap");
 		goto error_mmap;

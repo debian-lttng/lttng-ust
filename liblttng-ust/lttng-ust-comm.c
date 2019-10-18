@@ -27,6 +27,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <dlfcn.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
@@ -59,6 +60,9 @@
 #include "../libringbuffer/getcpu.h"
 #include "getenv.h"
 
+/* Concatenate lttng ust shared library name with its major version number. */
+#define LTTNG_UST_LIB_SO_NAME "liblttng-ust.so." LTTNG_UST_LIBRARY_VERSION_MAJOR
+
 /*
  * Has lttng ust comm constructor been called ?
  */
@@ -82,6 +86,8 @@ static int initialized;
  *
  * ust_lock nests within the dynamic loader lock (within glibc) because
  * it is taken within the library constructor.
+ *
+ * The ust fd tracker lock nests within the ust_mutex.
  */
 static pthread_mutex_t ust_mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -417,6 +423,7 @@ void lttng_ust_fixup_tls(void)
 	lttng_fixup_nest_count_tls();
 	lttng_fixup_procname_tls();
 	lttng_fixup_ust_mutex_nest_tls();
+	lttng_ust_fixup_perf_counter_tls();
 	lttng_ust_fixup_fd_tracker_tls();
 }
 
@@ -1768,6 +1775,7 @@ void __attribute__((constructor)) lttng_ust_init(void)
 	pthread_attr_t thread_attr;
 	int timeout_mode;
 	int ret;
+	void *handle;
 
 	if (uatomic_xchg(&initialized, 1) == 1)
 		return;
@@ -1780,6 +1788,26 @@ void __attribute__((constructor)) lttng_ust_init(void)
 	lttng_ust_fixup_tls();
 
 	lttng_ust_loaded = 1;
+
+	/*
+	 * We need to ensure that the liblttng-ust library is not unloaded to avoid
+	 * the unloading of code used by the ust_listener_threads as we can not
+	 * reliably know when they exited. To do that, manually load
+	 * liblttng-ust.so to increment the dynamic loader's internal refcount for
+	 * this library so it never becomes zero, thus never gets unloaded from the
+	 * address space of the process. Since we are already running in the
+	 * constructor of the LTTNG_UST_LIB_SO_NAME library, calling dlopen will
+	 * simply increment the refcount and no additionnal work is needed by the
+	 * dynamic loader as the shared library is already loaded in the address
+	 * space. As a safe guard, we use the RTLD_NODELETE flag to prevent
+	 * unloading of the UST library if its refcount becomes zero (which should
+	 * never happen). Do the return value check but discard the handle at the
+	 * end of the function as it's not needed.
+	 */
+	handle = dlopen(LTTNG_UST_LIB_SO_NAME, RTLD_LAZY | RTLD_NODELETE);
+	if (!handle) {
+		ERR("dlopen of liblttng-ust shared library (%s).", LTTNG_UST_LIB_SO_NAME);
+	}
 
 	/*
 	 * We want precise control over the order in which we construct
@@ -2040,6 +2068,8 @@ void ust_before_fork(sigset_t *save_sigset)
 
 	ust_lock_nocheck();
 	rcu_bp_before_fork();
+	lttng_ust_lock_fd_tracker();
+	lttng_perf_lock();
 }
 
 static void ust_after_fork_common(sigset_t *restore_sigset)
@@ -2047,6 +2077,8 @@ static void ust_after_fork_common(sigset_t *restore_sigset)
 	int ret;
 
 	DBG("process %d", getpid());
+	lttng_perf_unlock();
+	lttng_ust_unlock_fd_tracker();
 	ust_unlock();
 
 	pthread_mutex_unlock(&ust_fork_mutex);
