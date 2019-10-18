@@ -73,7 +73,7 @@ liblttng-ust-ctl.so.4 liblttng-ust-ctl4 #MINVER#
  lttng_ust_dynamic_type_field@Base 2.10.0
  lttng_ust_dynamic_type_tag_field@Base 2.10.0
  lttng_ust_enable_trace_clock_override@Base 2.10.0
- lttng_ust_enum_get@Base 2.10.0
+ lttng_ust_enum_get_from_desc@Base 2.11.0
  lttng_ust_fixup_fd_tracker_tls@Base 2.10.0
  lttng_ust_getcpu_init@Base 2.10.0
  lttng_ust_getcpu_override@Base 2.10.0

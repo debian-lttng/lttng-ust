@@ -7,7 +7,6 @@ liblttng-ust-cyg-profile-fast.so.0 liblttng-ust0 #MINVER#
  __tracepoint_lttng_ust_cyg_profile_fast___func_entry@Base 2.5.0
  __tracepoint_lttng_ust_cyg_profile_fast___func_exit@Base 2.5.0
  __tracepoint_provider_lttng_ust_cyg_profile_fast@Base 2.5.0
- __tracepoints__disable_destructors@Base 2.8.0
 liblttng-ust-cyg-profile.so.0 liblttng-ust0 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  __cyg_profile_func_enter@Base 2.5.0
@@ -17,7 +16,6 @@ liblttng-ust-cyg-profile.so.0 liblttng-ust0 #MINVER#
  __tracepoint_lttng_ust_cyg_profile___func_entry@Base 2.5.0
  __tracepoint_lttng_ust_cyg_profile___func_exit@Base 2.5.0
  __tracepoint_provider_lttng_ust_cyg_profile@Base 2.5.0
- __tracepoints__disable_destructors@Base 2.8.0
 liblttng-ust-dl.so.0 liblttng-ust0 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  __start___tracepoints_ptrs@Base 2.10.0
@@ -28,7 +26,6 @@ liblttng-ust-dl.so.0 liblttng-ust0 #MINVER#
  __tracepoint_lttng_ust_dl___dlmopen@Base 2.9.0
  __tracepoint_lttng_ust_dl___dlopen@Base 2.7.0
  __tracepoint_provider_lttng_ust_dl@Base 2.7.0
- __tracepoints__disable_destructors@Base 2.8.0
  dlclose@Base 2.5.0
  dlmopen@Base 2.9.0
  dlopen@Base 2.5.0
@@ -53,7 +50,6 @@ liblttng-ust-libc-wrapper.so.0 liblttng-ust0 #MINVER#
  __tracepoint_lttng_ust_libc___posix_memalign@Base 2.7.0
  __tracepoint_lttng_ust_libc___realloc@Base 2.7.0
  __tracepoint_provider_lttng_ust_libc@Base 2.7.0
- __tracepoints__disable_destructors@Base 2.8.0
  calloc@Base 2.5.0
  free@Base 2.5.0
  lttng_ust_malloc_wrapper_init@Base 2.5.0
@@ -70,7 +66,6 @@ liblttng-ust-pthread-wrapper.so.0 liblttng-ust0 #MINVER#
  __tracepoint_lttng_ust_pthread___pthread_mutex_trylock@Base 2.7.0
  __tracepoint_lttng_ust_pthread___pthread_mutex_unlock@Base 2.7.0
  __tracepoint_provider_lttng_ust_pthread@Base 2.7.0
- __tracepoints__disable_destructors@Base 2.8.0
  pthread_mutex_lock@Base 2.5.0
  pthread_mutex_trylock@Base 2.5.0
  pthread_mutex_unlock@Base 2.5.0
@@ -90,6 +85,8 @@ liblttng-ust-tracepoint.so.0 liblttng-ust0 #MINVER#
  init_usterr@Base 2.5.0
  patient_send@Base 2.5.0
  patient_write@Base 2.5.0
+ tp_disable_destructors@Base 2.11.0
+ tp_get_destructors_state@Base 2.11.0
  tp_rcu_dereference_sym_bp@Base 2.5.0
  tp_rcu_read_lock_bp@Base 2.5.0
  tp_rcu_read_unlock_bp@Base 2.5.0
@@ -141,7 +138,6 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  __tracepoint_provider_lttng_ust_statedump@Base 2.7.0
  __tracepoint_provider_lttng_ust_tracef@Base 2.5.0
  __tracepoint_provider_lttng_ust_tracelog@Base 2.7.0
- __tracepoints__disable_destructors@Base 2.8.0
  _get_num_possible_cpus@Base 2.5.0
  _lttng_get_sessions@Base 2.5.0
  _lttng_ust_tracef@Base 2.5.0
@@ -255,6 +251,9 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  lttng_handle_pending_statedump@Base 2.5.0
  lttng_perf_counter_exit@Base 2.5.0
  lttng_perf_counter_init@Base 2.5.0
+ lttng_perf_lock@Base 2.11.0
+ lttng_perf_unlock@Base 2.11.0
+ lttng_probe_provider_unregister_events@Base 2.11.0
  lttng_probe_register@Base 2.5.0
  lttng_probe_unregister@Base 2.5.0
  lttng_probes_get_event_list@Base 2.5.0
@@ -308,11 +307,12 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  lttng_ust_elf_get_memsz@Base 2.8.0
  lttng_ust_elf_is_pic@Base 2.8.0
  lttng_ust_enable_trace_clock_override@Base 2.7.0
- lttng_ust_enum_get@Base 2.8.0
+ lttng_ust_enum_get_from_desc@Base 2.11.0
  lttng_ust_events_exit@Base 2.5.0
  lttng_ust_exit@Base 2.5.0
  lttng_ust_field_list_get_iter_next@Base 2.5.0
  lttng_ust_fixup_fd_tracker_tls@Base 2.9.0
+ lttng_ust_fixup_perf_counter_tls@Base 2.11.0
  lttng_ust_fixup_tls@Base 2.9.0
  lttng_ust_getcpu_init@Base 2.7.0
  lttng_ust_getcpu_override@Base 2.7.0
