@@ -1,10 +1,10 @@
 dnl Version infos
 m4_define([V_MAJOR], [2])
-m4_define([V_MINOR], [10])
-m4_define([V_PATCH], [5])
+m4_define([V_MINOR], [11])
+m4_define([V_PATCH], [0])
 dnl m4_define([V_EXTRA], [])
-m4_define([V_NAME], [[KeKriek]])
-m4_define([V_DESC], [[From Brasserie Dunham, a sour mashed golden wheat ale fermented with local sour cherries from Tougas orchards. Fresh sweet cherry notes with some tartness, lively carbonation with a dry finish.]])
+m4_define([V_NAME], [[Lafontaine]])
+m4_define([V_DESC], [[A modern Saison beer from Montréal's Oshlag microbrewery, Lafontaine is a refreshing, zesty, rice beer with hints of fruit and spices.]])
 
 m4_define([V_STRING], [V_MAJOR.V_MINOR.V_PATCH])
 m4_ifdef([V_EXTRA], [m4_append([V_STRING], [-V_EXTRA])])
@@ -20,7 +20,12 @@ AC_SUBST([PATCHLEVEL_VERSION], [V_PATCH])
 # Following the numbering scheme proposed by libtool for the library version
 # http://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
 # This is the library version of liblttng-ust.
-AC_SUBST([LTTNG_UST_LIBRARY_VERSION], [0:0:0])
+m4_define([UST_LIB_V_MAJOR], [0])
+m4_define([UST_LIB_V_MINOR], [0])
+m4_define([UST_LIB_V_PATCH], [0])
+
+AC_SUBST([LTTNG_UST_LIBRARY_VERSION], [UST_LIB_V_MAJOR:UST_LIB_V_MINOR:UST_LIB_V_PATCH])
+AC_SUBST([LTTNG_UST_LIBRARY_VERSION_MAJOR], [UST_LIB_V_MAJOR])
 # note: remember to update tracepoint.h dlopen() to match this version
 # number. TODO: eventually automate by exporting the major number.
 
@@ -171,6 +176,30 @@ AC_CHECK_HEADERS([ \
 	wchar.h \
 ])
 
+# Set architecture specific options
+AS_CASE([$host_cpu],
+	[i[[3456]]86], [],
+	[x86_64], [],
+	[amd64], [],
+	[powerpc], [],
+	[ppc64], [],
+	[ppc64le], [],
+	[powerpc64], [],
+	[powerpc64le], [],
+	[s390], [NO_UNALIGNED_ACCESS=1],
+	[s390x], [NO_UNALIGNED_ACCESS=1],
+	[arm*], [
+		NO_UNALIGNED_ACCESS=1
+		NO_NUMA=1
+		],
+	[aarch64*], [NO_UNALIGNED_ACCESS=1],
+	[mips*], [NO_UNALIGNED_ACCESS=1],
+	[tile*], [NO_UNALIGNED_ACCESS=1],
+	[
+		UNSUPPORTED_ARCH=1
+		NO_UNALIGNED_ACCESS=1
+	])
+
 # Configuration options, which will be installed in the config.h
 AH_TEMPLATE([LTTNG_UST_HAVE_EFFICIENT_UNALIGNED_ACCESS], [Use efficient unaligned access.])
 AH_TEMPLATE([LTTNG_UST_HAVE_SDT_INTEGRATION], [SystemTap integration via sdt.h])
@@ -251,6 +280,27 @@ AC_CHECK_LIB([urcu-bp], [synchronize_rcu_bp], [], [AC_MSG_ERROR([Cannot find lib
 # urcu - check that URCU lib is at least version 0.6
 AC_CHECK_LIB([urcu-bp], [call_rcu_bp], [], [AC_MSG_ERROR([liburcu 0.6 or newer is needed, please update your version or use [LDFLAGS]=-Ldir to specify the right location.])])
 
+# numa.h integration
+AS_IF([test "x$NO_NUMA" = "x1"],[
+      AS_IF([test "x$enable_numa" = "x" ], [enable_numa=no])
+])
+
+AC_ARG_ENABLE([numa], [
+AS_HELP_STRING([--disable-numa], [disable NUMA support])
+], [
+	enable_numa=$enableval
+], [
+	enable_numa=yes
+])
+
+AS_IF([test "x$enable_numa" = "xyes"], [
+	# numa - check that numa lib is available
+	AC_CHECK_LIB([numa], [numa_available], [],
+[AC_MSG_ERROR([libnuma is not available. Please either install it (e.g. libnuma-dev) or use [LDFLAGS]=-Ldir to specify the right location, or use --disable-numa configure argument to disable NUMA support.])])
+	have_libnuma=yes
+])
+AM_CONDITIONAL([HAVE_LIBNUMA], [test "x$have_libnuma" = "xyes"])
+
 # optional linux/perf_event.h
 AC_CHECK_HEADERS([linux/perf_event.h], [have_perf_event=yes], [])
 
@@ -261,28 +311,6 @@ AM_CONDITIONAL([HAVE_PERF_EVENT], [test "x$have_perf_event" = "xyes"])
 AS_IF([test "x$have_perf_event" = "xyes"], [
 	AC_DEFINE([LTTNG_UST_HAVE_PERF_EVENT], [1])
 ])
-
-AC_MSG_CHECKING([host system alignment requirements])
-AS_CASE([$host_cpu],
-	[i[[3456]]86], [],
-	[x86_64], [],
-	[amd64], [],
-	[powerpc], [],
-	[ppc64], [],
-	[ppc64le], [],
-	[powerpc64], [],
-	[powerpc64le], [],
-	[s390], [NO_UNALIGNED_ACCESS=1],
-	[s390x], [NO_UNALIGNED_ACCESS=1],
-	[arm*], [NO_UNALIGNED_ACCESS=1],
-	[aarch64*], [NO_UNALIGNED_ACCESS=1],
-	[mips*], [NO_UNALIGNED_ACCESS=1],
-	[tile*], [NO_UNALIGNED_ACCESS=1],
-	[
-		UNSUPPORTED_ARCH=1
-		NO_UNALIGNED_ACCESS=1
-	])
-AC_MSG_RESULT([$host_cpu])
 
 AS_IF([test "x$NO_UNALIGNED_ACCESS" = "x"], [
 	AC_DEFINE([LTTNG_UST_HAVE_EFFICIENT_UNALIGNED_ACCESS], [1])
@@ -405,6 +433,19 @@ AC_DEFINE_UNQUOTED([LTTNG_SYSTEM_RUNDIR], ["$lttng_system_rundir"],
 
 AC_CHECK_PROG([BUILD_GEN_TP_EXAMPLES], [python], ["yes"])
 AM_CONDITIONAL([BUILD_GEN_TP_EXAMPLES], [test "x$BUILD_GEN_TP_EXAMPLES" = "xyes"])
+
+# Enable building examples
+AC_ARG_ENABLE(
+	examples,
+	AS_HELP_STRING(
+		[--disable-examples],
+		[Do not build and install examples]
+	),
+	[enable_examples=$enableval],
+	[enable_examples=yes]
+)
+
+AM_CONDITIONAL([ENABLE_EXAMPLES], [test "x$enable_examples" != "xno"])
 
 # Set $IN_GIT_REPO if we're in the Git repository; the `bootstrap` file
 # is not distributed in tarballs.
@@ -573,8 +614,14 @@ PPRINT_PROP_BOOL_CUSTOM([JNI interface (JNI)], $value, [use --enable-jni-interfa
 test "x$python_agent" = xyes && value=1 || value=0
 PPRINT_PROP_BOOL_CUSTOM([Python agent], $value, [use --enable-python-agent])
 
+test "x$enable_numa" = xyes && value=1 || value=0
+PPRINT_PROP_BOOL([NUMA], $value)
+
 AS_ECHO
 PPRINT_SET_INDENT(0)
+
+test "x$enable_examples" = xyes && value=1 || value=0
+PPRINT_PROP_BOOL([Build and install examples], $value, $PPRINT_COLOR_SUBTITLE)
 
 # man pages build enabled/disabled
 m4_pushdef([build_man_pages_msg], [Build and install man pages])

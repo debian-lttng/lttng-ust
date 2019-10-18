@@ -32,6 +32,8 @@
 #include <sys/time.h>
 #include <fcntl.h>
 #include <pthread.h>
+#include <signal.h>
+#include <stdbool.h>
 #include <urcu/compiler.h>
 #include <urcu/tls-compat.h>
 #include <urcu/system.h>
@@ -61,13 +63,25 @@
  * Protect the lttng_fd_set. Nests within the ust_lock, and therefore
  * within the libc dl lock. Therefore, we need to fixup the TLS before
  * nesting into this lock.
+ *
+ * The ust_safe_guard_fd_mutex nests within the ust_mutex. This mutex
+ * is also held across fork.
  */
 static pthread_mutex_t ust_safe_guard_fd_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+/*
+ * Cancel state when grabbing the ust_safe_guard_fd_mutex. Saved when
+ * locking, restored on unlock. Protected by ust_safe_guard_fd_mutex.
+ */
+static int ust_safe_guard_saved_cancelstate;
+
 /*
  * Track whether we are within lttng-ust or application, for close
- * system call override by LD_PRELOAD library.
+ * system call override by LD_PRELOAD library. This also tracks whether
+ * we are invoking close() from a signal handler nested on an
+ * application thread.
  */
-static DEFINE_URCU_TLS(int, thread_fd_tracking);
+static DEFINE_URCU_TLS(int, ust_fd_mutex_nest);
 
 /* fd_set used to book keep fd being used by lttng-ust. */
 static fd_set *lttng_fd_set;
@@ -80,7 +94,7 @@ static int init_done;
  */
 void lttng_ust_fixup_fd_tracker_tls(void)
 {
-	asm volatile ("" : : "m" (URCU_TLS(thread_fd_tracking)));
+	asm volatile ("" : : "m" (URCU_TLS(ust_fd_mutex_nest)));
 }
 
 /*
@@ -124,24 +138,64 @@ void lttng_ust_init_fd_tracker(void)
 
 void lttng_ust_lock_fd_tracker(void)
 {
-	URCU_TLS(thread_fd_tracking) = 1;
-	/*
-	 * Ensure the compiler don't move the store after the close()
-	 * call in case close() would be marked as leaf.
-	 */
-	cmm_barrier();
-	pthread_mutex_lock(&ust_safe_guard_fd_mutex);
+	sigset_t sig_all_blocked, orig_mask;
+	int ret, oldstate;
+
+	ret = pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &oldstate);
+	if (ret) {
+		ERR("pthread_setcancelstate: %s", strerror(ret));
+	}
+	sigfillset(&sig_all_blocked);
+	ret = pthread_sigmask(SIG_SETMASK, &sig_all_blocked, &orig_mask);
+	if (ret) {
+		ERR("pthread_sigmask: %s", strerror(ret));
+	}
+	if (!URCU_TLS(ust_fd_mutex_nest)++) {
+		/*
+		 * Ensure the compiler don't move the store after the close()
+		 * call in case close() would be marked as leaf.
+		 */
+		cmm_barrier();
+		pthread_mutex_lock(&ust_safe_guard_fd_mutex);
+		ust_safe_guard_saved_cancelstate = oldstate;
+	}
+	ret = pthread_sigmask(SIG_SETMASK, &orig_mask, NULL);
+	if (ret) {
+		ERR("pthread_sigmask: %s", strerror(ret));
+	}
 }
 
 void lttng_ust_unlock_fd_tracker(void)
 {
-	pthread_mutex_unlock(&ust_safe_guard_fd_mutex);
+	sigset_t sig_all_blocked, orig_mask;
+	int ret, newstate, oldstate;
+	bool restore_cancel = false;
+
+	sigfillset(&sig_all_blocked);
+	ret = pthread_sigmask(SIG_SETMASK, &sig_all_blocked, &orig_mask);
+	if (ret) {
+		ERR("pthread_sigmask: %s", strerror(ret));
+	}
 	/*
 	 * Ensure the compiler don't move the store before the close()
 	 * call, in case close() would be marked as leaf.
 	 */
 	cmm_barrier();
-	URCU_TLS(thread_fd_tracking) = 0;
+	if (!--URCU_TLS(ust_fd_mutex_nest)) {
+		newstate = ust_safe_guard_saved_cancelstate;
+		restore_cancel = true;
+		pthread_mutex_unlock(&ust_safe_guard_fd_mutex);
+	}
+	ret = pthread_sigmask(SIG_SETMASK, &orig_mask, NULL);
+	if (ret) {
+		ERR("pthread_sigmask: %s", strerror(ret));
+	}
+	if (restore_cancel) {
+		ret = pthread_setcancelstate(newstate, &oldstate);
+		if (ret) {
+			ERR("pthread_setcancelstate: %s", strerror(ret));
+		}
+	}
 }
 
 static int dup_std_fd(int fd)
@@ -231,7 +285,7 @@ int lttng_ust_add_fd_to_tracker(int fd)
 	 * constructors.
 	 */
 	lttng_ust_init_fd_tracker();
-	assert(URCU_TLS(thread_fd_tracking));
+	assert(URCU_TLS(ust_fd_mutex_nest));
 
 	if (IS_FD_STD(fd)) {
 		ret = dup_std_fd(fd);
@@ -264,7 +318,7 @@ void lttng_ust_delete_fd_from_tracker(int fd)
 	 */
 	lttng_ust_init_fd_tracker();
 
-	assert(URCU_TLS(thread_fd_tracking));
+	assert(URCU_TLS(ust_fd_mutex_nest));
 	/* Not a valid fd. */
 	assert(IS_FD_VALID(fd));
 	/* Deleting an fd which was not set. */
@@ -294,7 +348,7 @@ int lttng_ust_safe_close_fd(int fd, int (*close_cb)(int fd))
 	 * If called from lttng-ust, we directly call close without
 	 * validating whether the FD is part of the tracked set.
 	 */
-	if (URCU_TLS(thread_fd_tracking))
+	if (URCU_TLS(ust_fd_mutex_nest))
 		return close_cb(fd);
 
 	lttng_ust_lock_fd_tracker();
@@ -330,7 +384,7 @@ int lttng_ust_safe_fclose_stream(FILE *stream, int (*fclose_cb)(FILE *stream))
 	 * If called from lttng-ust, we directly call fclose without
 	 * validating whether the FD is part of the tracked set.
 	 */
-	if (URCU_TLS(thread_fd_tracking))
+	if (URCU_TLS(ust_fd_mutex_nest))
 		return fclose_cb(stream);
 
 	fd = fileno(stream);
@@ -393,7 +447,7 @@ int lttng_ust_safe_closefrom_fd(int lowfd, int (*close_cb)(int fd))
 	 * If called from lttng-ust, we directly call close without
 	 * validating whether the FD is part of the tracked set.
 	 */
-	if (URCU_TLS(thread_fd_tracking)) {
+	if (URCU_TLS(ust_fd_mutex_nest)) {
 		for (i = lowfd; i < lttng_ust_max_fd; i++) {
 			if (close_cb(i) < 0) {
 				switch (errno) {

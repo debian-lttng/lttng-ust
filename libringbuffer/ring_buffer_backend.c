@@ -326,6 +326,9 @@ int channel_backend_init(struct channel_backend *chanb,
 	shmsize += sizeof(struct commit_counters_hot) * num_subbuf;
 	shmsize += offset_align(shmsize, __alignof__(struct commit_counters_cold));
 	shmsize += sizeof(struct commit_counters_cold) * num_subbuf;
+	/* Sampled timestamp end */
+	shmsize += offset_align(shmsize, __alignof__(uint64_t));
+	shmsize += sizeof(uint64_t) * num_subbuf;
 
 	/* Per-cpu buffer size: backend */
 	/* num_subbuf + 1 is the worse case */
@@ -350,7 +353,7 @@ int channel_backend_init(struct channel_backend *chanb,
 			struct shm_object *shmobj;
 
 			shmobj = shm_object_table_alloc(handle->table, shmsize,
-					SHM_OBJECT_SHM, stream_fds[i]);
+					SHM_OBJECT_SHM, stream_fds[i], i);
 			if (!shmobj)
 				goto end;
 			align_shm(shmobj, __alignof__(struct lttng_ust_lib_ring_buffer));
@@ -369,7 +372,7 @@ int channel_backend_init(struct channel_backend *chanb,
 		struct lttng_ust_lib_ring_buffer *buf;
 
 		shmobj = shm_object_table_alloc(handle->table, shmsize,
-					SHM_OBJECT_SHM, stream_fds[0]);
+					SHM_OBJECT_SHM, stream_fds[0], -1);
 		if (!shmobj)
 			goto end;
 		align_shm(shmobj, __alignof__(struct lttng_ust_lib_ring_buffer));
