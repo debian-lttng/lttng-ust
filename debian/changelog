@@ -1,3 +1,15 @@
+ust (2.11.0-1) unstable; urgency=medium
+
+  * [baa9342] New upstream version 2.11.0
+  * [641faa0] Update symbols for 2.11.0
+  * [edf6b94] Bump debhelper to 11
+  * [311ebe7] Bump standards version to 4.4.1
+  * [a44044e] Add patch to fix typo 'acces'
+  * [25273b0] Update build dependencies for 2.11.0
+  * [0993c22] Update debian/copyright
+
+ -- Michael Jeanson <mjeanson@debian.org>  Mon, 21 Oct 2019 13:59:24 -0400
+
 ust (2.10.5-1) unstable; urgency=medium
 
   * [4c51c2c] Update salsa Ci configuration
