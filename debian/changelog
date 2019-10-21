@@ -1,3 +1,9 @@
+ust (2.11.0-1~ubuntu18.04.1) bionic; urgency=medium
+
+  * Source backport to bionic
+
+ -- Michael Jeanson <mjeanson@debian.org>  Mon, 21 Oct 2019 15:20:02 -0400
+
 ust (2.11.0-1) unstable; urgency=medium
 
   * [baa9342] New upstream version 2.11.0
