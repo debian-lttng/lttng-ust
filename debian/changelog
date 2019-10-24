@@ -1,3 +1,9 @@
+ust (2.11.0-1~ubuntu16.04.4) xenial; urgency=medium
+
+  * [acb1613] No libnuma on xenial armhf
+
+ -- Michael Jeanson <mjeanson@debian.org>  Thu, 24 Oct 2019 11:48:23 -0400
+
 ust (2.11.0-1~ubuntu16.04.3) xenial; urgency=medium
 
   * [5c4c885] Newer gcc makes these symbols public
