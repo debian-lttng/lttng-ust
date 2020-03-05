@@ -33,7 +33,6 @@ liblttng-ust-fd.so.0 liblttng-ust0 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  close@Base 2.9.0
  fclose@Base 2.10.1
- ust_loglevel@Base 2.9.0
 liblttng-ust-fork.so.0 liblttng-ust0 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  clone@Base 2.5.0
