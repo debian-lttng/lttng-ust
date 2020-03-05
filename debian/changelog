@@ -1,3 +1,10 @@
+ust (2.11.1-1) unstable; urgency=medium
+
+  * [f5f3f39] New upstream version 2.11.1
+  * [279c100] Remove erroneously exported symbol in liblttng-ust-fd.so
+
+ -- Michael Jeanson <mjeanson@debian.org>  Thu, 05 Mar 2020 16:55:38 -0500
+
 ust (2.11.0-1) unstable; urgency=medium
 
   * [baa9342] New upstream version 2.11.0
