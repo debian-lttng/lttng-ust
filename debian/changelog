@@ -1,3 +1,10 @@
+ust (2.11.1-1~ubuntu18.04.1) bionic; urgency=medium
+
+  * [f5f3f39] New upstream version 2.11.1
+  * [cbd86e4] Remove erroneously exported symbol in liblttng-ust-fd.so
+
+ -- Michael Jeanson <mjeanson@debian.org>  Thu, 05 Mar 2020 17:06:22 -0500
+
 ust (2.11.0-1~ubuntu18.04.1) bionic; urgency=medium
 
   * Source backport to bionic
