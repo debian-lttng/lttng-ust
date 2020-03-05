@@ -1,3 +1,10 @@
+ust (2.11.1-1~ubuntu16.04.1) xenial; urgency=medium
+
+  * [f5f3f39] New upstream version 2.11.1
+  * [8337768] Remove erroneously exported symbol in liblttng-ust-fd.so
+
+ -- Michael Jeanson <mjeanson@debian.org>  Thu, 05 Mar 2020 17:09:08 -0500
+
 ust (2.11.0-1~ubuntu16.04.4) xenial; urgency=medium
 
   * [acb1613] No libnuma on xenial armhf
