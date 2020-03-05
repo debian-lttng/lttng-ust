@@ -235,9 +235,10 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
 	$(top_srcdir)/python-lttngust/lttngust/cmd.py \
 	$(top_srcdir)/python-lttngust/lttngust/debug.py \
 	$(top_srcdir)/python-lttngust/lttngust/loghandler.py COPYING \
-	ChangeLog config/compile config/config.guess config/config.sub \
-	config/depcomp config/install-sh config/ltmain.sh \
-	config/missing config/py-compile config/texinfo.tex
+	ChangeLog config/ar-lib config/compile config/config.guess \
+	config/config.sub config/depcomp config/install-sh \
+	config/ltmain.sh config/missing config/py-compile \
+	config/texinfo.tex
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -451,8 +452,19 @@ SUBDIRS = . include snprintf libringbuffer liblttng-ust-comm \
 # liblttng-ust-malloc
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = lttng-ust.pc
-dist_doc_DATA = README.md ChangeLog
-dist_noinst_DATA = CodingStyle
+dist_doc_DATA = \
+	ChangeLog \
+	COPYING \
+	LICENSE \
+	README.md
+
+dist_noinst_DATA = \
+	CodingStyle \
+	CONTRIBUTING.md \
+	gpl-2.0.txt \
+	lgpl-2.1.txt \
+	mit-license.txt
+
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
