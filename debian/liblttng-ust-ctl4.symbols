@@ -134,6 +134,7 @@ liblttng-ust-ctl.so.4 liblttng-ust-ctl4 #MINVER#
  ustctl_channel_close_wakeup_fd@Base 2.10.0
  ustctl_channel_get_wait_fd@Base 2.10.0
  ustctl_channel_get_wakeup_fd@Base 2.10.0
+ ustctl_clear_buffer@Base 2.12.0
  ustctl_create_channel@Base 2.10.0
  ustctl_create_event@Base 2.10.0
  ustctl_create_session@Base 2.10.0

@@ -38,6 +38,16 @@ liblttng-ust-fork.so.0 liblttng-ust0 #MINVER#
  clone@Base 2.5.0
  daemon@Base 2.5.0
  fork@Base 2.5.0
+ setegid@Base 2.12.0
+ seteuid@Base 2.12.0
+ setgid@Base 2.12.0
+ setns@Base 2.12.0
+ setregid@Base 2.12.0
+ setresgid@Base 2.12.0
+ setresuid@Base 2.12.0
+ setreuid@Base 2.12.0
+ setuid@Base 2.12.0
+ unshare@Base 2.12.0
 liblttng-ust-libc-wrapper.so.0 liblttng-ust0 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  __start___tracepoints_ptrs@Base 2.10.0
@@ -116,6 +126,7 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  __tracepoint_lttng_ust_statedump___build_id@Base 2.8.0
  __tracepoint_lttng_ust_statedump___debug_link@Base 2.8.0
  __tracepoint_lttng_ust_statedump___end@Base 2.7.0
+ __tracepoint_lttng_ust_statedump___procname@Base 2.12.0
  __tracepoint_lttng_ust_statedump___start@Base 2.7.0
  __tracepoint_lttng_ust_tracef___event@Base 2.5.0
  __tracepoint_lttng_ust_tracelog___TRACE_ALERT@Base 2.7.0
@@ -196,13 +207,26 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  ltt_probe_unregister@Base 2.5.0
  lttng_abi_create_root_handle@Base 2.5.0
  lttng_abi_map_channel@Base 2.5.0
+ lttng_add_cgroup_ns_to_ctx@Base 2.12.0
  lttng_add_cpu_id_to_ctx@Base 2.7.0
  lttng_add_ip_to_ctx@Base 2.5.0
+ lttng_add_ipc_ns_to_ctx@Base 2.12.0
+ lttng_add_mnt_ns_to_ctx@Base 2.12.0
+ lttng_add_net_ns_to_ctx@Base 2.12.0
  lttng_add_perf_counter_to_ctx@Base 2.5.0
+ lttng_add_pid_ns_to_ctx@Base 2.12.0
  lttng_add_procname_to_ctx@Base 2.5.0
  lttng_add_pthread_id_to_ctx@Base 2.5.0
+ lttng_add_user_ns_to_ctx@Base 2.12.0
+ lttng_add_uts_ns_to_ctx@Base 2.12.0
+ lttng_add_vegid_to_ctx@Base 2.12.0
+ lttng_add_veuid_to_ctx@Base 2.12.0
+ lttng_add_vgid_to_ctx@Base 2.12.0
  lttng_add_vpid_to_ctx@Base 2.5.0
+ lttng_add_vsgid_to_ctx@Base 2.12.0
+ lttng_add_vsuid_to_ctx@Base 2.12.0
  lttng_add_vtid_to_ctx@Base 2.5.0
+ lttng_add_vuid_to_ctx@Base 2.12.0
  lttng_append_context@Base 2.5.0
  lttng_attach_context@Base 2.5.0
  lttng_channel_disable@Base 2.5.0
@@ -213,13 +237,26 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  lttng_client_callbacks_overwrite@Base 2.5.0
  lttng_client_callbacks_overwrite_rt@Base 2.5.0
  lttng_context_add_rcu@Base 2.8.0
+ lttng_context_cgroup_ns_reset@Base 2.12.0
  lttng_context_exit@Base 2.5.0
  lttng_context_init@Base 2.5.0
+ lttng_context_ipc_ns_reset@Base 2.12.0
  lttng_context_is_app@Base 2.8.0
+ lttng_context_mnt_ns_reset@Base 2.12.0
+ lttng_context_net_ns_reset@Base 2.12.0
+ lttng_context_pid_ns_reset@Base 2.12.0
  lttng_context_procname_reset@Base 2.5.0
  lttng_context_update@Base 2.6.0
+ lttng_context_user_ns_reset@Base 2.12.0
+ lttng_context_uts_ns_reset@Base 2.12.0
+ lttng_context_vegid_reset@Base 2.12.0
+ lttng_context_veuid_reset@Base 2.12.0
+ lttng_context_vgid_reset@Base 2.12.0
  lttng_context_vpid_reset@Base 2.5.0
+ lttng_context_vsgid_reset@Base 2.12.0
+ lttng_context_vsuid_reset@Base 2.12.0
  lttng_context_vtid_reset@Base 2.5.0
+ lttng_context_vuid_reset@Base 2.12.0
  lttng_crash_magic_xor@Base 2.7.0
  lttng_destroy_context@Base 2.5.0
  lttng_enabler_attach_bytecode@Base 2.5.0
@@ -237,8 +274,12 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  lttng_filter_validate_bytecode@Base 2.5.0
  lttng_find_context@Base 2.5.0
  lttng_fix_pending_events@Base 2.5.0
+ lttng_fixup_cgroup_ns_tls@Base 2.12.0
+ lttng_fixup_ipc_ns_tls@Base 2.12.0
+ lttng_fixup_net_ns_tls@Base 2.12.0
  lttng_fixup_procname_tls@Base 2.5.0
  lttng_fixup_ringbuffer_tls@Base 2.5.0
+ lttng_fixup_uts_ns_tls@Base 2.12.0
  lttng_fixup_vtid_tls@Base 2.5.0
  lttng_free_enabler_filter_bytecode@Base 2.5.0
  lttng_free_event_filter_runtime@Base 2.5.0
@@ -359,6 +400,16 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  synchronize_trace@Base 2.5.0
  ust_after_fork_child@Base 2.5.0
  ust_after_fork_parent@Base 2.5.0
+ ust_after_setegid@Base 2.12.0
+ ust_after_seteuid@Base 2.12.0
+ ust_after_setgid@Base 2.12.0
+ ust_after_setns@Base 2.12.0
+ ust_after_setregid@Base 2.12.0
+ ust_after_setresgid@Base 2.12.0
+ ust_after_setresuid@Base 2.12.0
+ ust_after_setreuid@Base 2.12.0
+ ust_after_setuid@Base 2.12.0
+ ust_after_unshare@Base 2.12.0
  ust_before_fork@Base 2.5.0
  ust_lock@Base 2.5.0
  ust_lock_nocheck@Base 2.5.0
