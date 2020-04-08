@@ -28,6 +28,9 @@
 #include <assert.h>
 #include "compat.h"
 
+/* Maximum number of nesting levels for the procname cache. */
+#define PROCNAME_NESTING_MAX	2
+
 /*
  * We cache the result to ensure we don't trigger a system call for
  * each event.
@@ -37,31 +40,45 @@
  * be set for a thread before the first event is logged within this
  * thread.
  */
-typedef char procname_array[17];
+typedef char procname_array[PROCNAME_NESTING_MAX][17];
+
 static DEFINE_URCU_TLS(procname_array, cached_procname);
+
+static DEFINE_URCU_TLS(int, procname_nesting);
 
 static inline
 char *wrapper_getprocname(void)
 {
-	if (caa_unlikely(!URCU_TLS(cached_procname)[0])) {
-		lttng_ust_getprocname(URCU_TLS(cached_procname));
-		URCU_TLS(cached_procname)[LTTNG_UST_PROCNAME_LEN - 1] = '\0';
+	int nesting = CMM_LOAD_SHARED(URCU_TLS(procname_nesting));
+
+	if (caa_unlikely(nesting >= PROCNAME_NESTING_MAX))
+		return "<unknown>";
+	if (caa_unlikely(!URCU_TLS(cached_procname)[nesting][0])) {
+		CMM_STORE_SHARED(URCU_TLS(procname_nesting), nesting + 1);
+		/* Increment nesting before updating cache. */
+		cmm_barrier();
+		lttng_ust_getprocname(URCU_TLS(cached_procname)[nesting]);
+		URCU_TLS(cached_procname)[nesting][LTTNG_UST_PROCNAME_LEN - 1] = '\0';
+		/* Decrement nesting after updating cache. */
+		cmm_barrier();
+		CMM_STORE_SHARED(URCU_TLS(procname_nesting), nesting);
 	}
-	return URCU_TLS(cached_procname);
+	return URCU_TLS(cached_procname)[nesting];
 }
 
+/* Reset should not be called from a signal handler. */
 void lttng_context_procname_reset(void)
 {
-	URCU_TLS(cached_procname)[0] = '\0';
+	CMM_STORE_SHARED(URCU_TLS(cached_procname)[1][0], '\0');
+	CMM_STORE_SHARED(URCU_TLS(procname_nesting), 1);
+	CMM_STORE_SHARED(URCU_TLS(cached_procname)[0][0], '\0');
+	CMM_STORE_SHARED(URCU_TLS(procname_nesting), 0);
 }
 
 static
 size_t procname_get_size(struct lttng_ctx_field *field, size_t offset)
 {
-	size_t size = 0;
-
-	size += LTTNG_UST_PROCNAME_LEN;
-	return size;
+	return LTTNG_UST_PROCNAME_LEN;
 }
 
 static
@@ -79,10 +96,7 @@ static
 void procname_get_value(struct lttng_ctx_field *field,
 		struct lttng_ctx_value *value)
 {
-	char *procname;
-
-	procname = wrapper_getprocname();
-	value->u.str = procname;
+	value->u.str = wrapper_getprocname();
 }
 
 int lttng_add_procname_to_ctx(struct lttng_ctx **ctx)

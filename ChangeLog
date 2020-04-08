@@ -1,4 +1,10 @@
-2020-03-04 (National Grammar Day) lttng-ust 2.11.1
+2020-04-08 (The Day After National Beer Day) lttng-ust 2.12.0
+	* (no change)
+
+2020-03-27 (International Stay At Home Month) lttng-ust 2.12.0-rc3
+	* Fix: v.u.d might be uninitialized
+
+2020-03-04 (National Grammar Day) lttng-ust 2.12.0-rc2
 	* Fix: set FD_CLOEXEC on incoming FDs.
 	* Fix: tracepoint.h: Disable address sanitizer on pointer array section variables
 	* Fix: jhash.h: remove out-of-bound reads
@@ -6,15 +12,24 @@
 	* Fix: lttng-ust-comm.c: return number of fd rather size of array
 	* liblttng-ust: exit loop early on event enabler match
 	* Add git-review config
+
+2020-02-05 (National Weatherperson's Day) lttng-ust 2.12.0-rc1
 	* Fix: build with -fno-common
+	* Bump LTTNG_UST_ABI_MINOR_VERSION to 1
+	* lttng-clear: stop tracing required
+	* doc: fix build failure due to wrong whitespace character
+	* doc: reformat long lines in doc/examples/Makefile.am
+	* doc: pass AR when building examples
+	* Require automake >= 1.12
+	* Add procname to lttng_ust_statedump information
+	* Docs: LTTNG-UST(3): missing references to some namespace man pages
+	* Set version to 2.12-pre
+	* Add pkgconfig support for liblttng-ust-ctl
 	* Fix: uninitialized variable in lib_ring_buffer_reserve_committed
 	* Fix: document proper liburcu version dependency
 	* Fix: Add missing files to distribution
-
-2019-10-17 (Wear Something Gaudy Day) lttng-ust 2.11.0
-	* (no change)
-
-2019-10-11 (National Sausage Pizza Day) lttng-ust 2.11.0-rc5
+	* Add userspace vuid/vgid contexts
+	* Add userspace namespace contexts
 	* Fix: lttng perf counter deadlock
 	* Revert "Fix: fd tracker: do not allow signal handlers to close lttng-ust FDs"
 	* Fix: fd tracker: do not allow signal handlers to close lttng-ust FDs
@@ -23,8 +38,8 @@
 	* Fix: Lock FD tracker across fork
 	* doc/man: include build version in GitHub links
 	* Check if the AR environment variable exists for cross compilation
-
-2019-09-07 (Walter White's Anniversary) lttng-ust 2.11.0-rc4
+	* ustctl: Implement ring buffer clear
+	* Make bitfield.h C++-friendly
 	* Fix: don't wait for initial statedump when 0 session active
 	* Fix: wait for initial statedump before proceeding to the main program
 	* Use MAP_POPULATE to reduce pagefault when available
@@ -34,8 +49,7 @@
 	* Fix: missing define when not building with gcc
 	* Fix: client_sequence_number may dereference NULL pointer
 	* Fix: namespace our gettid wrapper
-
-2019-05-24 (Scavenger Hunt Day) lttng-ust 2.11.0-rc3
+	* Fix: get tid not pid in vtid context
 	* Cleanup: bitfields: streamline use of underscores
 	* Silence compiler "always false comparison" warning
 	* Fix: bitfield: shift undefined/implementation defined behaviors
@@ -43,16 +57,32 @@
 	* Fix: alignment of ring buffer shm space reservation
 	* Fix: allocate ts_end in ringbuffer shared memory
 	* Fix: timestamp_end field should include all events within sub-buffer
+	* Harmonize rw_prog_cxx_works macro across projects
+	* Update macros from the autoconf archive
 	* ust-ctl API: clarify getter usage requirements
 	* Fix: don't access packet header for stream_id and stream_instance_id getters
+	* Add LTTNG_PACKED ifdefs to validate that it is defined
+	* Report perf integration status at configure
 	* compat: work around broken _SC_NPROCESSORS_CONF on MUSL libc
+	* Code cleanup in contexts
 	* doc: remove repeated word in coding style
 	* tap-driver.sh: flush stdout after each test result
 	* Move wait_shm_mmap initialization to library constructor
-
-2019-01-25 (National Opposite Day) lttng-ust 2.11.0-rc2
+	* Fix: additional compiler barriers for procname context
+	* Fix: procname context async-signal safety
+	* Cleanup vtid/vpid context caches
+	* Cleanup: fix typo 'acces' -> 'access'
 	* Fix: Initialize fd field of struct lttng_ust_elf to -1 at allocation
+	* Cleanup: test Makefiles
+	* Add silent mode to examples Makefiles
+	* Add silent rules support for docs
+	* Use config.h to define SONAME major number
+	* Use a variable to select the dlopen lib in Makefiles
+	* Add hello-many to gitignore
+	* Adapt lttng-ust to use multiflavor symbols from liburcu 0.11
 	* Clarify lib_ring_buffer_switch_slow() requirements
+	* tests: hello-many
+	* Fix: sync event enablers before choosing header type
 	* Fix: address shellcheck warnings/errors in example scripts
 	* Fix: check for event class/instance prototype mismatch
 	* Fix: race between statedump and library destructor

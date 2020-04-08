@@ -90,8 +90,6 @@ build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
 noinst_PROGRAMS = hello$(EXEEXT)
-@LTTNG_UST_BUILD_WITH_LIBDL_TRUE@am__append_1 = -ldl
-@LTTNG_UST_BUILD_WITH_LIBC_DL_TRUE@am__append_2 = -lc
 subdir = tests/test-app-ctx
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_c___attribute__.m4 \
@@ -125,7 +123,7 @@ am_hello_OBJECTS = hello-hello.$(OBJEXT) hello-tp.$(OBJEXT)
 hello_OBJECTS = $(am_hello_OBJECTS)
 am__DEPENDENCIES_1 =
 hello_DEPENDENCIES = $(top_builddir)/liblttng-ust/liblttng-ust.la \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -219,6 +217,7 @@ CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
+DL_LIBS = @DL_LIBS@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -253,7 +252,6 @@ LTLIBOBJS = @LTLIBOBJS@
 LTTNG_UST_CTL_LIBRARY_VERSION = @LTTNG_UST_CTL_LIBRARY_VERSION@
 LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS = @LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS@
 LTTNG_UST_LIBRARY_VERSION = @LTTNG_UST_LIBRARY_VERSION@
-LTTNG_UST_LIBRARY_VERSION_MAJOR = @LTTNG_UST_LIBRARY_VERSION_MAJOR@
 LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAINT = @MAINT@
 MAJOR_VERSION = @MAJOR_VERSION@
@@ -286,7 +284,6 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-UUDECODE = @UUDECODE@
 VERSION = @VERSION@
 WEAK_ALIAS = @WEAK_ALIAS@
 WEAK_ALIAS_CROSSFILE = @WEAK_ALIAS_CROSSFILE@
@@ -357,8 +354,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
 hello_SOURCES = hello.c tp.c ust_tests_hello.h
-hello_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la \
-	$(am__append_1) $(am__append_2)
+hello_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la $(DL_LIBS)
 hello_CFLAGS = -Werror=old-style-definition $(AM_CFLAGS)
 all: all-am
 

@@ -89,14 +89,10 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-@LTTNG_UST_BUILD_WITH_LIBDL_TRUE@am__append_1 = -ldl
-@LTTNG_UST_BUILD_WITH_LIBC_DL_TRUE@am__append_2 = -lc
-@HAVE_PERF_EVENT_TRUE@am__append_3 = \
+@HAVE_PERF_EVENT_TRUE@am__append_1 = \
 @HAVE_PERF_EVENT_TRUE@	lttng-context-perf-counters.c \
 @HAVE_PERF_EVENT_TRUE@	perf_event.h
 
-@LTTNG_UST_BUILD_WITH_LIBDL_TRUE@am__append_4 = -ldl
-@LTTNG_UST_BUILD_WITH_LIBC_DL_TRUE@am__append_5 = -lc
 subdir = liblttng-ust
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_c___attribute__.m4 \
@@ -159,51 +155,47 @@ am__liblttng_ust_runtime_la_SOURCES_DIST = lttng-ust-comm.c \
 	lttng-ust-abi.c lttng-probes.c lttng-context-provider.c \
 	lttng-context-vtid.c lttng-context-vpid.c \
 	lttng-context-pthread-id.c lttng-context-procname.c \
-	lttng-context-ip.c lttng-context-cpu-id.c lttng-context.c \
-	lttng-events.c lttng-filter.c lttng-filter.h \
-	lttng-filter-validator.c lttng-filter-specialize.c \
-	lttng-filter-interpreter.c filter-bytecode.h \
-	lttng-hash-helper.h lttng-ust-elf.c lttng-ust-statedump.c \
-	lttng-ust-statedump.h lttng-ust-statedump-provider.h ust_lib.c \
-	ust_lib.h tracepoint-internal.h clock.h compat.h wait.h \
-	jhash.h lttng-ust-uuid.h error.h tracef.c \
-	lttng-ust-tracef-provider.h tracelog.c \
-	lttng-ust-tracelog-provider.h getenv.h string-utils.c \
-	string-utils.h lttng-context-perf-counters.c perf_event.h
-@HAVE_PERF_EVENT_TRUE@am__objects_1 = liblttng_ust_runtime_la-lttng-context-perf-counters.lo
-am_liblttng_ust_runtime_la_OBJECTS =  \
-	liblttng_ust_runtime_la-lttng-ust-comm.lo \
-	liblttng_ust_runtime_la-lttng-ust-abi.lo \
-	liblttng_ust_runtime_la-lttng-probes.lo \
-	liblttng_ust_runtime_la-lttng-context-provider.lo \
-	liblttng_ust_runtime_la-lttng-context-vtid.lo \
-	liblttng_ust_runtime_la-lttng-context-vpid.lo \
-	liblttng_ust_runtime_la-lttng-context-pthread-id.lo \
-	liblttng_ust_runtime_la-lttng-context-procname.lo \
-	liblttng_ust_runtime_la-lttng-context-ip.lo \
-	liblttng_ust_runtime_la-lttng-context-cpu-id.lo \
-	liblttng_ust_runtime_la-lttng-context.lo \
-	liblttng_ust_runtime_la-lttng-events.lo \
-	liblttng_ust_runtime_la-lttng-filter.lo \
-	liblttng_ust_runtime_la-lttng-filter-validator.lo \
-	liblttng_ust_runtime_la-lttng-filter-specialize.lo \
-	liblttng_ust_runtime_la-lttng-filter-interpreter.lo \
-	liblttng_ust_runtime_la-lttng-ust-elf.lo \
-	liblttng_ust_runtime_la-lttng-ust-statedump.lo \
-	liblttng_ust_runtime_la-ust_lib.lo \
-	liblttng_ust_runtime_la-tracef.lo \
-	liblttng_ust_runtime_la-tracelog.lo \
-	liblttng_ust_runtime_la-string-utils.lo $(am__objects_1)
+	lttng-context-ip.c lttng-context-cpu-id.c \
+	lttng-context-cgroup-ns.c lttng-context-ipc-ns.c \
+	lttng-context-mnt-ns.c lttng-context-net-ns.c \
+	lttng-context-pid-ns.c lttng-context-user-ns.c \
+	lttng-context-uts-ns.c lttng-context-vuid.c \
+	lttng-context-veuid.c lttng-context-vsuid.c \
+	lttng-context-vgid.c lttng-context-vegid.c \
+	lttng-context-vsgid.c lttng-context.c lttng-events.c \
+	lttng-filter.c lttng-filter.h lttng-filter-validator.c \
+	lttng-filter-specialize.c lttng-filter-interpreter.c \
+	filter-bytecode.h lttng-hash-helper.h lttng-ust-elf.c \
+	lttng-ust-statedump.c lttng-ust-statedump.h \
+	lttng-ust-statedump-provider.h ust_lib.c ust_lib.h \
+	tracepoint-internal.h clock.h compat.h wait.h jhash.h \
+	lttng-ust-uuid.h error.h tracef.c lttng-ust-tracef-provider.h \
+	tracelog.c lttng-ust-tracelog-provider.h getenv.h \
+	string-utils.c string-utils.h ns.h creds.h \
+	lttng-context-perf-counters.c perf_event.h
+@HAVE_PERF_EVENT_TRUE@am__objects_1 = lttng-context-perf-counters.lo
+am_liblttng_ust_runtime_la_OBJECTS = lttng-ust-comm.lo \
+	lttng-ust-abi.lo lttng-probes.lo lttng-context-provider.lo \
+	lttng-context-vtid.lo lttng-context-vpid.lo \
+	lttng-context-pthread-id.lo lttng-context-procname.lo \
+	lttng-context-ip.lo lttng-context-cpu-id.lo \
+	lttng-context-cgroup-ns.lo lttng-context-ipc-ns.lo \
+	lttng-context-mnt-ns.lo lttng-context-net-ns.lo \
+	lttng-context-pid-ns.lo lttng-context-user-ns.lo \
+	lttng-context-uts-ns.lo lttng-context-vuid.lo \
+	lttng-context-veuid.lo lttng-context-vsuid.lo \
+	lttng-context-vgid.lo lttng-context-vegid.lo \
+	lttng-context-vsgid.lo lttng-context.lo lttng-events.lo \
+	lttng-filter.lo lttng-filter-validator.lo \
+	lttng-filter-specialize.lo lttng-filter-interpreter.lo \
+	lttng-ust-elf.lo lttng-ust-statedump.lo ust_lib.lo tracef.lo \
+	tracelog.lo string-utils.lo $(am__objects_1)
 liblttng_ust_runtime_la_OBJECTS =  \
 	$(am_liblttng_ust_runtime_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-liblttng_ust_runtime_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
-	$(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
 liblttng_ust_support_la_DEPENDENCIES =  \
 	$(top_builddir)/libringbuffer/libringbuffer.la
 am_liblttng_ust_support_la_OBJECTS = ust-core.lo getenv.lo \
@@ -218,7 +210,7 @@ liblttng_ust_support_la_OBJECTS =  \
 am__DEPENDENCIES_1 =
 liblttng_ust_tracepoint_la_DEPENDENCIES =  \
 	$(top_builddir)/snprintf/libustsnprintf.la \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1)
 am_liblttng_ust_tracepoint_la_OBJECTS =  \
 	liblttng_ust_tracepoint_la-tracepoint.lo \
 	liblttng_ust_tracepoint_la-tracepoint-weak-test.lo
@@ -232,8 +224,7 @@ liblttng_ust_la_DEPENDENCIES =  \
 	$(top_builddir)/snprintf/libustsnprintf.la \
 	$(top_builddir)/liblttng-ust-comm/liblttng-ust-comm.la \
 	liblttng-ust-tracepoint.la liblttng-ust-runtime.la \
-	liblttng-ust-support.la $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
+	liblttng-ust-support.la $(am__DEPENDENCIES_1)
 am_liblttng_ust_la_OBJECTS =
 liblttng_ust_la_OBJECTS = $(am_liblttng_ust_la_OBJECTS)
 liblttng_ust_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
@@ -332,6 +323,7 @@ CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
+DL_LIBS = @DL_LIBS@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -366,7 +358,6 @@ LTLIBOBJS = @LTLIBOBJS@
 LTTNG_UST_CTL_LIBRARY_VERSION = @LTTNG_UST_CTL_LIBRARY_VERSION@
 LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS = @LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS@
 LTTNG_UST_LIBRARY_VERSION = @LTTNG_UST_LIBRARY_VERSION@
-LTTNG_UST_LIBRARY_VERSION_MAJOR = @LTTNG_UST_LIBRARY_VERSION_MAJOR@
 LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAINT = @MAINT@
 MAJOR_VERSION = @MAJOR_VERSION@
@@ -399,7 +390,6 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-UUDECODE = @UUDECODE@
 VERSION = @VERSION@
 WEAK_ALIAS = @WEAK_ALIAS@
 WEAK_ALIAS_CROSSFILE = @WEAK_ALIAS_CROSSFILE@
@@ -479,26 +469,35 @@ liblttng_ust_tracepoint_la_SOURCES = \
 	jhash.h \
 	error.h
 
-liblttng_ust_tracepoint_la_LIBADD = -lurcu-bp -lpthread \
-	$(top_builddir)/snprintf/libustsnprintf.la $(am__append_1) \
-	$(am__append_2)
+liblttng_ust_tracepoint_la_LIBADD = \
+	-lurcu-bp \
+	-lpthread \
+	$(top_builddir)/snprintf/libustsnprintf.la \
+	$(DL_LIBS)
+
 liblttng_ust_tracepoint_la_LDFLAGS = -no-undefined -version-info $(LTTNG_UST_LIBRARY_VERSION)
 liblttng_ust_tracepoint_la_CFLAGS = -DUST_COMPONENT="liblttng_ust_tracepoint" $(AM_CFLAGS)
 liblttng_ust_runtime_la_SOURCES = lttng-ust-comm.c lttng-ust-abi.c \
 	lttng-probes.c lttng-context-provider.c lttng-context-vtid.c \
 	lttng-context-vpid.c lttng-context-pthread-id.c \
 	lttng-context-procname.c lttng-context-ip.c \
-	lttng-context-cpu-id.c lttng-context.c lttng-events.c \
-	lttng-filter.c lttng-filter.h lttng-filter-validator.c \
-	lttng-filter-specialize.c lttng-filter-interpreter.c \
-	filter-bytecode.h lttng-hash-helper.h lttng-ust-elf.c \
-	lttng-ust-statedump.c lttng-ust-statedump.h \
-	lttng-ust-statedump-provider.h ust_lib.c ust_lib.h \
-	tracepoint-internal.h clock.h compat.h wait.h jhash.h \
-	lttng-ust-uuid.h error.h tracef.c lttng-ust-tracef-provider.h \
-	tracelog.c lttng-ust-tracelog-provider.h getenv.h \
-	string-utils.c string-utils.h $(am__append_3)
-liblttng_ust_runtime_la_CFLAGS = -DLTTNG_UST_LIBRARY_VERSION_MAJOR=\"$(LTTNG_UST_LIBRARY_VERSION_MAJOR)\"
+	lttng-context-cpu-id.c lttng-context-cgroup-ns.c \
+	lttng-context-ipc-ns.c lttng-context-mnt-ns.c \
+	lttng-context-net-ns.c lttng-context-pid-ns.c \
+	lttng-context-user-ns.c lttng-context-uts-ns.c \
+	lttng-context-vuid.c lttng-context-veuid.c \
+	lttng-context-vsuid.c lttng-context-vgid.c \
+	lttng-context-vegid.c lttng-context-vsgid.c lttng-context.c \
+	lttng-events.c lttng-filter.c lttng-filter.h \
+	lttng-filter-validator.c lttng-filter-specialize.c \
+	lttng-filter-interpreter.c filter-bytecode.h \
+	lttng-hash-helper.h lttng-ust-elf.c lttng-ust-statedump.c \
+	lttng-ust-statedump.h lttng-ust-statedump-provider.h ust_lib.c \
+	ust_lib.h tracepoint-internal.h clock.h compat.h wait.h \
+	jhash.h lttng-ust-uuid.h error.h tracef.c \
+	lttng-ust-tracef-provider.h tracelog.c \
+	lttng-ust-tracelog-provider.h getenv.h string-utils.c \
+	string-utils.h ns.h creds.h $(am__append_1)
 liblttng_ust_support_la_SOURCES = \
 	lttng-tracer.h \
 	lttng-tracer-core.h \
@@ -521,11 +520,16 @@ liblttng_ust_la_LDFLAGS = -no-undefined -version-info $(LTTNG_UST_LIBRARY_VERSIO
 liblttng_ust_support_la_LIBADD = \
 	$(top_builddir)/libringbuffer/libringbuffer.la
 
-liblttng_ust_la_LIBADD = -lpthread -lrt -lurcu-cds \
+liblttng_ust_la_LIBADD = \
+	-lpthread \
+	-lrt \
+	-lurcu-cds \
 	$(top_builddir)/snprintf/libustsnprintf.la \
 	$(top_builddir)/liblttng-ust-comm/liblttng-ust-comm.la \
-	liblttng-ust-tracepoint.la liblttng-ust-runtime.la \
-	liblttng-ust-support.la $(am__append_4) $(am__append_5)
+	liblttng-ust-tracepoint.la \
+	liblttng-ust-runtime.la liblttng-ust-support.la \
+	$(DL_LIBS)
+
 liblttng_ust_la_CFLAGS = -DUST_COMPONENT="liblttng_ust" $(AM_CFLAGS)
 all: all-am
 
@@ -608,7 +612,7 @@ clean-noinstLTLIBRARIES:
 	}
 
 liblttng-ust-runtime.la: $(liblttng_ust_runtime_la_OBJECTS) $(liblttng_ust_runtime_la_DEPENDENCIES) $(EXTRA_liblttng_ust_runtime_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(liblttng_ust_runtime_la_LINK)  $(liblttng_ust_runtime_la_OBJECTS) $(liblttng_ust_runtime_la_LIBADD) $(LIBS)
+	$(AM_V_CCLD)$(LINK)  $(liblttng_ust_runtime_la_OBJECTS) $(liblttng_ust_runtime_la_LIBADD) $(LIBS)
 
 liblttng-ust-support.la: $(liblttng_ust_support_la_OBJECTS) $(liblttng_ust_support_la_DEPENDENCIES) $(EXTRA_liblttng_ust_support_la_DEPENDENCIES) 
 	$(AM_V_CCLD)$(LINK)  $(liblttng_ust_support_la_OBJECTS) $(liblttng_ust_support_la_LIBADD) $(LIBS)
@@ -626,40 +630,53 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getenv.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-context-cpu-id.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-context-ip.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-context-perf-counters.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-context-procname.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-context-provider.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-context-pthread-id.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-context-vpid.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-context-vtid.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-context.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-events.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-filter-interpreter.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-filter-specialize.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-filter-validator.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-filter.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-probes.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-abi.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-comm.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-elf.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-statedump.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-string-utils.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-tracef.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-tracelog.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_runtime_la-ust_lib.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_tracepoint_la-tracepoint-weak-test.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblttng_ust_tracepoint_la-tracepoint.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-clock.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-cgroup-ns.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-cpu-id.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-ip.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-ipc-ns.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-mnt-ns.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-net-ns.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-perf-counters.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-pid-ns.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-procname.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-provider.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-pthread-id.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-user-ns.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-uts-ns.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-vegid.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-veuid.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-vgid.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-vpid.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-vsgid.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-vsuid.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-vtid.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context-vuid.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-context.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-events.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-filter-interpreter.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-filter-specialize.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-filter-validator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-filter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-getcpu.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-probes.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-ring-buffer-client-discard-rt.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-ring-buffer-client-discard.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-ring-buffer-client-overwrite-rt.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-ring-buffer-client-overwrite.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-ring-buffer-metadata-client.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-ust-abi.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-ust-comm.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-ust-dynamic-type.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-ust-elf.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-ust-statedump.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/string-utils.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tracef.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tracelog.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ust-core.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ust_lib.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -681,167 +698,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
-
-liblttng_ust_runtime_la-lttng-ust-comm.lo: lttng-ust-comm.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-ust-comm.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-comm.Tpo -c -o liblttng_ust_runtime_la-lttng-ust-comm.lo `test -f 'lttng-ust-comm.c' || echo '$(srcdir)/'`lttng-ust-comm.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-comm.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-comm.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-ust-comm.c' object='liblttng_ust_runtime_la-lttng-ust-comm.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-ust-comm.lo `test -f 'lttng-ust-comm.c' || echo '$(srcdir)/'`lttng-ust-comm.c
-
-liblttng_ust_runtime_la-lttng-ust-abi.lo: lttng-ust-abi.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-ust-abi.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-abi.Tpo -c -o liblttng_ust_runtime_la-lttng-ust-abi.lo `test -f 'lttng-ust-abi.c' || echo '$(srcdir)/'`lttng-ust-abi.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-abi.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-abi.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-ust-abi.c' object='liblttng_ust_runtime_la-lttng-ust-abi.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-ust-abi.lo `test -f 'lttng-ust-abi.c' || echo '$(srcdir)/'`lttng-ust-abi.c
-
-liblttng_ust_runtime_la-lttng-probes.lo: lttng-probes.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-probes.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-probes.Tpo -c -o liblttng_ust_runtime_la-lttng-probes.lo `test -f 'lttng-probes.c' || echo '$(srcdir)/'`lttng-probes.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-probes.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-probes.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-probes.c' object='liblttng_ust_runtime_la-lttng-probes.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-probes.lo `test -f 'lttng-probes.c' || echo '$(srcdir)/'`lttng-probes.c
-
-liblttng_ust_runtime_la-lttng-context-provider.lo: lttng-context-provider.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-context-provider.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-provider.Tpo -c -o liblttng_ust_runtime_la-lttng-context-provider.lo `test -f 'lttng-context-provider.c' || echo '$(srcdir)/'`lttng-context-provider.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-provider.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-provider.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-context-provider.c' object='liblttng_ust_runtime_la-lttng-context-provider.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-context-provider.lo `test -f 'lttng-context-provider.c' || echo '$(srcdir)/'`lttng-context-provider.c
-
-liblttng_ust_runtime_la-lttng-context-vtid.lo: lttng-context-vtid.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-context-vtid.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-vtid.Tpo -c -o liblttng_ust_runtime_la-lttng-context-vtid.lo `test -f 'lttng-context-vtid.c' || echo '$(srcdir)/'`lttng-context-vtid.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-vtid.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-vtid.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-context-vtid.c' object='liblttng_ust_runtime_la-lttng-context-vtid.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-context-vtid.lo `test -f 'lttng-context-vtid.c' || echo '$(srcdir)/'`lttng-context-vtid.c
-
-liblttng_ust_runtime_la-lttng-context-vpid.lo: lttng-context-vpid.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-context-vpid.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-vpid.Tpo -c -o liblttng_ust_runtime_la-lttng-context-vpid.lo `test -f 'lttng-context-vpid.c' || echo '$(srcdir)/'`lttng-context-vpid.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-vpid.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-vpid.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-context-vpid.c' object='liblttng_ust_runtime_la-lttng-context-vpid.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-context-vpid.lo `test -f 'lttng-context-vpid.c' || echo '$(srcdir)/'`lttng-context-vpid.c
-
-liblttng_ust_runtime_la-lttng-context-pthread-id.lo: lttng-context-pthread-id.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-context-pthread-id.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-pthread-id.Tpo -c -o liblttng_ust_runtime_la-lttng-context-pthread-id.lo `test -f 'lttng-context-pthread-id.c' || echo '$(srcdir)/'`lttng-context-pthread-id.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-pthread-id.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-pthread-id.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-context-pthread-id.c' object='liblttng_ust_runtime_la-lttng-context-pthread-id.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-context-pthread-id.lo `test -f 'lttng-context-pthread-id.c' || echo '$(srcdir)/'`lttng-context-pthread-id.c
-
-liblttng_ust_runtime_la-lttng-context-procname.lo: lttng-context-procname.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-context-procname.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-procname.Tpo -c -o liblttng_ust_runtime_la-lttng-context-procname.lo `test -f 'lttng-context-procname.c' || echo '$(srcdir)/'`lttng-context-procname.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-procname.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-procname.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-context-procname.c' object='liblttng_ust_runtime_la-lttng-context-procname.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-context-procname.lo `test -f 'lttng-context-procname.c' || echo '$(srcdir)/'`lttng-context-procname.c
-
-liblttng_ust_runtime_la-lttng-context-ip.lo: lttng-context-ip.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-context-ip.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-ip.Tpo -c -o liblttng_ust_runtime_la-lttng-context-ip.lo `test -f 'lttng-context-ip.c' || echo '$(srcdir)/'`lttng-context-ip.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-ip.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-ip.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-context-ip.c' object='liblttng_ust_runtime_la-lttng-context-ip.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-context-ip.lo `test -f 'lttng-context-ip.c' || echo '$(srcdir)/'`lttng-context-ip.c
-
-liblttng_ust_runtime_la-lttng-context-cpu-id.lo: lttng-context-cpu-id.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-context-cpu-id.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-cpu-id.Tpo -c -o liblttng_ust_runtime_la-lttng-context-cpu-id.lo `test -f 'lttng-context-cpu-id.c' || echo '$(srcdir)/'`lttng-context-cpu-id.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-cpu-id.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-cpu-id.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-context-cpu-id.c' object='liblttng_ust_runtime_la-lttng-context-cpu-id.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-context-cpu-id.lo `test -f 'lttng-context-cpu-id.c' || echo '$(srcdir)/'`lttng-context-cpu-id.c
-
-liblttng_ust_runtime_la-lttng-context.lo: lttng-context.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-context.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-context.Tpo -c -o liblttng_ust_runtime_la-lttng-context.lo `test -f 'lttng-context.c' || echo '$(srcdir)/'`lttng-context.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-context.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-context.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-context.c' object='liblttng_ust_runtime_la-lttng-context.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-context.lo `test -f 'lttng-context.c' || echo '$(srcdir)/'`lttng-context.c
-
-liblttng_ust_runtime_la-lttng-events.lo: lttng-events.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-events.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-events.Tpo -c -o liblttng_ust_runtime_la-lttng-events.lo `test -f 'lttng-events.c' || echo '$(srcdir)/'`lttng-events.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-events.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-events.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-events.c' object='liblttng_ust_runtime_la-lttng-events.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-events.lo `test -f 'lttng-events.c' || echo '$(srcdir)/'`lttng-events.c
-
-liblttng_ust_runtime_la-lttng-filter.lo: lttng-filter.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-filter.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-filter.Tpo -c -o liblttng_ust_runtime_la-lttng-filter.lo `test -f 'lttng-filter.c' || echo '$(srcdir)/'`lttng-filter.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-filter.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-filter.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-filter.c' object='liblttng_ust_runtime_la-lttng-filter.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-filter.lo `test -f 'lttng-filter.c' || echo '$(srcdir)/'`lttng-filter.c
-
-liblttng_ust_runtime_la-lttng-filter-validator.lo: lttng-filter-validator.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-filter-validator.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-filter-validator.Tpo -c -o liblttng_ust_runtime_la-lttng-filter-validator.lo `test -f 'lttng-filter-validator.c' || echo '$(srcdir)/'`lttng-filter-validator.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-filter-validator.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-filter-validator.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-filter-validator.c' object='liblttng_ust_runtime_la-lttng-filter-validator.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-filter-validator.lo `test -f 'lttng-filter-validator.c' || echo '$(srcdir)/'`lttng-filter-validator.c
-
-liblttng_ust_runtime_la-lttng-filter-specialize.lo: lttng-filter-specialize.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-filter-specialize.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-filter-specialize.Tpo -c -o liblttng_ust_runtime_la-lttng-filter-specialize.lo `test -f 'lttng-filter-specialize.c' || echo '$(srcdir)/'`lttng-filter-specialize.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-filter-specialize.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-filter-specialize.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-filter-specialize.c' object='liblttng_ust_runtime_la-lttng-filter-specialize.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-filter-specialize.lo `test -f 'lttng-filter-specialize.c' || echo '$(srcdir)/'`lttng-filter-specialize.c
-
-liblttng_ust_runtime_la-lttng-filter-interpreter.lo: lttng-filter-interpreter.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-filter-interpreter.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-filter-interpreter.Tpo -c -o liblttng_ust_runtime_la-lttng-filter-interpreter.lo `test -f 'lttng-filter-interpreter.c' || echo '$(srcdir)/'`lttng-filter-interpreter.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-filter-interpreter.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-filter-interpreter.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-filter-interpreter.c' object='liblttng_ust_runtime_la-lttng-filter-interpreter.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-filter-interpreter.lo `test -f 'lttng-filter-interpreter.c' || echo '$(srcdir)/'`lttng-filter-interpreter.c
-
-liblttng_ust_runtime_la-lttng-ust-elf.lo: lttng-ust-elf.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-ust-elf.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-elf.Tpo -c -o liblttng_ust_runtime_la-lttng-ust-elf.lo `test -f 'lttng-ust-elf.c' || echo '$(srcdir)/'`lttng-ust-elf.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-elf.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-elf.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-ust-elf.c' object='liblttng_ust_runtime_la-lttng-ust-elf.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-ust-elf.lo `test -f 'lttng-ust-elf.c' || echo '$(srcdir)/'`lttng-ust-elf.c
-
-liblttng_ust_runtime_la-lttng-ust-statedump.lo: lttng-ust-statedump.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-ust-statedump.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-statedump.Tpo -c -o liblttng_ust_runtime_la-lttng-ust-statedump.lo `test -f 'lttng-ust-statedump.c' || echo '$(srcdir)/'`lttng-ust-statedump.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-statedump.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-ust-statedump.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-ust-statedump.c' object='liblttng_ust_runtime_la-lttng-ust-statedump.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-ust-statedump.lo `test -f 'lttng-ust-statedump.c' || echo '$(srcdir)/'`lttng-ust-statedump.c
-
-liblttng_ust_runtime_la-ust_lib.lo: ust_lib.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-ust_lib.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-ust_lib.Tpo -c -o liblttng_ust_runtime_la-ust_lib.lo `test -f 'ust_lib.c' || echo '$(srcdir)/'`ust_lib.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-ust_lib.Tpo $(DEPDIR)/liblttng_ust_runtime_la-ust_lib.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ust_lib.c' object='liblttng_ust_runtime_la-ust_lib.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-ust_lib.lo `test -f 'ust_lib.c' || echo '$(srcdir)/'`ust_lib.c
-
-liblttng_ust_runtime_la-tracef.lo: tracef.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-tracef.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-tracef.Tpo -c -o liblttng_ust_runtime_la-tracef.lo `test -f 'tracef.c' || echo '$(srcdir)/'`tracef.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-tracef.Tpo $(DEPDIR)/liblttng_ust_runtime_la-tracef.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tracef.c' object='liblttng_ust_runtime_la-tracef.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-tracef.lo `test -f 'tracef.c' || echo '$(srcdir)/'`tracef.c
-
-liblttng_ust_runtime_la-tracelog.lo: tracelog.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-tracelog.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-tracelog.Tpo -c -o liblttng_ust_runtime_la-tracelog.lo `test -f 'tracelog.c' || echo '$(srcdir)/'`tracelog.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-tracelog.Tpo $(DEPDIR)/liblttng_ust_runtime_la-tracelog.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tracelog.c' object='liblttng_ust_runtime_la-tracelog.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-tracelog.lo `test -f 'tracelog.c' || echo '$(srcdir)/'`tracelog.c
-
-liblttng_ust_runtime_la-string-utils.lo: string-utils.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-string-utils.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-string-utils.Tpo -c -o liblttng_ust_runtime_la-string-utils.lo `test -f 'string-utils.c' || echo '$(srcdir)/'`string-utils.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-string-utils.Tpo $(DEPDIR)/liblttng_ust_runtime_la-string-utils.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='string-utils.c' object='liblttng_ust_runtime_la-string-utils.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-string-utils.lo `test -f 'string-utils.c' || echo '$(srcdir)/'`string-utils.c
-
-liblttng_ust_runtime_la-lttng-context-perf-counters.lo: lttng-context-perf-counters.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_runtime_la-lttng-context-perf-counters.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-perf-counters.Tpo -c -o liblttng_ust_runtime_la-lttng-context-perf-counters.lo `test -f 'lttng-context-perf-counters.c' || echo '$(srcdir)/'`lttng-context-perf-counters.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-perf-counters.Tpo $(DEPDIR)/liblttng_ust_runtime_la-lttng-context-perf-counters.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='lttng-context-perf-counters.c' object='liblttng_ust_runtime_la-lttng-context-perf-counters.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_runtime_la_CFLAGS) $(CFLAGS) -c -o liblttng_ust_runtime_la-lttng-context-perf-counters.lo `test -f 'lttng-context-perf-counters.c' || echo '$(srcdir)/'`lttng-context-perf-counters.c
 
 liblttng_ust_tracepoint_la-tracepoint.lo: tracepoint.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblttng_ust_tracepoint_la_CFLAGS) $(CFLAGS) -MT liblttng_ust_tracepoint_la-tracepoint.lo -MD -MP -MF $(DEPDIR)/liblttng_ust_tracepoint_la-tracepoint.Tpo -c -o liblttng_ust_tracepoint_la-tracepoint.lo `test -f 'tracepoint.c' || echo '$(srcdir)/'`tracepoint.c

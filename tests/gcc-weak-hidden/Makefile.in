@@ -15,7 +15,6 @@
 @SET_MAKE@
 
 
-
 VPATH = @srcdir@
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
@@ -91,7 +90,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-noinst_PROGRAMS = test-gcc-wh$(EXEEXT)
+noinst_PROGRAMS = test_gcc_weak_hidden$(EXEEXT)
 subdir = tests/gcc-weak-hidden
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_c___attribute__.m4 \
@@ -129,11 +128,10 @@ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
 PROGRAMS = $(noinst_PROGRAMS)
-am_test_gcc_wh_OBJECTS = main.$(OBJEXT) b.$(OBJEXT)
-test_gcc_wh_OBJECTS = $(am_test_gcc_wh_OBJECTS)
-test_gcc_wh_DEPENDENCIES = $(top_builddir)/tests/utils/libtap.a \
-	$(builddir)/libgcc-wh.la
-SCRIPTS = $(noinst_SCRIPTS)
+am_test_gcc_weak_hidden_OBJECTS = main.$(OBJEXT) b.$(OBJEXT)
+test_gcc_weak_hidden_OBJECTS = $(am_test_gcc_weak_hidden_OBJECTS)
+test_gcc_weak_hidden_DEPENDENCIES =  \
+	$(top_builddir)/tests/utils/libtap.a $(builddir)/libgcc-wh.la
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -168,8 +166,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libgcc_wh_la_SOURCES) $(test_gcc_wh_SOURCES)
-DIST_SOURCES = $(libgcc_wh_la_SOURCES) $(test_gcc_wh_SOURCES)
+SOURCES = $(libgcc_wh_la_SOURCES) $(test_gcc_weak_hidden_SOURCES)
+DIST_SOURCES = $(libgcc_wh_la_SOURCES) $(test_gcc_weak_hidden_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -220,6 +218,7 @@ CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
+DL_LIBS = @DL_LIBS@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -254,7 +253,6 @@ LTLIBOBJS = @LTLIBOBJS@
 LTTNG_UST_CTL_LIBRARY_VERSION = @LTTNG_UST_CTL_LIBRARY_VERSION@
 LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS = @LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS@
 LTTNG_UST_LIBRARY_VERSION = @LTTNG_UST_LIBRARY_VERSION@
-LTTNG_UST_LIBRARY_VERSION_MAJOR = @LTTNG_UST_LIBRARY_VERSION_MAJOR@
 LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAINT = @MAINT@
 MAJOR_VERSION = @MAJOR_VERSION@
@@ -287,7 +285,6 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-UUDECODE = @UUDECODE@
 VERSION = @VERSION@
 WEAK_ALIAS = @WEAK_ALIAS@
 WEAK_ALIAS_CROSSFILE = @WEAK_ALIAS_CROSSFILE@
@@ -359,13 +356,10 @@ top_srcdir = @top_srcdir@
 AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/tests/utils
 noinst_LTLIBRARIES = libgcc-wh.la
 libgcc_wh_la_SOURCES = c.c d.c
-test_gcc_wh_SOURCES = main.c b.c
-test_gcc_wh_LDADD = $(top_builddir)/tests/utils/libtap.a \
+test_gcc_weak_hidden_SOURCES = main.c b.c
+test_gcc_weak_hidden_LDADD = $(top_builddir)/tests/utils/libtap.a \
 	$(builddir)/libgcc-wh.la
 
-noinst_SCRIPTS = test_gcc_weak_hidden
-CLEANFILES = $(noinst_SCRIPTS)
-EXTRA_DIST = test_gcc_weak_hidden.in
 all: all-am
 
 .SUFFIXES:
@@ -423,9 +417,9 @@ clean-noinstPROGRAMS:
 	echo " rm -f" $$list; \
 	rm -f $$list
 
-test-gcc-wh$(EXEEXT): $(test_gcc_wh_OBJECTS) $(test_gcc_wh_DEPENDENCIES) $(EXTRA_test_gcc_wh_DEPENDENCIES) 
-	@rm -f test-gcc-wh$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(test_gcc_wh_OBJECTS) $(test_gcc_wh_LDADD) $(LIBS)
+test_gcc_weak_hidden$(EXEEXT): $(test_gcc_weak_hidden_OBJECTS) $(test_gcc_weak_hidden_DEPENDENCIES) $(EXTRA_test_gcc_weak_hidden_DEPENDENCIES) 
+	@rm -f test_gcc_weak_hidden$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_gcc_weak_hidden_OBJECTS) $(test_gcc_weak_hidden_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -549,7 +543,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(SCRIPTS)
+all-am: Makefile $(LTLIBRARIES) $(PROGRAMS)
 installdirs:
 install: install-am
 install-exec: install-exec-am
@@ -573,7 +567,6 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -671,10 +664,6 @@ uninstall-am:
 
 .PRECIOUS: Makefile
 
-
-$(noinst_SCRIPTS): %: %.in
-	$(SED) "s#@ABSTOPSRCDIR@#$(abs_top_srcdir)#g" < $< > $@
-	chmod +x $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

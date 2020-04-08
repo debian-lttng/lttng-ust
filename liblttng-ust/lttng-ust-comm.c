@@ -61,7 +61,7 @@
 #include "getenv.h"
 
 /* Concatenate lttng ust shared library name with its major version number. */
-#define LTTNG_UST_LIB_SO_NAME "liblttng-ust.so." LTTNG_UST_LIBRARY_VERSION_MAJOR
+#define LTTNG_UST_LIB_SO_NAME "liblttng-ust.so." __ust_stringify(CONFIG_LTTNG_UST_LIBRARY_VERSION_MAJOR)
 
 /*
  * Has lttng ust comm constructor been called ?
@@ -263,6 +263,8 @@ struct sock_info {
 	/* Keep track of lazy state dump not performed yet. */
 	int statedump_pending;
 	int initial_statedump_done;
+	/* Keep procname for statedump */
+	char procname[LTTNG_UST_PROCNAME_LEN];
 };
 
 /* Socket from app (connect) to session daemon (listen) for communication */
@@ -283,6 +285,7 @@ struct sock_info global_apps = {
 
 	.statedump_pending = 0,
 	.initial_statedump_done = 0,
+	.procname[0] = '\0'
 };
 
 /* TODO: allow global_apps_sock_path override */
@@ -300,6 +303,7 @@ struct sock_info local_apps = {
 
 	.statedump_pending = 0,
 	.initial_statedump_done = 0,
+	.procname[0] = '\0'
 };
 
 static int wait_poll_fallback;
@@ -425,6 +429,10 @@ void lttng_ust_fixup_tls(void)
 	lttng_fixup_ust_mutex_nest_tls();
 	lttng_ust_fixup_perf_counter_tls();
 	lttng_ust_fixup_fd_tracker_tls();
+	lttng_fixup_cgroup_ns_tls();
+	lttng_fixup_ipc_ns_tls();
+	lttng_fixup_net_ns_tls();
+	lttng_fixup_uts_ns_tls();
 }
 
 int lttng_get_notify_socket(void *owner)
@@ -432,6 +440,15 @@ int lttng_get_notify_socket(void *owner)
 	struct sock_info *info = owner;
 
 	return info->notify_socket;
+}
+
+
+LTTNG_HIDDEN
+char* lttng_ust_sockinfo_get_procname(void *owner)
+{
+	struct sock_info *info = owner;
+
+	return info->procname;
 }
 
 static
@@ -463,6 +480,7 @@ int setup_global_apps(void)
 	}
 
 	global_apps.allowed = 1;
+	lttng_ust_getprocname(global_apps.procname);
 error:
 	return ret;
 }
@@ -507,6 +525,8 @@ int setup_local_apps(void)
 		ret = -EIO;
 		goto end;
 	}
+
+	lttng_ust_getprocname(local_apps.procname);
 end:
 	return ret;
 }
@@ -2034,6 +2054,34 @@ void __attribute__((destructor)) lttng_ust_exit(void)
 	lttng_ust_cleanup(1);
 }
 
+static
+void ust_context_ns_reset(void)
+{
+	lttng_context_pid_ns_reset();
+	lttng_context_cgroup_ns_reset();
+	lttng_context_ipc_ns_reset();
+	lttng_context_mnt_ns_reset();
+	lttng_context_net_ns_reset();
+	lttng_context_user_ns_reset();
+	lttng_context_uts_ns_reset();
+}
+
+static
+void ust_context_vuids_reset(void)
+{
+	lttng_context_vuid_reset();
+	lttng_context_veuid_reset();
+	lttng_context_vsuid_reset();
+}
+
+static
+void ust_context_vgids_reset(void)
+{
+	lttng_context_vgid_reset();
+	lttng_context_vegid_reset();
+	lttng_context_vsgid_reset();
+}
+
 /*
  * We exclude the worker threads across fork and clone (except
  * CLONE_VM), because these system calls only keep the forking thread
@@ -2067,7 +2115,7 @@ void ust_before_fork(sigset_t *save_sigset)
 	pthread_mutex_lock(&ust_fork_mutex);
 
 	ust_lock_nocheck();
-	rcu_bp_before_fork();
+	urcu_bp_before_fork();
 	lttng_ust_lock_fd_tracker();
 	lttng_perf_lock();
 }
@@ -2095,7 +2143,7 @@ void ust_after_fork_parent(sigset_t *restore_sigset)
 	if (URCU_TLS(lttng_ust_nest_count))
 		return;
 	DBG("process %d", getpid());
-	rcu_bp_after_fork_parent();
+	urcu_bp_after_fork_parent();
 	/* Release mutexes and reenable signals */
 	ust_after_fork_common(restore_sigset);
 }
@@ -2116,13 +2164,70 @@ void ust_after_fork_child(sigset_t *restore_sigset)
 	lttng_context_vpid_reset();
 	lttng_context_vtid_reset();
 	lttng_context_procname_reset();
+	ust_context_ns_reset();
+	ust_context_vuids_reset();
+	ust_context_vgids_reset();
 	DBG("process %d", getpid());
 	/* Release urcu mutexes */
-	rcu_bp_after_fork_child();
+	urcu_bp_after_fork_child();
 	lttng_ust_cleanup(0);
 	/* Release mutexes and reenable signals */
 	ust_after_fork_common(restore_sigset);
 	lttng_ust_init();
+}
+
+void ust_after_setns(void)
+{
+	ust_context_ns_reset();
+	ust_context_vuids_reset();
+	ust_context_vgids_reset();
+}
+
+void ust_after_unshare(void)
+{
+	ust_context_ns_reset();
+	ust_context_vuids_reset();
+	ust_context_vgids_reset();
+}
+
+void ust_after_setuid(void)
+{
+	ust_context_vuids_reset();
+}
+
+void ust_after_seteuid(void)
+{
+	ust_context_vuids_reset();
+}
+
+void ust_after_setreuid(void)
+{
+	ust_context_vuids_reset();
+}
+
+void ust_after_setresuid(void)
+{
+	ust_context_vuids_reset();
+}
+
+void ust_after_setgid(void)
+{
+	ust_context_vgids_reset();
+}
+
+void ust_after_setegid(void)
+{
+	ust_context_vgids_reset();
+}
+
+void ust_after_setregid(void)
+{
+	ust_context_vgids_reset();
+}
+
+void ust_after_setresgid(void)
+{
+	ust_context_vgids_reset();
 }
 
 void lttng_ust_sockinfo_session_enabled(void *owner)

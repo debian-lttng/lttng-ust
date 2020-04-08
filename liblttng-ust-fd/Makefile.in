@@ -89,8 +89,6 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-@LTTNG_UST_BUILD_WITH_LIBDL_TRUE@am__append_1 = -ldl
-@LTTNG_UST_BUILD_WITH_LIBC_DL_TRUE@am__append_2 = -lc
 subdir = liblttng-ust-fd
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_c___attribute__.m4 \
@@ -151,7 +149,7 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 liblttng_ust_fd_la_DEPENDENCIES =  \
 	$(top_builddir)/liblttng-ust/liblttng-ust.la \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1)
 am_liblttng_ust_fd_la_OBJECTS = liblttng_ust_fd_la-lttng-ust-fd.lo
 liblttng_ust_fd_la_OBJECTS = $(am_liblttng_ust_fd_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -248,6 +246,7 @@ CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
+DL_LIBS = @DL_LIBS@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -282,7 +281,6 @@ LTLIBOBJS = @LTLIBOBJS@
 LTTNG_UST_CTL_LIBRARY_VERSION = @LTTNG_UST_CTL_LIBRARY_VERSION@
 LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS = @LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS@
 LTTNG_UST_LIBRARY_VERSION = @LTTNG_UST_LIBRARY_VERSION@
-LTTNG_UST_LIBRARY_VERSION_MAJOR = @LTTNG_UST_LIBRARY_VERSION_MAJOR@
 LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAINT = @MAINT@
 MAJOR_VERSION = @MAJOR_VERSION@
@@ -315,7 +313,6 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-UUDECODE = @UUDECODE@
 VERSION = @VERSION@
 WEAK_ALIAS = @WEAK_ALIAS@
 WEAK_ALIAS_CROSSFILE = @WEAK_ALIAS_CROSSFILE@
@@ -389,9 +386,10 @@ lib_LTLIBRARIES = liblttng-ust-fd.la
 liblttng_ust_fd_la_SOURCES = \
 	lttng-ust-fd.c
 
-liblttng_ust_fd_la_LIBADD =  \
-	$(top_builddir)/liblttng-ust/liblttng-ust.la $(am__append_1) \
-	$(am__append_2)
+liblttng_ust_fd_la_LIBADD = \
+	$(top_builddir)/liblttng-ust/liblttng-ust.la \
+	$(DL_LIBS)
+
 liblttng_ust_fd_la_CFLAGS = -DUST_COMPONENT=liblttng-ust-fd $(AM_CFLAGS)
 all: all-am
 

@@ -1,10 +1,10 @@
 dnl Version infos
 m4_define([V_MAJOR], [2])
-m4_define([V_MINOR], [11])
-m4_define([V_PATCH], [1])
+m4_define([V_MINOR], [12])
+m4_define([V_PATCH], [0])
 dnl m4_define([V_EXTRA], [])
-m4_define([V_NAME], [[Lafontaine]])
-m4_define([V_DESC], [[A modern Saison beer from Montréal's Oshlag microbrewery, Lafontaine is a refreshing, zesty, rice beer with hints of fruit and spices.]])
+m4_define([V_NAME], [[(Ta) Meilleure]])
+m4_define([V_DESC], [[Ta Meilleure is a Northeast IPA beer brewed by Lagabière. Translating to "Your best one", this beer gives out strong aromas of passion fruit, lemon, and peaches. Tastewise, expect a lot of fruit, a creamy texture, and a smooth lingering hop bitterness.]])
 
 m4_define([V_STRING], [V_MAJOR.V_MINOR.V_PATCH])
 m4_ifdef([V_EXTRA], [m4_append([V_STRING], [-V_EXTRA])])
@@ -25,7 +25,7 @@ m4_define([UST_LIB_V_MINOR], [0])
 m4_define([UST_LIB_V_PATCH], [0])
 
 AC_SUBST([LTTNG_UST_LIBRARY_VERSION], [UST_LIB_V_MAJOR:UST_LIB_V_MINOR:UST_LIB_V_PATCH])
-AC_SUBST([LTTNG_UST_LIBRARY_VERSION_MAJOR], [UST_LIB_V_MAJOR])
+AC_DEFINE([CONFIG_LTTNG_UST_LIBRARY_VERSION_MAJOR], [UST_LIB_V_MAJOR], [Major SONAME number of the ust library])
 # note: remember to update tracepoint.h dlopen() to match this version
 # number. TODO: eventually automate by exporting the major number.
 
@@ -41,7 +41,7 @@ AC_CONFIG_SRCDIR([include/lttng/tracepoint.h])
 AC_CANONICAL_TARGET
 AC_CANONICAL_HOST
 
-AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip tar-ustar])
+AM_INIT_AUTOMAKE([1.12 foreign dist-bzip2 no-dist-gzip tar-ustar])
 AM_MAINTAINER_MODE([enable])
 
 # Enable silent rules if available (Introduced in AM 1.11)
@@ -55,7 +55,7 @@ AC_SYS_LARGEFILE
 AC_PROG_CC
 AC_PROG_CC_STDC
 AC_PROG_CXX
-rw_PROG_CXX_WORKS
+RW_PROG_CXX_WORKS
 AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
 
 # Check if the compiler support weak symbols
@@ -66,6 +66,7 @@ AS_IF([test "x${ax_cv_sys_weak_alias}" = "xno"], [
 ])
 
 # Checks for programs.
+AM_PROG_AR
 AC_PROG_SED
 AC_PROG_GREP
 AC_PROG_LN_S
@@ -207,26 +208,24 @@ AH_TEMPLATE([LTTNG_UST_HAVE_PERF_EVENT], [Perf event integration via perf_event.
 
 # Checks for libraries.
 AC_CHECK_LIB([dl], [dlopen], [
-	have_libdl=yes
 	libdl_name=dl
+	DL_LIBS="-ldl"
 ], [
 	#libdl not found, check for dlopen in libc.
 	AC_CHECK_LIB([c], [dlopen], [
-		have_libc_dl=yes
 		libdl_name=c
+		DL_LIBS="-lc"
 	], [
 		AC_MSG_ERROR([Cannot find dlopen in libdl nor libc. Use [LDFLAGS]=-Ldir to specify their location.])
 	])
 ])
+AC_SUBST(DL_LIBS)
 
 # Check if libdl has dlmopen support.
 AH_TEMPLATE([HAVE_DLMOPEN], ["Define to 1 if dlmopen is available."])
 AC_CHECK_LIB([$libdl_name], [dlmopen],
 	[AC_DEFINE([HAVE_DLMOPEN], [1])]
 )
-
-AM_CONDITIONAL([LTTNG_UST_BUILD_WITH_LIBDL], [test "x$have_libdl" = "xyes"])
-AM_CONDITIONAL([LTTNG_UST_BUILD_WITH_LIBC_DL], [test "x$have_libc_dl" = "xyes"])
 
 AC_CHECK_LIB([pthread], [pthread_create])
 AC_CHECK_LIB([pthread], [pthread_setname_np],
@@ -275,10 +274,10 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 ])
 
 # urcu - check that URCU lib is available to compilation
-AC_CHECK_LIB([urcu-bp], [synchronize_rcu_bp], [], [AC_MSG_ERROR([Cannot find liburcu-bp lib. Use [LDFLAGS]=-Ldir to specify its location.])])
+AC_CHECK_LIB([urcu-bp], [urcu_bp_synchronize_rcu], [], [AC_MSG_ERROR([Cannot find liburcu-bp 0.11 or newer. Use [LDFLAGS]=-Ldir to specify its location.])])
 
-# urcu - check that URCU lib is at least version 0.6
-AC_CHECK_LIB([urcu-bp], [call_rcu_bp], [], [AC_MSG_ERROR([liburcu 0.6 or newer is needed, please update your version or use [LDFLAGS]=-Ldir to specify the right location.])])
+# urcu - check that URCU lib is at least version 0.11
+AC_CHECK_LIB([urcu-bp], [urcu_bp_call_rcu], [], [AC_MSG_ERROR([liburcu 0.11 or newer is needed, please update your version or use [LDFLAGS]=-Ldir to specify the right location.])])
 
 # numa.h integration
 AS_IF([test "x$NO_NUMA" = "x1"],[
@@ -547,6 +546,7 @@ AC_CONFIG_FILES([
 	tests/Makefile
 	tests/ctf-types/Makefile
 	tests/hello/Makefile
+	tests/hello-many/Makefile
 	tests/hello.cxx/Makefile
 	tests/same_line_tracepoint/Makefile
 	tests/snprintf/Makefile
@@ -556,6 +556,7 @@ AC_CONFIG_FILES([
 	tests/test-app-ctx/Makefile
 	tests/gcc-weak-hidden/Makefile
 	lttng-ust.pc
+	lttng-ust-ctl.pc
 ])
 
 # Create link for python agent for the VPATH guru.
@@ -565,6 +566,8 @@ AC_CONFIG_LINKS([
 	python-lttngust/lttngust/debug.py:python-lttngust/lttngust/debug.py
 	python-lttngust/lttngust/loghandler.py:python-lttngust/lttngust/loghandler.py
 ])
+
+AC_CONFIG_FILES([tests/ust-elf/test_ust_elf],[chmod +x tests/ust-elf/test_ust_elf])
 
 AC_OUTPUT
 
@@ -613,6 +616,9 @@ PPRINT_PROP_BOOL_CUSTOM([JNI interface (JNI)], $value, [use --enable-jni-interfa
 
 test "x$python_agent" = xyes && value=1 || value=0
 PPRINT_PROP_BOOL_CUSTOM([Python agent], $value, [use --enable-python-agent])
+
+test "x$have_perf_event" = "xyes" && value=1 || value=0
+PPRINT_PROP_BOOL_CUSTOM([Perf event integration], $value)
 
 test "x$enable_numa" = xyes && value=1 || value=0
 PPRINT_PROP_BOOL([NUMA], $value)

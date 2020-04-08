@@ -23,6 +23,10 @@
 #include <sys/types.h>
 #include <limits.h>
 
+#ifndef LTTNG_PACKED
+#error "LTTNG_PACKED should be defined"
+#endif
+
 #ifndef LTTNG_UST_UUID_LEN
 #define LTTNG_UST_UUID_LEN	16
 #endif
@@ -238,6 +242,7 @@ int ustctl_put_subbuf(struct ustctl_consumer_stream *stream);
 
 void ustctl_flush_buffer(struct ustctl_consumer_stream *stream,
 		int producer_active);
+void ustctl_clear_buffer(struct ustctl_consumer_stream *stream);
 
 /* index */
 

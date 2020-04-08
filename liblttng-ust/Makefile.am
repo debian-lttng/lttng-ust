@@ -12,19 +12,15 @@ liblttng_ust_tracepoint_la_SOURCES = \
 	lttng-tracer-core.h \
 	jhash.h \
 	error.h
+
 liblttng_ust_tracepoint_la_LIBADD = \
 	-lurcu-bp \
 	-lpthread \
-	$(top_builddir)/snprintf/libustsnprintf.la
+	$(top_builddir)/snprintf/libustsnprintf.la \
+	$(DL_LIBS)
+
 liblttng_ust_tracepoint_la_LDFLAGS = -no-undefined -version-info $(LTTNG_UST_LIBRARY_VERSION)
 liblttng_ust_tracepoint_la_CFLAGS = -DUST_COMPONENT="liblttng_ust_tracepoint" $(AM_CFLAGS)
-
-if LTTNG_UST_BUILD_WITH_LIBDL
-liblttng_ust_tracepoint_la_LIBADD += -ldl
-endif
-if LTTNG_UST_BUILD_WITH_LIBC_DL
-liblttng_ust_tracepoint_la_LIBADD += -lc
-endif
 
 liblttng_ust_runtime_la_SOURCES = \
 	lttng-ust-comm.c \
@@ -37,6 +33,19 @@ liblttng_ust_runtime_la_SOURCES = \
 	lttng-context-procname.c \
 	lttng-context-ip.c \
 	lttng-context-cpu-id.c \
+	lttng-context-cgroup-ns.c \
+	lttng-context-ipc-ns.c \
+	lttng-context-mnt-ns.c \
+	lttng-context-net-ns.c \
+	lttng-context-pid-ns.c \
+	lttng-context-user-ns.c \
+	lttng-context-uts-ns.c \
+	lttng-context-vuid.c \
+	lttng-context-veuid.c \
+	lttng-context-vsuid.c \
+	lttng-context-vgid.c \
+	lttng-context-vegid.c \
+	lttng-context-vsgid.c \
 	lttng-context.c \
 	lttng-events.c \
 	lttng-filter.c \
@@ -65,9 +74,9 @@ liblttng_ust_runtime_la_SOURCES = \
 	lttng-ust-tracelog-provider.h \
 	getenv.h \
 	string-utils.c \
-	string-utils.h
-
-liblttng_ust_runtime_la_CFLAGS = -DLTTNG_UST_LIBRARY_VERSION_MAJOR=\"$(LTTNG_UST_LIBRARY_VERSION_MAJOR)\"
+	string-utils.h \
+	ns.h \
+	creds.h
 
 if HAVE_PERF_EVENT
 liblttng_ust_runtime_la_SOURCES += \
@@ -106,13 +115,7 @@ liblttng_ust_la_LIBADD = \
 	$(top_builddir)/snprintf/libustsnprintf.la \
 	$(top_builddir)/liblttng-ust-comm/liblttng-ust-comm.la \
 	liblttng-ust-tracepoint.la \
-	liblttng-ust-runtime.la liblttng-ust-support.la
-
-if LTTNG_UST_BUILD_WITH_LIBDL
-liblttng_ust_la_LIBADD += -ldl
-endif
-if LTTNG_UST_BUILD_WITH_LIBC_DL
-liblttng_ust_la_LIBADD += -lc
-endif
+	liblttng-ust-runtime.la liblttng-ust-support.la \
+	$(DL_LIBS)
 
 liblttng_ust_la_CFLAGS = -DUST_COMPONENT="liblttng_ust" $(AM_CFLAGS)

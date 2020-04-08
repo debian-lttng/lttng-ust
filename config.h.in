@@ -3,6 +3,9 @@
 /* LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS */
 #undef CONFIG_LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS
 
+/* Major SONAME number of the ust library */
+#undef CONFIG_LTTNG_UST_LIBRARY_VERSION_MAJOR
+
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 #undef HAVE_ARPA_INET_H
 

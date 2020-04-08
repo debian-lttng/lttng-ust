@@ -90,10 +90,6 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-@LTTNG_UST_BUILD_WITH_LIBDL_TRUE@am__append_1 = -ldl
-@LTTNG_UST_BUILD_WITH_LIBDL_TRUE@am__append_2 = -ldl
-@LTTNG_UST_BUILD_WITH_LIBC_DL_TRUE@am__append_3 = -lc
-@LTTNG_UST_BUILD_WITH_LIBC_DL_TRUE@am__append_4 = -lc
 subdir = liblttng-ust-cyg-profile
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_c___attribute__.m4 \
@@ -152,8 +148,7 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
-liblttng_ust_cyg_profile_fast_la_DEPENDENCIES = $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
+liblttng_ust_cyg_profile_fast_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_liblttng_ust_cyg_profile_fast_la_OBJECTS =  \
 	lttng-ust-cyg-profile-fast.lo
 liblttng_ust_cyg_profile_fast_la_OBJECTS =  \
@@ -162,8 +157,7 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-liblttng_ust_cyg_profile_la_DEPENDENCIES = $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
+liblttng_ust_cyg_profile_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_liblttng_ust_cyg_profile_la_OBJECTS = lttng-ust-cyg-profile.lo
 liblttng_ust_cyg_profile_la_OBJECTS =  \
 	$(am_liblttng_ust_cyg_profile_la_OBJECTS)
@@ -256,6 +250,7 @@ CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
+DL_LIBS = @DL_LIBS@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -290,7 +285,6 @@ LTLIBOBJS = @LTLIBOBJS@
 LTTNG_UST_CTL_LIBRARY_VERSION = @LTTNG_UST_CTL_LIBRARY_VERSION@
 LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS = @LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS@
 LTTNG_UST_LIBRARY_VERSION = @LTTNG_UST_LIBRARY_VERSION@
-LTTNG_UST_LIBRARY_VERSION_MAJOR = @LTTNG_UST_LIBRARY_VERSION_MAJOR@
 LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAINT = @MAINT@
 MAJOR_VERSION = @MAJOR_VERSION@
@@ -323,7 +317,6 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-UUDECODE = @UUDECODE@
 VERSION = @VERSION@
 WEAK_ALIAS = @WEAK_ALIAS@
 WEAK_ALIAS_CROSSFILE = @WEAK_ALIAS_CROSSFILE@
@@ -400,16 +393,20 @@ liblttng_ust_cyg_profile_la_SOURCES = \
 	lttng-ust-cyg-profile.c \
 	lttng-ust-cyg-profile.h
 
-liblttng_ust_cyg_profile_la_LIBADD =  \
-	-L$(top_builddir)/liblttng-ust/.libs -llttng-ust \
-	$(am__append_1) $(am__append_3)
+liblttng_ust_cyg_profile_la_LIBADD = \
+	-L$(top_builddir)/liblttng-ust/.libs \
+	-llttng-ust \
+	$(DL_LIBS)
+
 liblttng_ust_cyg_profile_fast_la_SOURCES = \
 	lttng-ust-cyg-profile-fast.c \
 	lttng-ust-cyg-profile-fast.h
 
-liblttng_ust_cyg_profile_fast_la_LIBADD =  \
-	-L$(top_builddir)/liblttng-ust/.libs -llttng-ust \
-	$(am__append_2) $(am__append_4)
+liblttng_ust_cyg_profile_fast_la_LIBADD = \
+	-L$(top_builddir)/liblttng-ust/.libs \
+	-llttng-ust \
+	$(DL_LIBS)
+
 noinst_SCRIPTS = run run-fast
 EXTRA_DIST = run run-fast
 all: all-am

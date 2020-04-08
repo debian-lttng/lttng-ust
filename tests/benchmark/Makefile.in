@@ -91,10 +91,6 @@ build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
 noinst_PROGRAMS = bench1$(EXEEXT) bench2$(EXEEXT)
-@LTTNG_UST_BUILD_WITH_LIBDL_TRUE@am__append_1 = -ldl
-@LTTNG_UST_BUILD_WITH_LIBDL_TRUE@am__append_2 = -ldl
-@LTTNG_UST_BUILD_WITH_LIBC_DL_TRUE@am__append_3 = -lc
-@LTTNG_UST_BUILD_WITH_LIBC_DL_TRUE@am__append_4 = -lc
 subdir = tests/benchmark
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_c___attribute__.m4 \
@@ -129,7 +125,7 @@ am_bench1_OBJECTS = bench.$(OBJEXT) tp.$(OBJEXT)
 bench1_OBJECTS = $(am_bench1_OBJECTS)
 am__DEPENDENCIES_1 =
 bench1_DEPENDENCIES = $(top_builddir)/liblttng-ust/liblttng-ust.la \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -137,7 +133,7 @@ am__v_lt_1 =
 am_bench2_OBJECTS = bench2-bench.$(OBJEXT) bench2-tp.$(OBJEXT)
 bench2_OBJECTS = $(am_bench2_OBJECTS)
 bench2_DEPENDENCIES = $(top_builddir)/liblttng-ust/liblttng-ust.la \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1)
 bench2_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(bench2_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
@@ -229,6 +225,7 @@ CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
+DL_LIBS = @DL_LIBS@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -263,7 +260,6 @@ LTLIBOBJS = @LTLIBOBJS@
 LTTNG_UST_CTL_LIBRARY_VERSION = @LTTNG_UST_CTL_LIBRARY_VERSION@
 LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS = @LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS@
 LTTNG_UST_LIBRARY_VERSION = @LTTNG_UST_LIBRARY_VERSION@
-LTTNG_UST_LIBRARY_VERSION_MAJOR = @LTTNG_UST_LIBRARY_VERSION_MAJOR@
 LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAINT = @MAINT@
 MAJOR_VERSION = @MAJOR_VERSION@
@@ -296,7 +292,6 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-UUDECODE = @UUDECODE@
 VERSION = @VERSION@
 WEAK_ALIAS = @WEAK_ALIAS@
 WEAK_ALIAS_CROSSFILE = @WEAK_ALIAS_CROSSFILE@
@@ -367,11 +362,9 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
 bench1_SOURCES = bench.c tp.c ust_tests_benchmark.h
-bench1_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la \
-	$(am__append_1) $(am__append_3)
+bench1_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la $(DL_LIBS)
 bench2_SOURCES = bench.c tp.c ust_tests_benchmark.h
-bench2_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la \
-	$(am__append_2) $(am__append_4)
+bench2_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la $(DL_LIBS)
 bench2_CFLAGS = -DTRACING $(AM_CFLAGS)
 dist_noinst_SCRIPTS = test_benchmark ptime
 extra_DIST = README

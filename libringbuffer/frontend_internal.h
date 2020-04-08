@@ -205,6 +205,39 @@ void lib_ring_buffer_reserve_push_reader(struct lttng_ust_lib_ring_buffer *buf,
 					      consumed_new) != consumed_old));
 }
 
+/*
+ * Move consumed position to the beginning of subbuffer in which the
+ * write offset is. Should only be used on ring buffers that are not
+ * actively being written into, because clear_reader does not take into
+ * account the commit counters when moving the consumed position, which
+ * can make concurrent trace producers or consumers observe consumed
+ * position further than the write offset, which breaks ring buffer
+ * algorithm guarantees.
+ */
+static inline
+void lib_ring_buffer_clear_reader(struct lttng_ust_lib_ring_buffer *buf,
+				  struct lttng_ust_shm_handle *handle)
+{
+	struct channel *chan;
+	const struct lttng_ust_lib_ring_buffer_config *config;
+	unsigned long offset, consumed_old, consumed_new;
+
+	chan = shmp(handle, buf->backend.chan);
+	if (!chan)
+		return;
+	config = &chan->backend.config;
+
+	do {
+		offset = v_read(config, &buf->offset);
+		consumed_old = uatomic_read(&buf->consumed);
+		CHAN_WARN_ON(chan, (long) (subbuf_trunc(offset, chan)
+				- subbuf_trunc(consumed_old, chan))
+				< 0);
+		consumed_new = subbuf_trunc(offset, chan);
+	} while (caa_unlikely(uatomic_cmpxchg(&buf->consumed, consumed_old,
+					      consumed_new) != consumed_old));
+}
+
 static inline
 int lib_ring_buffer_pending_data(const struct lttng_ust_lib_ring_buffer_config *config,
 				 struct lttng_ust_lib_ring_buffer *buf,
