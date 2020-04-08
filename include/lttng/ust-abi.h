@@ -30,6 +30,10 @@
 #include <stdint.h>
 #include <lttng/ust-compiler.h>
 
+#ifndef LTTNG_PACKED
+#error "LTTNG_PACKED should be defined"
+#endif
+
 #ifndef __ust_stringify
 #define __ust_stringify1(x)	#x
 #define __ust_stringify(x)	__ust_stringify1(x)
@@ -43,7 +47,7 @@
 
 /* Version for ABI between liblttng-ust, sessiond, consumerd */
 #define LTTNG_UST_ABI_MAJOR_VERSION		8
-#define LTTNG_UST_ABI_MINOR_VERSION		0
+#define LTTNG_UST_ABI_MINOR_VERSION		1
 
 enum lttng_ust_instrumentation {
 	LTTNG_UST_TRACEPOINT		= 0,
@@ -141,6 +145,19 @@ enum lttng_ust_context_type {
 	LTTNG_UST_CONTEXT_PERF_THREAD_COUNTER	= 5,
 	LTTNG_UST_CONTEXT_CPU_ID		= 6,
 	LTTNG_UST_CONTEXT_APP_CONTEXT		= 7,
+	LTTNG_UST_CONTEXT_CGROUP_NS		= 8,
+	LTTNG_UST_CONTEXT_IPC_NS		= 9,
+	LTTNG_UST_CONTEXT_MNT_NS		= 10,
+	LTTNG_UST_CONTEXT_NET_NS		= 11,
+	LTTNG_UST_CONTEXT_PID_NS		= 12,
+	LTTNG_UST_CONTEXT_USER_NS		= 13,
+	LTTNG_UST_CONTEXT_UTS_NS		= 14,
+	LTTNG_UST_CONTEXT_VUID			= 15,
+	LTTNG_UST_CONTEXT_VEUID			= 16,
+	LTTNG_UST_CONTEXT_VSUID			= 17,
+	LTTNG_UST_CONTEXT_VGID			= 18,
+	LTTNG_UST_CONTEXT_VEGID			= 19,
+	LTTNG_UST_CONTEXT_VSGID			= 20,
 };
 
 struct lttng_ust_perf_counter_ctx {

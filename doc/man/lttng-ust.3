@@ -2,12 +2,12 @@
 .\"     Title: lttng-ust
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: DocBook XSL Stylesheets v1.79.1 <http://docbook.sf.net/>
-.\"      Date: 03/04/2020
+.\"      Date: 03/27/2020
 .\"    Manual: LTTng Manual
-.\"    Source: LTTng 2.11.1
+.\"    Source: LTTng 2.12.0-rc3
 .\"  Language: English
 .\"
-.TH "LTTNG\-UST" "3" "03/04/2020" "LTTng 2\&.11\&.1" "LTTng Manual"
+.TH "LTTNG\-UST" "3" "03/27/2020" "LTTng 2\&.12\&.0\-rc3" "LTTng Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -1151,12 +1151,103 @@ before hitting the first tracepoint for that thread\&.
 .PP
 \fBvpid\fR
 .RS 4
-Virtual process ID: process ID as seen from the point of view of the process namespace\&.
+Virtual process ID: process ID as seen from the point of view of the current
+\fBpid_namespaces\fR(7)\&.
 .RE
 .PP
 \fBvtid\fR
 .RS 4
-Virtual thread ID: thread ID as seen from the point of view of the process namespace\&.
+Virtual thread ID: thread ID as seen from the point of view of the current
+\fBpid_namespaces\fR(7)\&.
+.RE
+.sp
+The following \fBnamespaces\fR(7) context fields are supported by LTTng\-UST:
+.PP
+\fBcgroup_ns\fR
+.RS 4
+Cgroup root directory namespace: inode number of the current
+\fBcgroup_namespaces\fR(7)
+in the proc filesystem\&.
+.RE
+.PP
+\fBipc_ns\fR
+.RS 4
+System V IPC, POSIX message queues namespace: inode number of the current
+\fBipc_namespaces\fR(7)
+namespace in the proc filesystem\&.
+.RE
+.PP
+\fBmnt_ns\fR
+.RS 4
+Mount points namespace: inode number of the current
+\fBmount_namespaces\fR(7)
+in the proc filesystem\&.
+.RE
+.PP
+\fBnet_ns\fR
+.RS 4
+Network devices, stacks, ports namespace: inode number of the current
+\fBnetwork_namespaces\fR(7)
+in the proc filesystem\&.
+.RE
+.PP
+\fBpid_ns\fR
+.RS 4
+Process IDs namespace: inode number of the current
+\fBpid_namespaces\fR(7)
+in the proc filesystem\&.
+.RE
+.PP
+\fBuser_ns\fR
+.RS 4
+User and group IDs namespace: inode number of the current
+\fBuser_namespaces\fR(7)
+in the proc filesystem\&.
+.RE
+.PP
+\fButs_ns\fR
+.RS 4
+Hostname and NIS domain name namespace: inode number of the current
+\fButs_namespaces\fR(7)
+in the proc filesystem\&.
+.RE
+.sp
+The following \fBcredentials\fR(7) context fields are supported by LTTng\-UST:
+.PP
+\fBvuid\fR
+.RS 4
+Virtual real user ID: real user ID as seen from the point of view of the current
+\fBuser_namespaces\fR(7)\&.
+.RE
+.PP
+\fBvgid\fR
+.RS 4
+Virtual real group ID: real group ID as seen from the point of view of the current
+\fBuser_namespaces\fR(7)\&.
+.RE
+.PP
+\fBveuid\fR
+.RS 4
+Virtual effective user ID: effective user ID as seen from the point of view of the current
+\fBuser_namespaces\fR(7)\&.
+.RE
+.PP
+\fBvegid\fR
+.RS 4
+Virtual effective group ID: effective group ID as seen from the point of view of the current
+\fBuser_namespaces\fR(7)\&.
+.RE
+.PP
+\fBvsuid\fR
+.RS 4
+Virtual saved set\-user ID: saved set\-user ID as seen from the point of view of the current
+\fBuser_namespaces\fR(7)\&.
+.RE
+.PP
+\fBvsgid\fR
+.RS 4
+Virtual saved set\-group ID: saved set\-group ID as seen from the point of view of the current
+\fBuser_namespaces\fR(7)\&.
 .RE
 .SS "LTTng\-UST state dump"
 .sp
@@ -1301,6 +1392,30 @@ T{
 \fBfilename\fR
 T}:T{
 Debug link file name\&.
+T}
+.TE
+.sp 1
+.RE
+.PP
+\fBlttng_ust_statedump:procname\fR
+.RS 4
+The process procname at process start\&.
+.sp
+Fields:
+.TS
+allbox tab(:);
+ltB ltB.
+T{
+Field name
+T}:T{
+Description
+T}
+.T&
+lt lt.
+T{
+\fBprocname\fR
+T}:T{
+The process name\&.
 T}
 .TE
 .sp 1
@@ -1530,7 +1645,7 @@ if (lttng_ust_loaded) {
 .ps -1
 .br
 .sp
-A few examples are available in the \fBdoc/examples\fR <https://github.com/lttng/lttng-ust/tree/v2.11.1/doc/examples> directory of LTTng\-UST\(cqs source tree\&.
+A few examples are available in the \fBdoc/examples\fR <https://github.com/lttng/lttng-ust/tree/v2.12.0-rc3/doc/examples> directory of LTTng\-UST\(cqs source tree\&.
 .sp .5v
 .RE
 .sp
@@ -1872,7 +1987,7 @@ Setting this environment variable may significantly affect application timings\&
 \fBLTTNG_UST_CLOCK_PLUGIN\fR
 .RS 4
 Path to the shared object which acts as the clock override plugin\&. An example of such a plugin can be found in the LTTng\-UST documentation under
-\fBexamples/clock-override\fR <https://github.com/lttng/lttng-ust/tree/v2.11.1/doc/examples/clock-override>\&.
+\fBexamples/clock-override\fR <https://github.com/lttng/lttng-ust/tree/v2.12.0-rc3/doc/examples/clock-override>\&.
 .RE
 .PP
 \fBLTTNG_UST_DEBUG\fR
@@ -1886,7 +2001,7 @@ If set, enable
 Path to the shared object which acts as the
 \fBgetcpu()\fR
 override plugin\&. An example of such a plugin can be found in the LTTng\-UST documentation under
-\fBexamples/getcpu-override\fR <https://github.com/lttng/lttng-ust/tree/v2.11.1/doc/examples/getcpu-override>\&.
+\fBexamples/getcpu-override\fR <https://github.com/lttng/lttng-ust/tree/v2.12.0-rc3/doc/examples/getcpu-override>\&.
 .RE
 .PP
 \fBLTTNG_UST_REGISTER_TIMEOUT\fR
@@ -1913,6 +2028,15 @@ Default: 3000\&.
 If set, prevents
 \fBliblttng-ust\fR
 from performing a base address state dump (see the
+\fILTTng\-UST state dump\fR
+section above)\&.
+.RE
+.PP
+\fBLTTNG_UST_WITHOUT_PROCNAME_STATEDUMP\fR
+.RS 4
+If set, prevents
+\fBliblttng-ust\fR
+from performing a procname state dump (see the
 \fILTTng\-UST state dump\fR
 section above)\&.
 .RE
@@ -2006,7 +2130,7 @@ on
 .sp
 This library is part of the LTTng\-UST project\&.
 .sp
-This library is distributed under the GNU Lesser General Public License, version 2\&.1 <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html>\&. See the \fBCOPYING\fR <https://github.com/lttng/lttng-ust/blob/v2.11.1/COPYING> file for more details\&.
+This library is distributed under the GNU Lesser General Public License, version 2\&.1 <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html>\&. See the \fBCOPYING\fR <https://github.com/lttng/lttng-ust/blob/v2.12.0-rc3/COPYING> file for more details\&.
 .SH "THANKS"
 .sp
 Thanks to Ericsson for funding this work, providing real\-life use cases, and testing\&.

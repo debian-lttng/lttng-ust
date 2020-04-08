@@ -125,7 +125,8 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h $(top_builddir)/include/lttng/ust-config.h
 CONFIG_CLEAN_FILES = include/lttng/ust-version.h \
-	python-lttngust/lttngust/__init__.py lttng-ust.pc
+	python-lttngust/lttngust/__init__.py lttng-ust.pc \
+	lttng-ust-ctl.pc
 CONFIG_CLEAN_VPATH_FILES = python-lttngust/lttngust/agent.py \
 	python-lttngust/lttngust/cmd.py \
 	python-lttngust/lttngust/debug.py \
@@ -222,7 +223,8 @@ DIST_SUBDIRS = . include snprintf libringbuffer liblttng-ust-comm \
 	liblttng-ust-java liblttng-ust-java-agent python-lttngust \
 	liblttng-ust-python-agent tests doc
 am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
-	$(srcdir)/lttng-ust.pc.in $(top_srcdir)/config/compile \
+	$(srcdir)/lttng-ust-ctl.pc.in $(srcdir)/lttng-ust.pc.in \
+	$(top_srcdir)/config/ar-lib $(top_srcdir)/config/compile \
 	$(top_srcdir)/config/config.guess \
 	$(top_srcdir)/config/config.sub \
 	$(top_srcdir)/config/install-sh $(top_srcdir)/config/ltmain.sh \
@@ -305,6 +307,7 @@ CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
+DL_LIBS = @DL_LIBS@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -339,7 +342,6 @@ LTLIBOBJS = @LTLIBOBJS@
 LTTNG_UST_CTL_LIBRARY_VERSION = @LTTNG_UST_CTL_LIBRARY_VERSION@
 LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS = @LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS@
 LTTNG_UST_LIBRARY_VERSION = @LTTNG_UST_LIBRARY_VERSION@
-LTTNG_UST_LIBRARY_VERSION_MAJOR = @LTTNG_UST_LIBRARY_VERSION_MAJOR@
 LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAINT = @MAINT@
 MAJOR_VERSION = @MAJOR_VERSION@
@@ -372,7 +374,6 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-UUDECODE = @UUDECODE@
 VERSION = @VERSION@
 WEAK_ALIAS = @WEAK_ALIAS@
 WEAK_ALIAS_CROSSFILE = @WEAK_ALIAS_CROSSFILE@
@@ -451,7 +452,7 @@ SUBDIRS = . include snprintf libringbuffer liblttng-ust-comm \
 #temporarily disabled
 # liblttng-ust-malloc
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = lttng-ust.pc
+pkgconfig_DATA = lttng-ust.pc lttng-ust-ctl.pc
 dist_doc_DATA = \
 	ChangeLog \
 	COPYING \
@@ -530,6 +531,8 @@ include/lttng/ust-version.h: $(top_builddir)/config.status $(top_srcdir)/include
 python-lttngust/lttngust/__init__.py: $(top_builddir)/config.status $(top_srcdir)/python-lttngust/lttngust/__init__.py.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 lttng-ust.pc: $(top_builddir)/config.status $(srcdir)/lttng-ust.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+lttng-ust-ctl.pc: $(top_builddir)/config.status $(srcdir)/lttng-ust-ctl.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:

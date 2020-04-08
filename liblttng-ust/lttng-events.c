@@ -415,6 +415,9 @@ int lttng_session_enable(struct lttng_session *session)
 	/* Set transient enabler state to "enabled" */
 	session->tstate = 1;
 
+	/* We need to sync enablers with session before activation. */
+	lttng_session_sync_enablers(session);
+
 	/*
 	 * Snapshot the number of events per channel to know the type of header
 	 * we need to use.
@@ -457,9 +460,6 @@ int lttng_session_enable(struct lttng_session *session)
 			return -EINVAL;
 		}
 	}
-
-	/* We need to sync enablers with session before activation. */
-	lttng_session_sync_enablers(session);
 
 	/* Set atomically the state to "active" */
 	CMM_ACCESS_ONCE(session->active) = 1;
@@ -1114,6 +1114,32 @@ int lttng_attach_context(struct lttng_ust_context *context_param,
 	case LTTNG_UST_CONTEXT_APP_CONTEXT:
 		return lttng_ust_add_app_context_to_ctx_rcu(uargs->app_context.ctxname,
 			ctx);
+	case LTTNG_UST_CONTEXT_CGROUP_NS:
+		return lttng_add_cgroup_ns_to_ctx(ctx);
+	case LTTNG_UST_CONTEXT_IPC_NS:
+		return lttng_add_ipc_ns_to_ctx(ctx);
+	case LTTNG_UST_CONTEXT_MNT_NS:
+		return lttng_add_mnt_ns_to_ctx(ctx);
+	case LTTNG_UST_CONTEXT_NET_NS:
+		return lttng_add_net_ns_to_ctx(ctx);
+	case LTTNG_UST_CONTEXT_PID_NS:
+		return lttng_add_pid_ns_to_ctx(ctx);
+	case LTTNG_UST_CONTEXT_USER_NS:
+		return lttng_add_user_ns_to_ctx(ctx);
+	case LTTNG_UST_CONTEXT_UTS_NS:
+		return lttng_add_uts_ns_to_ctx(ctx);
+	case LTTNG_UST_CONTEXT_VUID:
+		return lttng_add_vuid_to_ctx(ctx);
+	case LTTNG_UST_CONTEXT_VEUID:
+		return lttng_add_veuid_to_ctx(ctx);
+	case LTTNG_UST_CONTEXT_VSUID:
+		return lttng_add_vsuid_to_ctx(ctx);
+	case LTTNG_UST_CONTEXT_VGID:
+		return lttng_add_vgid_to_ctx(ctx);
+	case LTTNG_UST_CONTEXT_VEGID:
+		return lttng_add_vegid_to_ctx(ctx);
+	case LTTNG_UST_CONTEXT_VSGID:
+		return lttng_add_vsgid_to_ctx(ctx);
 	default:
 		return -EINVAL;
 	}

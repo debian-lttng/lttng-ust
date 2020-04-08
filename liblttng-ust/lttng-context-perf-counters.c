@@ -460,10 +460,7 @@ static
 void perf_counter_get_value(struct lttng_ctx_field *field,
 		struct lttng_ctx_value *value)
 {
-	uint64_t v;
-
-	v = wrapper_perf_counter_read(field);
-	value->u.s64 = v;
+	value->u.s64 = wrapper_perf_counter_read(field);
 }
 
 /* Called with perf lock held */
