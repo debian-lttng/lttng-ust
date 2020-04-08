@@ -1,0 +1,9 @@
+---
+debian:
+  copyright: 2011-2013, Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+  copyright: 2010-2013, Jon Bernard <jbernard@debian.org>
+  copyright: 2015-2020, Michael Jeanson <mjeanson@debian.org>
+  license: GPL-3
+
+m4/libtool.m4:
+  override-license: GPL-2+

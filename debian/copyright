@@ -14,23 +14,6 @@ Copyright: 2011-2013, Alexandre Montplaisir <alexmonthy@voxpopuli.im>
            2015-2019, Michael Jeanson <mjeanson@debian.org>
 License: GPL-3
 
-Files: config/*
-Copyright: 1996-2015, Free Software Foundation, Inc.
-License: GPL-2+
-
-Files: config/config.guess
-  config/config.sub
-Copyright: 1992-2014, Free Software Foundation, Inc.
-License: GPL-3
-
-Files: config/install-sh
-Copyright: 1994, X Consortium
-License: Expat
-
-Files: config/texinfo.tex
-Copyright: 1985, 1986, 1988, 1990-2009, Free Software Foundation, Inc.
-License: GPL-3+
-
 Files: doc/*
 Copyright: 2011, 2012, Julien Desfossez <julien.desfossez@polymtl.ca>
   2010-2012, David Goulet <david.goulet@polymtl.ca>
@@ -38,11 +21,6 @@ Copyright: 2011, 2012, Julien Desfossez <julien.desfossez@polymtl.ca>
   2009-2012, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
   2009, Pierre-Marc Fournier
 License: LGPL-2.1
-
-Files: doc/examples/clock-override/Makefile
-Copyright: 2014, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-  2013, Jérémie Galarneau <jeremie.galarneau@efficios.com>
-License: LGPL-2.1+
 
 Files: doc/examples/clock-override/lttng-ust-clock-override-example.c
 Copyright: 2014, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
@@ -70,28 +48,14 @@ Copyright: 2011-2014, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
   2009, 2010, Pierre-Marc Fournier
 License: LGPL-2.1
 
-Files: doc/examples/demo-tracef/Makefile
-Copyright: 2014, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-  2013, Jérémie Galarneau <jeremie.galarneau@efficios.com>
-License: LGPL-2.1+
-
 Files: doc/examples/demo-tracelog/*
 Copyright: 2011-2014, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
   2009, 2010, Pierre-Marc Fournier
 License: LGPL-2.1
 
-Files: doc/examples/demo-tracelog/Makefile
-Copyright: 2014, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-  2013, Jérémie Galarneau <jeremie.galarneau@efficios.com>
-License: LGPL-2.1+
-
 Files: doc/examples/demo/*
 Copyright: 2011, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 License: Expat
-
-Files: doc/examples/demo/Makefile
-Copyright: 2013, Jérémie Galarneau <jeremie.galarneau@efficios.com>
-License: LGPL-2.1+
 
 Files: doc/examples/demo/demo.c
 Copyright: 2011-2014, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
@@ -101,11 +65,6 @@ License: LGPL-2.1
 Files: doc/examples/easy-ust/*
 Copyright: 2011, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 License: Expat
-
-Files: doc/examples/easy-ust/Makefile
-Copyright: 2012, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-  2011, 2012, Matthew Khouzam <matthew.khouzam@ericsson.com>
-License: LGPL-2.1+
 
 Files: doc/examples/easy-ust/sample.c
 Copyright: 2012, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
@@ -122,17 +81,6 @@ Copyright: 2012, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
   2011, 2012, Matthew Khouzam <matthew.khouzam@ericsson.com>
 License: Expat
 
-Files: doc/examples/gen-tp/Makefile
-Copyright: 2012, Yannick Brosseau <yannick.brosseau@gmail.com>
-  2012, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-  2011, 2012, Matthew Khouzam <matthew.khouzam@ericsson.com>
-License: LGPL-2.1+
-
-Files: doc/examples/getcpu-override/Makefile
-Copyright: 2014, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-  2013, Jérémie Galarneau <jeremie.galarneau@efficios.com>
-License: LGPL-2.1+
-
 Files: doc/examples/getcpu-override/lttng-ust-getcpu-override-example.c
 Copyright: 2014, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 License: Expat
@@ -140,10 +88,6 @@ License: Expat
 Files: doc/examples/hello-static-lib/*
 Copyright: 2011, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 License: Expat
-
-Files: doc/examples/hello-static-lib/Makefile
-Copyright: 2013, Jérémie Galarneau <jeremie.galarneau@efficios.com>
-License: LGPL-2.1+
 
 Files: doc/examples/hello-static-lib/hello.c
 Copyright: 2011-2014, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
@@ -162,17 +106,9 @@ Files: doc/examples/java-jul/Hello.java
 Copyright: 2015, - EfficiOS Inc., Alexandre Montplaisir <alexmonthy@efficios.com> / 2013, - David Goulet <dgoulet@efficios.com>
 License: Expat
 
-Files: doc/examples/java-jul/Makefile
-Copyright: 2013, - David Goulet <dgoulet@efficios.com>
-License: LGPL-2.1+
-
 Files: doc/examples/java-log4j/Hello.java
 Copyright: 2015, - EfficiOS Inc., Alexandre Montplaisir <alexmonthy@efficios.com> / 2014, - Christian Babeux <christian.babeux@efficios.com>
 License: Expat
-
-Files: doc/examples/java-log4j/Makefile
-Copyright: 2014, - Christian Babeux <christian.babeux@efficios.com>
-License: LGPL-2.1+
 
 Files: include/*
 Copyright: 2011-2014, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
@@ -399,10 +335,6 @@ License: LGPL-2.1
 
 Files: liblttng-ust-java-agent/java/lttng-ust-agent-common/org/lttng/ust/agent/utils/*
 Copyright: 2016, - EfficiOS Inc., Alexandre Montplaisir <alexmonthy@efficios.com>
-License: LGPL-2.1
-
-Files: liblttng-ust-java-agent/java/lttng-ust-agent-jul/Makefile.am
-Copyright: 2015, - EfficiOS Inc., Alexandre Montplaisir <alexmonthy@efficios.com> / 2013, - David Goulet <dgoulet@efficios.com>
 License: LGPL-2.1
 
 Files: liblttng-ust-java-agent/java/lttng-ust-agent-jul/org/*
@@ -846,7 +778,7 @@ Files: tests/same_line_tracepoint/same_line_tracepoint.c
 Copyright: 2013, Jérémie Galarneau
 License: LGPL-2.1+
 
-Files: tests/snprintf/prog.c
+Files: tests/snprintf/snprintf.c
 Copyright: 2009, Pierre-Marc Fournier
 License: LGPL-2.1+
 
@@ -859,7 +791,7 @@ Copyright: 2011-2014, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
   2009, 2010, Pierre-Marc Fournier
 License: LGPL-2.1
 
-Files: tests/ust-elf/prog.c
+Files: tests/ust-elf/ust-elf.c
 Copyright: 2015, Antoine Busque <abusque@efficios.com>
 License: LGPL-2.1+
 
