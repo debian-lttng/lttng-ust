@@ -1,0 +1,102 @@
+From 4ae3f13373ab43824ddca62d3482584a6296641d Mon Sep 17 00:00:00 2001
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date: Thu, 9 Apr 2020 11:29:18 -0400
+Subject: [PATCH] Fix: namespace contexts !CONFIG_RCU_TLS variable
+ initialization
+
+The namespace contexts introduced in lttng-ust 2.12 require to
+initialize TLS variable to nonzero values. However, in !CONFIG_RCU_TLS
+(compatibility mode using pthread setspecific), this initialization
+does not build.
+
+Use the new DEFINE_URCU_TLS_INIT from liburcu when building
+!CONFIG_RCU_TLS to fix this issue. Since this requires a dependency on
+a new liburcu version, only !CONFIG_RCU_TLS adds this dependency in the
+fix. A followup cleanup patch will use DEFINE_URCU_TLS_INIT as we add
+a strict version dependency.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ liblttng-ust/lttng-context-cgroup-ns.c | 4 ++++
+ liblttng-ust/lttng-context-ipc-ns.c    | 5 ++++-
+ liblttng-ust/lttng-context-net-ns.c    | 5 ++++-
+ liblttng-ust/lttng-context-uts-ns.c    | 4 ++++
+ 4 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/liblttng-ust/lttng-context-cgroup-ns.c b/liblttng-ust/lttng-context-cgroup-ns.c
+index d4053150..97af2759 100644
+--- a/liblttng-ust/lttng-context-cgroup-ns.c
++++ b/liblttng-ust/lttng-context-cgroup-ns.c
+@@ -38,7 +38,11 @@
+  * We cache the result to ensure we don't stat(2) the proc filesystem on
+  * each event.
+  */
++#ifdef CONFIG_RCU_TLS
+ static DEFINE_URCU_TLS(ino_t, cached_cgroup_ns) = NS_INO_UNINITIALIZED;
++#else
++static DEFINE_URCU_TLS_INIT(ino_t, cached_cgroup_ns, NS_INO_UNINITIALIZED);
++#endif
+ 
+ static
+ ino_t get_cgroup_ns(void)
+diff --git a/liblttng-ust/lttng-context-ipc-ns.c b/liblttng-ust/lttng-context-ipc-ns.c
+index c973dc86..a05a6c61 100644
+--- a/liblttng-ust/lttng-context-ipc-ns.c
++++ b/liblttng-ust/lttng-context-ipc-ns.c
+@@ -33,12 +33,15 @@
+ #include "lttng-tracer-core.h"
+ #include "ns.h"
+ 
+-
+ /*
+  * We cache the result to ensure we don't stat(2) the proc filesystem on
+  * each event.
+  */
++#ifdef CONFIG_RCU_TLS
+ static DEFINE_URCU_TLS(ino_t, cached_ipc_ns) = NS_INO_UNINITIALIZED;
++#else
++static DEFINE_URCU_TLS_INIT(ino_t, cached_ipc_ns, NS_INO_UNINITIALIZED);
++#endif
+ 
+ static
+ ino_t get_ipc_ns(void)
+diff --git a/liblttng-ust/lttng-context-net-ns.c b/liblttng-ust/lttng-context-net-ns.c
+index 9d6ded12..c0aaa9d4 100644
+--- a/liblttng-ust/lttng-context-net-ns.c
++++ b/liblttng-ust/lttng-context-net-ns.c
+@@ -33,12 +33,15 @@
+ #include "lttng-tracer-core.h"
+ #include "ns.h"
+ 
+-
+ /*
+  * We cache the result to ensure we don't stat(2) the proc filesystem on
+  * each event.
+  */
++#ifdef CONFIG_RCU_TLS
+ static DEFINE_URCU_TLS(ino_t, cached_net_ns) = NS_INO_UNINITIALIZED;
++#else
++static DEFINE_URCU_TLS_INIT(ino_t, cached_net_ns, NS_INO_UNINITIALIZED);
++#endif
+ 
+ static
+ ino_t get_net_ns(void)
+diff --git a/liblttng-ust/lttng-context-uts-ns.c b/liblttng-ust/lttng-context-uts-ns.c
+index fb2d89f9..778ccb46 100644
+--- a/liblttng-ust/lttng-context-uts-ns.c
++++ b/liblttng-ust/lttng-context-uts-ns.c
+@@ -38,7 +38,11 @@
+  * We cache the result to ensure we don't stat(2) the proc filesystem on
+  * each event.
+  */
++#ifdef CONFIG_RCU_TLS
+ static DEFINE_URCU_TLS(ino_t, cached_uts_ns) = NS_INO_UNINITIALIZED;
++#else
++static DEFINE_URCU_TLS_INIT(ino_t, cached_uts_ns, NS_INO_UNINITIALIZED);
++#endif
+ 
+ static
+ ino_t get_uts_ns(void)
+-- 
+2.25.1
+
