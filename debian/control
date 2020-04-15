@@ -11,7 +11,6 @@ Build-Depends: debhelper (>= 11),
   liburcu-dev (>= 0.12~),
   libnuma-dev,
   python3,
-  python3-distutils,
   texinfo,
   uuid-dev
 Standards-Version: 4.4.1
