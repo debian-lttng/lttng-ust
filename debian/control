@@ -9,7 +9,7 @@ Build-Depends: debhelper (>= 11),
   javahelper <!nojava>,
   liblog4j1.2-java <!nojava>,
   liburcu-dev (>= 0.12~),
-  libnuma-dev,
+  libnuma-dev [!armhf],
   python3,
   texinfo,
   uuid-dev
