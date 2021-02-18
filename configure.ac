@@ -1,7 +1,7 @@
 dnl Version infos
 m4_define([V_MAJOR], [2])
 m4_define([V_MINOR], [12])
-m4_define([V_PATCH], [0])
+m4_define([V_PATCH], [1])
 dnl m4_define([V_EXTRA], [])
 m4_define([V_NAME], [[(Ta) Meilleure]])
 m4_define([V_DESC], [[Ta Meilleure is a Northeast IPA beer brewed by Lagabière. Translating to "Your best one", this beer gives out strong aromas of passion fruit, lemon, and peaches. Tastewise, expect a lot of fruit, a creamy texture, and a smooth lingering hop bitterness.]])
@@ -53,7 +53,8 @@ AC_REQUIRE_AUX_FILE([tap-driver.sh])
 AC_USE_SYSTEM_EXTENSIONS
 AC_SYS_LARGEFILE
 AC_PROG_CC
-AC_PROG_CC_STDC
+# AC_PROG_CC_STDC was merged in AC_PROG_CC in autoconf 2.70
+m4_version_prereq([2.70], [], [AC_PROG_CC_STDC])
 AC_PROG_CXX
 RW_PROG_CXX_WORKS
 AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
@@ -359,6 +360,7 @@ AS_IF([test "x$jni_interface" = "xyes" || test "x$java_agent_jul" = "xyes" || te
 	AX_PROG_JAVAC
 	AX_PROG_JAVA
 	AX_PROG_JAR
+	AC_ARG_VAR([CLASSPATH], [Java class path])
 
 	AX_JNI_INCLUDE_DIR
 	for JNI_INCLUDE_DIR in $JNI_INCLUDE_DIRS
@@ -563,6 +565,7 @@ AC_CONFIG_FILES([
 AC_CONFIG_LINKS([
 	python-lttngust/lttngust/agent.py:python-lttngust/lttngust/agent.py
 	python-lttngust/lttngust/cmd.py:python-lttngust/lttngust/cmd.py
+	python-lttngust/lttngust/compat.py:python-lttngust/lttngust/compat.py
 	python-lttngust/lttngust/debug.py:python-lttngust/lttngust/debug.py
 	python-lttngust/lttngust/loghandler.py:python-lttngust/lttngust/loghandler.py
 ])
