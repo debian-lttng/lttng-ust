@@ -1,3 +1,10 @@
+ust (2.12.1-1~ubuntu20.04.1) focal; urgency=medium
+
+  * [3b6a5b7] New upstream version 2.12.1
+  * [9c9a347] Drop patch applied upstream
+
+ -- Michael Jeanson <mjeanson@debian.org>  Thu, 18 Feb 2021 15:18:04 -0500
+
 ust (2.12.0-2~ubuntu20.04.1) focal; urgency=medium
 
   * Source backport to focal
