@@ -1,3 +1,10 @@
+ust (2.12.1-1~ubuntu18.04.1) bionic; urgency=medium
+
+  * [3b6a5b7] New upstream version 2.12.1
+  * [a05283f] Drop patch applied upstream
+
+ -- Michael Jeanson <mjeanson@debian.org>  Thu, 18 Feb 2021 15:22:22 -0500
+
 ust (2.12.0-2~ubuntu18.04.1) bionic; urgency=medium
 
   * Source backport to bionic
