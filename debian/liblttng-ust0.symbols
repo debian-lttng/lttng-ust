@@ -196,7 +196,6 @@ liblttng-ust.so.0 liblttng-ust0 #MINVER#
  ltt_probe_register@Base 2.5.0
  ltt_probe_unregister@Base 2.5.0
  lttng_abi_create_root_handle@Base 2.5.0
- lttng_abi_map_channel@Base 2.5.0
  lttng_add_cgroup_ns_to_ctx@Base 2.12.0
  lttng_add_cpu_id_to_ctx@Base 2.7.0
  lttng_add_ip_to_ctx@Base 2.5.0
