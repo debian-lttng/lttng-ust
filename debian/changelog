@@ -1,3 +1,10 @@
+ust (2.12.2-1~ubuntu18.04.1) bionic; urgency=medium
+
+  * [25dc303] New upstream version 2.12.2
+  * [eef8188] Update symbols
+
+ -- Michael Jeanson <mjeanson@debian.org>  Wed, 16 Jun 2021 14:19:50 -0400
+
 ust (2.12.1-1~ubuntu18.04.1) bionic; urgency=medium
 
   * [3b6a5b7] New upstream version 2.12.1
