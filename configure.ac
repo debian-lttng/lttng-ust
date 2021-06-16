@@ -1,7 +1,7 @@
 dnl Version infos
 m4_define([V_MAJOR], [2])
 m4_define([V_MINOR], [12])
-m4_define([V_PATCH], [1])
+m4_define([V_PATCH], [2])
 dnl m4_define([V_EXTRA], [])
 m4_define([V_NAME], [[(Ta) Meilleure]])
 m4_define([V_DESC], [[Ta Meilleure is a Northeast IPA beer brewed by Lagabière. Translating to "Your best one", this beer gives out strong aromas of passion fruit, lemon, and peaches. Tastewise, expect a lot of fruit, a creamy texture, and a smooth lingering hop bitterness.]])
@@ -73,8 +73,8 @@ AC_PROG_GREP
 AC_PROG_LN_S
 AC_PROG_MKDIR_P
 AC_PROG_MAKE_SET
-AC_CHECK_PROG([HAVE_CMAKE], [cmake], ["yes"])
-AM_CONDITIONAL([HAVE_CMAKE], [test "x$HAVE_CMAKE" = "xyes"])
+AC_CHECK_PROG([CMAKE], [cmake])
+AM_CONDITIONAL([HAVE_CMAKE], [test "x$CMAKE" != "x"])
 
 # libtool link_all_deplibs fixup. See http://bugs.lttng.org/issues/321.
 AC_ARG_ENABLE([libtool-linkdep-fixup], [
