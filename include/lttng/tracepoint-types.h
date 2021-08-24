@@ -1,26 +1,21 @@
-#ifndef _LTTNG_TRACEPOINT_TYPES_H
-#define _LTTNG_TRACEPOINT_TYPES_H
+/*
+ * SPDX-License-Identifier: MIT
+ *
+ * Copyright (C) 2011-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+ */
+
+#ifndef _LTTNG_UST_TRACEPOINT_TYPES_H
+#define _LTTNG_UST_TRACEPOINT_TYPES_H
+
+#include <stdint.h>
 
 /*
- * Copyright 2011-2012 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+ * Tracepoint probe definition
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * IMPORTANT: this structure is part of the ABI between instrumented
+ * applications and UST. This structure is fixed-size because it is part
+ * of a public array of structures. Rather than extending this
+ * structure, struct lttng_ust_tracepoint should be extended instead.
  */
 
 struct lttng_ust_tracepoint_probe {
@@ -28,14 +23,29 @@ struct lttng_ust_tracepoint_probe {
 	void *data;
 };
 
-#define LTTNG_UST_TRACEPOINT_PADDING	16
+/*
+ * Tracepoint definition
+ *
+ * IMPORTANT: this structure is part of the ABI between instrumented
+ * applications and UST. Fields need to be only added at the end, never
+ * reordered, never removed.
+ *
+ * The field @struct_size should be used to determine the size of the
+ * structure. It should be queried before using additional fields added
+ * at the end of the structure.
+ */
+
 struct lttng_ust_tracepoint {
-	const char *name;
+	uint32_t struct_size;
+
+	const char *provider_name;
+	const char *event_name;
 	int state;
 	struct lttng_ust_tracepoint_probe *probes;
 	int *tracepoint_provider_ref;
 	const char *signature;
-	char padding[LTTNG_UST_TRACEPOINT_PADDING];
+
+	/* End of base ABI. Fields below should be used after checking struct_size. */
 };
 
-#endif /* _LTTNG_TRACEPOINT_TYPES_H */
+#endif /* _LTTNG_UST_TRACEPOINT_TYPES_H */

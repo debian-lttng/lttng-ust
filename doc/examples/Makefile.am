@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: LGPL-2.1-only
+
 doc_examplesdir = ${docdir}/examples
 doc_examples_easy_ustdir = ${docdir}/examples/easy-ust
 doc_examples_gen_tpdir = ${docdir}/examples/gen-tp
@@ -9,7 +11,7 @@ doc_examples_clock_overridedir = ${docdir}/examples/clock-override
 doc_examples_getcpu_overridedir = ${docdir}/examples/getcpu-override
 doc_examples_cmakedir = ${docdir}/examples/cmake-multiple-shared-libraries
 
-if BUILD_JAVA_AGENT_WITH_JUL
+if ENABLE_JAVA_AGENT_WITH_JUL
 doc_examples_java_juldir = ${docdir}/examples/java-jul
 dist_doc_examples_java_jul_DATA = java-jul/Makefile \
 				  java-jul/Hello.java \
@@ -20,7 +22,7 @@ dist_doc_examples_java_jul_DATA = java-jul/Makefile \
 SUBDIRS_JUL = java-jul
 endif
 
-if BUILD_JAVA_AGENT_WITH_LOG4J
+if ENABLE_JAVA_AGENT_WITH_LOG4J
 doc_examples_java_log4jdir = ${docdir}/examples/java-log4j
 dist_doc_examples_java_log4j_DATA = java-log4j/Makefile \
 				  java-log4j/Hello.java \
@@ -28,13 +30,13 @@ dist_doc_examples_java_log4j_DATA = java-log4j/Makefile \
 SUBDIRS_LOG4J = java-log4j
 endif
 
-if BUILD_PYTHON_AGENT
+if ENABLE_PYTHON_AGENT
 doc_examples_pythondir = ${docdir}/examples/python
 dist_doc_examples_python_DATA = python/hello.py
 endif
 
 if HAVE_CMAKE
-if CXX_WORKS
+if HAVE_CXX
 SUBDIRS_CMAKE = cmake-multiple-shared-libraries
 endif
 endif
@@ -81,10 +83,12 @@ dist_doc_examples_hello_static_lib_DATA = hello-static-lib/Makefile \
 
 dist_doc_examples_demo_tracef_DATA = demo-tracef/Makefile \
 	demo-tracef/demo-tracef.c \
+	demo-tracef/demo-vtracef.c \
 	demo-tracef/README
 
 dist_doc_examples_demo_tracelog_DATA = demo-tracelog/Makefile \
 	demo-tracelog/demo-tracelog.c \
+	demo-tracelog/demo-vtracelog.c \
 	demo-tracelog/README
 
 dist_doc_examples_clock_override_DATA = clock-override/Makefile \
@@ -101,7 +105,7 @@ dist_doc_examples_getcpu_override_DATA = getcpu-override/Makefile \
 SUBDIRS_PROXY = easy-ust demo hello-static-lib demo-tracef clock-override \
 		getcpu-override demo-tracelog
 
-if BUILD_GEN_TP_EXAMPLES
+if ENABLE_GEN_TP_EXAMPLES
 SUBDIRS_PROXY += gen-tp
 endif
 
@@ -128,15 +132,18 @@ all-local:
 			$(MAKE) all \
 				AR="$(AR)" \
 				CC="$(CC)" \
+				PYTHON="$(PYTHON)" \
 				CPPFLAGS="$(CPPFLAGS)" \
 				AM_CPPFLAGS="$(AM_CPPFLAGS) \
 				-I$$rel_src_subdir$(top_srcdir)/include/ \
-				-I$$rel_build_subdir$(top_builddir)/include/" \
+				-I$$rel_build_subdir$(top_builddir)/include/ \
+				-I$$rel_src_subdir$(top_srcdir)/src/ \
+				-I$$rel_build_subdir$(top_builddir)/src/" \
 				CFLAGS='$(CFLAGS)' \
 				AM_CFLAGS='$(AM_CFLAGS)' \
 				LDFLAGS="$(LDFLAGS)" \
-				AM_LDFLAGS='$(AM_LDFLAGS) -L../../../liblttng-ust/.libs -Wl,-rpath="$(PWD)/../../liblttng-ust/.libs/" -Wl,-rpath-link="$(PWD)/../../liblttng-ust/.libs/"' \
-				LTTNG_GEN_TP_PATH="../../../tools/" \
+				AM_LDFLAGS='$(AM_LDFLAGS) -L../../../src/lib/lttng-ust/.libs -Wl,-rpath="$(PWD)/../../src/lib/lttng-ust/.libs/" -Wl,-rpath-link="$(PWD)/../../src/lib/lttng-ust/.libs/"' \
+				LTTNG_GEN_TP_PATH="$$rel_src_subdir$(top_srcdir)/tools/" \
 				AM_V_P="$(AM_V_P)" \
 				AM_V_at="$(AM_V_at)" \
 				$(AM_MAKEFLAGS) \
@@ -148,8 +155,8 @@ all-local:
 				cd $$subdir && \
 				$(MAKE) all \
 					CLASSPATH="$(CLASSPATH)" \
-					JAVA_CLASSPATH_OVERRIDE_JUL="../../../liblttng-ust-java-agent/java/lttng-ust-agent-jul" \
-					JAVA_CLASSPATH_OVERRIDE_COMMON="../../../liblttng-ust-java-agent/java/lttng-ust-agent-common" \
+					JAVA_CLASSPATH_OVERRIDE_JUL="../../../src/lib/lttng-ust-java-agent/java/lttng-ust-agent-jul" \
+					JAVA_CLASSPATH_OVERRIDE_COMMON="../../../src/lib/lttng-ust-java-agent/java/lttng-ust-agent-common" \
 					$(AM_MAKEFLAGS) \
 			) || exit 1; \
 		done; \
@@ -160,8 +167,8 @@ all-local:
 				cd $$subdir && \
 				$(MAKE) all \
 					CLASSPATH="$(CLASSPATH)" \
-					JAVA_CLASSPATH_OVERRIDE_LOG4J="../../../liblttng-ust-java-agent/java/lttng-ust-agent-log4j" \
-					JAVA_CLASSPATH_OVERRIDE_COMMON="../../../liblttng-ust-java-agent/java/lttng-ust-agent-common" \
+					JAVA_CLASSPATH_OVERRIDE_LOG4J="../../../src/lib/lttng-ust-java-agent/java/lttng-ust-agent-log4j" \
+					JAVA_CLASSPATH_OVERRIDE_COMMON="../../../src/lib/lttng-ust-java-agent/java/lttng-ust-agent-common" \
 					$(AM_MAKEFLAGS) \
 			) || exit 1; \
 		done; \
@@ -175,11 +182,11 @@ all-local:
 				AR="$(AR)" \
 					CC="$(CC)" \
 					CXX="$(CXX)" \
-					cmake \
+					$(CMAKE) \
 					-DCMAKE_INCLUDE_PATH="$(abs_top_srcdir)/include;$(abs_top_builddir)/include" \
-					-DCMAKE_LIBRARY_PATH="$(abs_top_builddir)/liblttng-ust/.libs" \
-					-DCMAKE_C_FLAGS="$(AM_CFLAGS) $(AM_CPPFLAGS) $(CPPFLAGS) $(CFLAGS)" \
-					-DCMAKE_CXX_FLAGS="$(AM_CXXFLAGS) $(AM_CPPFLAGS) $(CXXFLAGS) $(CPPFLAGS)" \
+					-DCMAKE_LIBRARY_PATH="$(abs_top_builddir)/src/lib/lttng-ust/.libs" \
+					-DCMAKE_C_FLAGS="$(AM_CFLAGS) $(CPPFLAGS) $(CFLAGS)" \
+					-DCMAKE_CXX_FLAGS="$(AM_CXXFLAGS) $(CXXFLAGS) $(CPPFLAGS)" \
 					-DCMAKE_EXE_LINKER_FLAGS="$(AM_LDFLAGS) $(LDFLAGS)" \
 					.. && \
 				$(MAKE) \

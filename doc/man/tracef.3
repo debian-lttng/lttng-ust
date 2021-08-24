@@ -2,12 +2,12 @@
 .\"     Title: tracef
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: DocBook XSL Stylesheets v1.79.1 <http://docbook.sf.net/>
-.\"      Date: 02/17/2021
+.\"      Date: 08/02/2021
 .\"    Manual: LTTng Manual
-.\"    Source: LTTng 2.12.1
+.\"    Source: LTTng 2.13.0
 .\"  Language: English
 .\"
-.TH "TRACEF" "3" "02/17/2021" "LTTng 2\&.12\&.1" "LTTng Manual"
+.TH "TRACEF" "3" "08/02/2021" "LTTng 2\&.13\&.0" "LTTng Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -39,163 +39,12 @@ tracef \- LTTng\-UST printf(3)\-like interface
 #define \fBtracef\fR(\fIfmt\fR, \&...)
 .fi
 .sp
-Link with \fB-llttng-ust\fR\&.
+Link with \fB-llttng-ust -llttng-ust-common\fR\&.
 .SH "DESCRIPTION"
 .sp
-The LTTng\-UST \fBtracef()\fR API allows you to trace your application with the help of a simple \fBprintf\fR(3)\-like macro\&. The \fIfmt\fR argument is passed directly to the \fIfmt\fR parameter of \fBvasprintf\fR(3), as well as the optional parameters following \fIfmt\fR\&.
+The \fBtracef()\fR macro is part of version\ \&0 of the LTTng\-UST API (see the \(lqCompatibility with previous APIs\(rq section of \fBlttng-ust\fR(3))\&.
 .sp
-To use \fBtracef()\fR, include \fB<lttng/tracef.h>\fR where you need it, and link your application with \fBliblttng-ust\fR\&. See the \fIEXAMPLE\fR section below for a complete usage example\&.
-.sp
-Once your application is instrumented with \fBtracef()\fR calls and ready to run, use \fBlttng-enable-event\fR(1) to enable the \fBlttng_ust_tracef:*\fR event\&.
-.sp
-The \fBtracef()\fR events contain a single field, named \fBmsg\fR, which is the formatted string output\&.
-.sp
-If you need to attach a specific log level to a \fBtracef()\fR call, use \fBtracelog\fR(3) instead\&.
-.sp
-See also the \fILIMITATIONS\fR section below for important limitations to consider when using \fBtracef()\fR\&.
-.SH "EXAMPLE"
-.sp
-Here\(cqs a usage example of \fBtracef()\fR:
-.sp
-.if n \{\
-.RS 4
-.\}
-.nf
-#include <stdlib\&.h>
-#include <lttng/tracef\&.h>
-
-int main(void)
-{
-    int i;
-
-    for (i = 0; i < 25; i++) {
-        tracef("my message: %s, this integer: %d", "a message", i);
-    }
-
-    return EXIT_SUCCESS;
-}
-.fi
-.if n \{\
-.RE
-.\}
-.sp
-This C source file, saved as \fBapp.c\fR, can be compiled into a program like this:
-.sp
-.if n \{\
-.RS 4
-.\}
-.nf
-$ cc \-o app app\&.c \-llttng\-ust
-.fi
-.if n \{\
-.RE
-.\}
-.sp
-You can create an LTTng tracing session, enable the \fBtracef()\fR events, and start the created tracing session like this:
-.sp
-.if n \{\
-.RS 4
-.\}
-.nf
-$ lttng create my\-session
-$ lttng enable\-event \-\-userspace \*(Aqlttng_ust_tracef:*\*(Aq
-$ lttng start
-.fi
-.if n \{\
-.RE
-.\}
-.sp
-Next, start the program to be traced:
-.sp
-.if n \{\
-.RS 4
-.\}
-.nf
-$ \&./app
-.fi
-.if n \{\
-.RE
-.\}
-.sp
-Finally, stop the tracing session, and inspect the recorded events:
-.sp
-.if n \{\
-.RS 4
-.\}
-.nf
-$ lttng stop
-$ lttng view
-.fi
-.if n \{\
-.RE
-.\}
-.SH "LIMITATIONS"
-.sp
-The \fBtracef()\fR utility macro was developed to make user space tracing super simple, albeit with notable disadvantages compared to custom, full\-fledged tracepoint providers:
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-All generated events have the same provider/event names\&.
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-There\(cqs no static type checking\&.
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-The only event field with user data you actually get, named
-\fBmsg\fR, is a string potentially containing the values you passed to the macro using your own format\&. This also means that you cannot use filtering using a custom expression at run time because there are no isolated fields\&.
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-Since
-\fBtracef()\fR
-uses C standard library\(cqs
-\fBvasprintf\fR(3)
-function in the background to format the strings at run time, its expected performance is lower than using custom tracepoint providers with typed fields, which do not require a conversion to a string\&.
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-Generally, a string containing the textual representation of the user data fields is not as compact as binary fields in the resulting trace\&.
-.RE
-.sp
-Thus, \fBtracef()\fR is useful for quick prototyping and debugging, but should not be considered for any permanent/serious application instrumentation\&.
-.sp
-See \fBlttng-ust\fR(3) to learn more about custom tracepoint providers\&.
+Prefer using \fBlttng_ust_tracef\fR(3) which is part of version\ \&1 of the API and has the \fBlttng_ust_\fR namespace\&.
 .SH "BUGS"
 .sp
 If you encounter any issue or usability problem, please report it on the LTTng bug tracker <https://bugs.lttng.org/projects/lttng-ust>\&.
@@ -286,7 +135,7 @@ on
 .sp
 This macro is part of the LTTng\-UST project\&.
 .sp
-This macro is distributed under the GNU Lesser General Public License, version 2\&.1 <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html>\&. See the \fBCOPYING\fR <https://github.com/lttng/lttng-ust/blob/v2.12.1/COPYING> file for more details\&.
+This macro is distributed under the GNU Lesser General Public License, version 2\&.1 <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html>\&. See the for more details\&.
 .SH "THANKS"
 .sp
 Thanks to Ericsson for funding this work, providing real\-life use cases, and testing\&.
@@ -297,4 +146,4 @@ Special thanks to Michel Dagenais and the DORSAL laboratory <http://www.dorsal.p
 LTTng\-UST was originally written by Mathieu Desnoyers, with additional contributions from various other people\&. It is currently maintained by Mathieu Desnoyers <mailto:mathieu.desnoyers@efficios.com>\&.
 .SH "SEE ALSO"
 .sp
-\fBtracelog\fR(3), \fBlttng-ust\fR(3), \fBlttng\fR(1), \fBprintf\fR(3)
+\fBlttng_ust_tracef\fR(3), \fBlttng_ust_vtracef\fR(3)

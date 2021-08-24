@@ -1,14 +1,7 @@
-# Copyright (C) 2013  Jérémie Galarneau <jeremie.galarneau@efficios.com>
-# Copyright (C) 2014  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+# SPDX-License-Identifier: MIT
 #
-# THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY EXPRESSED
-# OR IMPLIED. ANY USE IS AT YOUR OWN RISK.
-#
-# Permission is hereby granted to use or copy this program for any
-# purpose, provided the above notices are retained on all copies.
-# Permission to modify the code and to distribute modified code is
-# granted, provided the above notices are retained, and a notice that
-# the code was modified is included with the above copyright notice.
+# Copyright (C) 2013 Jérémie Galarneau <jeremie.galarneau@efficios.com>
+# Copyright (C) 2014 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 #
 # This Makefile is not using automake so that users may see how to build
 # a program with tracepoint provider probes as stand-alone shared objects.
@@ -20,7 +13,7 @@ LIBS = -ldl -llttng-ust	# On Linux
 LOCAL_CPPFLAGS += -I.
 AM_V_P := :
 
-all: demo-tracelog
+all: demo-tracelog demo-vtracelog
 
 demo-tracelog.o: demo-tracelog.c
 	@if $(AM_V_P); then set -x; else echo "  CC       $@"; fi; \
@@ -32,6 +25,16 @@ demo-tracelog: demo-tracelog.o
 		$(CC) $(LDFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) $(CFLAGS) \
 		-o $@ $< $(LIBS)
 
+demo-vtracelog.o: demo-vtracelog.c
+	@if $(AM_V_P); then set -x; else echo "  CC       $@"; fi; \
+		$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(AM_CFLAGS) $(AM_CPPFLAGS) \
+		$(CFLAGS) -c -o $@ $<
+
+demo-vtracelog: demo-vtracelog.o
+	@if $(AM_V_P); then set -x; else echo "  CCLD     $@"; fi; \
+		$(CC) $(LDFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) $(CFLAGS) \
+		-o $@ $< $(LIBS)
+
 .PHONY: clean
 clean:
-	rm -f *.o *.a demo-tracelog
+	rm -f *.o *.a demo-tracelog demo-vtracelog

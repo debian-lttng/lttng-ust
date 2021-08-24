@@ -1,20 +1,8 @@
 /*
- * Copyright (C) 2009  Pierre-Marc Fournier
- * Copyright (C) 2011  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+ * SPDX-License-Identifier: LGPL-2.1-only
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; version 2.1 of
- * the License.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+ * Copyright (C) 2009 Pierre-Marc Fournier
+ * Copyright (C) 2011 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
  */
 
 #include <stdio.h>
@@ -29,8 +17,8 @@
 #include <arpa/inet.h>
 #include <stdlib.h>
 
-#define TRACEPOINT_DEFINE
-#define TRACEPOINT_PROBE_DYNAMIC_LINKAGE
+#define LTTNG_UST_TRACEPOINT_DEFINE
+#define LTTNG_UST_TRACEPOINT_PROBE_DYNAMIC_LINKAGE
 #include "ust_tests_demo.h"
 #include "ust_tests_demo2.h"
 #include "ust_tests_demo3.h"
@@ -52,14 +40,14 @@ int main(int argc, char **argv)
 	sleep(delay);
 
 	fprintf(stderr, "Tracing... ");
-	tracepoint(ust_tests_demo, starting, 123);
+	lttng_ust_tracepoint(ust_tests_demo, starting, 123);
 	for (i = 0; i < 5; i++) {
 		netint = htonl(i);
-		tracepoint(ust_tests_demo2, loop, i, netint, values,
+		lttng_ust_tracepoint(ust_tests_demo2, loop, i, netint, values,
 			   text, strlen(text), dbl, flt);
 	}
-	tracepoint(ust_tests_demo, done, 456);
-	tracepoint(ust_tests_demo3, done, 42);
+	lttng_ust_tracepoint(ust_tests_demo, done, 456);
+	lttng_ust_tracepoint(ust_tests_demo3, done, 42);
 	fprintf(stderr, " done.\n");
 	return 0;
 }

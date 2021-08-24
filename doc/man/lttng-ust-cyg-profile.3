@@ -1,13 +1,13 @@
 '\" t
-.\"     Title: lttng-ust-dl
+.\"     Title: lttng-ust-cyg-profile
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: DocBook XSL Stylesheets v1.79.1 <http://docbook.sf.net/>
-.\"      Date: 02/17/2021
+.\"      Date: 08/02/2021
 .\"    Manual: LTTng Manual
-.\"    Source: LTTng 2.12.1
+.\"    Source: LTTng 2.13.0
 .\"  Language: English
 .\"
-.TH "LTTNG\-UST\-DL" "3" "02/17/2021" "LTTng 2\&.12\&.1" "LTTng Manual"
+.TH "LTTNG\-UST\-CYG\-PRO" "3" "08/02/2021" "LTTng 2\&.13\&.0" "LTTng Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -106,7 +106,7 @@ Using this feature can result in a \fBmassive amount\fR of trace data to be gene
 .RE
 .SS "Fast function tracing"
 .sp
-The following LTTng\-UST events are available when using \fBliblttng-ust-cyg-profile-fast.so\fR\&. Their log level is set to \fBTRACE_DEBUG_FUNCTION\fR\&.
+The following LTTng\-UST events are available when using \fBliblttng-ust-cyg-profile-fast.so\fR\&. Their log level is set to \fBLTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_FUNCTION\fR\&.
 .PP
 \fBlttng_ust_cyg_profile_fast:func_entry\fR
 .RS 4
@@ -146,7 +146,7 @@ library should only be used when it can be guaranteed that the complete event st
 .RE
 .SS "Verbose function tracing"
 .sp
-The following LTTng\-UST events are available when using \fBliblttng-ust-cyg-profile.so\fR\&. Their log level is set to \fBTRACE_DEBUG_FUNCTION\fR\&.
+The following LTTng\-UST events are available when using \fBliblttng-ust-cyg-profile.so\fR\&. Their log level is set to \fBLTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_FUNCTION\fR\&.
 .PP
 \fBlttng_ust_cyg_profile:func_entry\fR
 .RS 4
@@ -301,7 +301,7 @@ on
 .sp
 This library is part of the LTTng\-UST project\&.
 .sp
-This library is distributed under the GNU Lesser General Public License, version 2\&.1 <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html>\&. See the \fBCOPYING\fR <https://github.com/lttng/lttng-ust/blob/v2.12.1/COPYING> file for more details\&.
+This library is distributed under the GNU Lesser General Public License, version 2\&.1 <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html>\&. See the for more details\&.
 .SH "THANKS"
 .sp
 Thanks to Ericsson for funding this work, providing real\-life use cases, and testing\&.

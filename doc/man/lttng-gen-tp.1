@@ -2,12 +2,12 @@
 .\"     Title: lttng-gen-tp
 .\"    Author: [see the "AUTHOR" section]
 .\" Generator: DocBook XSL Stylesheets v1.79.1 <http://docbook.sf.net/>
-.\"      Date: 02/17/2021
+.\"      Date: 08/02/2021
 .\"    Manual: LTTng Manual
-.\"    Source: LTTng 2.12.1
+.\"    Source: LTTng 2.13.0
 .\"  Language: English
 .\"
-.TH "LTTNG\-GEN\-TP" "1" "02/17/2021" "LTTng 2\&.12\&.1" "LTTng Manual"
+.TH "LTTNG\-GEN\-TP" "1" "08/02/2021" "LTTng 2\&.13\&.0" "LTTng Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -44,9 +44,9 @@ Currently, \fBlttng-gen-tp\fR can generate the \fB.h\fR, \fB.c\fR, and \fB.o\fR 
 By default, \fBlttng-gen-tp\fR generates the \fB.h\fR, \fB.c\fR, and \fB.o\fR files, their basename being the basename of \fITEMPLATE\fR\&. You can generate one or more specific file types with the \fB--output\fR option, repeated if needed\&.
 .SS "Template file format"
 .sp
-The template file, which usually has the \fB.tp\fR extension, contains a list of \fBTRACEPOINT_EVENT()\fR definitions and other optional definition entries, like \fBTRACEPOINT_LOGLEVEL()\fR\&. See \fBlttng-ust\fR(3) for the complete list of available definitions\&.
+The template file, which usually has the \fB.tp\fR extension, contains a list of \fBLTTNG_UST_TRACEPOINT_EVENT()\fR definitions and other optional definition entries, like \fBLTTNG_UST_TRACEPOINT_LOGLEVEL()\fR\&. See \fBlttng-ust\fR(3) for the complete list of available definitions\&.
 .sp
-The \fBTRACEPOINT_EVENT()\fR definitions are written as you would write them in an LTTng\-UST template provider header file\&. C comments are supported (\fB/* */\fR and \fB//\fR), as well as lines starting with \fB#\fR\&.
+The \fBLTTNG_UST_TRACEPOINT_EVENT()\fR definitions are written as you would write them in an LTTng\-UST template provider header file\&. C comments are supported (\fB/* */\fR and \fB//\fR), as well as lines starting with \fB#\fR\&.
 .if n \{\
 .sp
 .\}
@@ -60,7 +60,7 @@ The \fBTRACEPOINT_EVENT()\fR definitions are written as you would write them in 
 .ps -1
 .br
 .sp
-The provider name (the first argument of \fBTRACEPOINT_EVENT()\fR) must be the same in all the \fBTRACEPOINT_EVENT()\fR macros of \fITEMPLATE\fR\&.
+The provider name (the first argument of \fBLTTNG_UST_TRACEPOINT_EVENT()\fR) must be the same in all the \fBLTTNG_UST_TRACEPOINT_EVENT()\fR macros of \fITEMPLATE\fR\&.
 .sp .5v
 .RE
 .sp
@@ -70,7 +70,7 @@ Here\(cqs an example:
 .RS 4
 .\}
 .nf
-TRACEPOINT_EVENT(
+LTTNG_UST_TRACEPOINT_EVENT(
     // Tracepoint provider name
     my_provider,
 
@@ -78,11 +78,11 @@ TRACEPOINT_EVENT(
     my_event,
 
     // Tracepoint arguments (input)
-    TP_ARGS(char *, text),
+    LTTNG_UST_TP_ARGS(char *, text),
 
     // Tracepoint/event fields (output)
-    TP_FIELDS(
-        ctf_string(message, text)
+    LTTNG_UST_TP_FIELDS(
+        lttng_ust_field_string(message, text)
     )
 )
 .fi
@@ -234,7 +234,7 @@ on
 .sp
 \fBlttng-gen-tp\fR is part of the LTTng\-UST project\&.
 .sp
-\fBlttng-gen-tp\fR is distributed under the GNU General Public License, version 2 <http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>\&. See the \fBCOPYING\fR <https://github.com/lttng/lttng-ust/blob/v2.12.1/COPYING> file for more details\&.
+\fBlttng-gen-tp\fR is distributed under the GNU General Public License, version 2 <http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>\&. See the for more details\&.
 .SH "AUTHOR"
 .sp
 \fBlttng-gen-tp\fR was originally written by Yannick Brosseau <mailto:yannick.brosseau@gmail.com>\&. It is currently maintained by Mathieu Desnoyers <mailto:mathieu.desnoyers@efficios.com>\&.

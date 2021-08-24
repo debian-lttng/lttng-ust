@@ -1,0 +1,499 @@
+'\" t
+.\"     Title: lttng_ust_tracelog
+.\"    Author: [see the "AUTHORS" section]
+.\" Generator: DocBook XSL Stylesheets v1.79.1 <http://docbook.sf.net/>
+.\"      Date: 08/02/2021
+.\"    Manual: LTTng Manual
+.\"    Source: LTTng 2.13.0
+.\"  Language: English
+.\"
+.TH "LTTNG_UST_TRACELOG" "3" "08/02/2021" "LTTng 2\&.13\&.0" "LTTng Manual"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+lttng_ust_tracelog, lttng_ust_vtracelog \- LTTng\-UST printf(3)\-like interface with a log level
+.SH "SYNOPSIS"
+.sp
+.nf
+\fB#include <lttng/tracelog\&.h>\fR
+.fi
+.sp
+.nf
+#define \fBlttng_ust_tracelog\fR(\fIlevel\fR, \fIfmt\fR, \&...)
+#define \fBlttng_ust_vtracelog\fR(\fIlevel\fR, \fIfmt\fR, \fIap\fR)
+.fi
+.sp
+Link with:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB-llttng-ust\fR
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+If you define
+\fB_LGPL_SOURCE\fR
+before including
+\fB<lttng/tracelog.h>\fR
+(directly or indirectly):
+\fB-llttng-ust-common\fR
+.RE
+.SH "DESCRIPTION"
+.sp
+The LTTng\-UST \fBlttng_ust_tracelog()\fR and \fBlttng_ust_vtracelog()\fR API allows you to trace your application with the help of simple \fBprintf\fR(3)\-like and \fBvprintf\fR(3)\-like macros, with an additional parameter for the desired log level\&.
+.sp
+The \fIfmt\fR argument is passed directly as the \fIfmt\fR parameter of \fBvasprintf\fR(3), as well as:
+.PP
+For \fBlttng_ust_tracelog()\fR
+.RS 4
+The optional parameters following
+\fIfmt\fR\&.
+.RE
+.PP
+For \fBlttng_ust_vtracelog()\fR
+.RS 4
+The
+\fIap\fR
+parameter as the
+\fIap\fR
+parameter of
+\fBvasprintf\fR(3)
+(\fBva_list\fR
+type)\&.
+.RE
+.sp
+The purpose of \fBlttng_ust_tracelog()\fR and \fBlttng_ust_vtracelog()\fR is to ease the migration from logging to tracing\&.
+.sp
+The available values for the \fIlevel\fR parameter are:
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_EMERG\fR
+.RS 4
+System is unusable\&.
+.RE
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_ALERT\fR
+.RS 4
+Action must be taken immediately\&.
+.RE
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_CRIT\fR
+.RS 4
+Critical conditions\&.
+.RE
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_ERR\fR
+.RS 4
+Error conditions\&.
+.RE
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_WARNING\fR
+.RS 4
+Warning conditions\&.
+.RE
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_NOTICE\fR
+.RS 4
+Normal, but significant, condition\&.
+.RE
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_INFO\fR
+.RS 4
+Informational message\&.
+.RE
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_SYSTEM\fR
+.RS 4
+Debug information with system\-level scope (set of programs)\&.
+.RE
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_PROGRAM\fR
+.RS 4
+Debug information with program\-level scope (set of processes)\&.
+.RE
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_PROCESS\fR
+.RS 4
+Debug information with process\-level scope (set of modules)\&.
+.RE
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_MODULE\fR
+.RS 4
+Debug information with module (executable/library) scope (set of units)\&.
+.RE
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_UNIT\fR
+.RS 4
+Debug information with compilation unit scope (set of functions)\&.
+.RE
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_FUNCTION\fR
+.RS 4
+Debug information with function\-level scope\&.
+.RE
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_LINE\fR
+.RS 4
+Debug information with line\-level scope (default log level)\&.
+.RE
+.PP
+\fBLTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG\fR
+.RS 4
+Debug\-level message\&.
+.RE
+.sp
+To use \fBlttng_ust_tracelog()\fR or \fBlttng_ust_vtracelog()\fR, include \fB<lttng/tracelog.h>\fR where you need it, and link your application with \fBliblttng-ust\fR and \fBliblttng-ust-common\fR\&. See the \fIEXAMPLE\fR section below for a complete usage example\&.
+.sp
+Once your application is instrumented with \fBlttng_ust_tracelog()\fR and/or \fBlttng_ust_vtracelog()\fR calls and ready to run, use \fBlttng-enable-event\fR(1) to enable the \fBlttng_ust_tracelog:*\fR event\&. You can isolate specific log levels with the \fB--loglevel\fR and \fB--loglevel-only\fR options of this command\&.
+.sp
+The \fBlttng_ust_tracelog()\fR and \fBlttng_ust_vtracelog()\fR events contain the following fields:
+.TS
+allbox tab(:);
+ltB ltB.
+T{
+Field name
+T}:T{
+Description
+T}
+.T&
+lt lt
+lt lt
+lt lt
+lt lt.
+T{
+.sp
+\fBline\fR
+T}:T{
+.sp
+Line in source file where \fBlttng_ust_tracelog()\fR was called\&.
+T}
+T{
+.sp
+\fBfile\fR
+T}:T{
+.sp
+Source file from which \fBlttng_ust_tracelog()\fR was called\&.
+T}
+T{
+.sp
+\fBfunc\fR
+T}:T{
+.sp
+Function name from which \fBlttng_ust_tracelog()\fR was called\&.
+T}
+T{
+.sp
+\fBmsg\fR
+T}:T{
+.sp
+Formatted string output\&.
+T}
+.TE
+.sp 1
+.sp
+If you do not need to attach a specific log level to a \fBlttng_ust_tracelog()\fR/\fBlttng_ust_vtracelog()\fR call, use \fBlttng_ust_tracef\fR(3) instead\&.
+.sp
+See also the \fILIMITATIONS\fR section below for important limitations to consider when using \fBlttng_ust_tracelog()\fR or \fBlttng_ust_vtracelog()\fR\&.
+.SH "EXAMPLE"
+.sp
+Here\(cqs a usage example of \fBlttng_ust_tracelog()\fR:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+#include <stdlib\&.h>
+#include <lttng/tracelog\&.h>
+
+int main(int argc, char *argv[])
+{
+    int i;
+
+    if (argc < 2) {
+        lttng_ust_tracelog(LTTNG_UST_TRACEPOINT_LOGLEVEL_CRIT,
+                           "Not enough arguments: %d", argc);
+        return EXIT_FAILURE;
+    }
+
+    lttng_ust_tracelog(LTTNG_UST_TRACEPOINT_LOGLEVEL_INFO,
+                       "Starting app with %d arguments", argc);
+
+    for (i = 0; i < argc; i++) {
+        lttng_ust_tracelog(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG,
+                           "Argument %d: %s", i, argv[i]);
+    }
+
+    lttng_ust_tracelog(LTTNG_UST_TRACEPOINT_LOGLEVEL_INFO,
+                       "Exiting app");
+    return EXIT_SUCCESS;
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+This C source file, saved as \fBapp.c\fR, can be compiled into a program like this:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ cc \-o app app\&.c \-llttng\-ust \-llttng\-ust\-common
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+You can create an LTTng tracing session, enable all the \fBlttng_ust_tracelog()\fR events, and start the created tracing session like this:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ lttng create my\-session
+$ lttng enable\-event \-\-userspace \*(Aqlttng_ust_tracelog:*\*(Aq
+$ lttng start
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Or you can enable \fBlttng_ust_tracelog()\fR events matching a log level at least as severe as a given log level:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ lttng enable\-event \-\-userspace \*(Aqlttng_ust_tracelog:*\*(Aq \e
+                     \-\-loglevel=INFO
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Next, start the program to be traced:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ \&./app a few arguments passed to this application
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Finally, stop the tracing session, and inspect the recorded events:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ lttng stop
+$ lttng view
+.fi
+.if n \{\
+.RE
+.\}
+.SH "LIMITATIONS"
+.sp
+The \fBlttng_ust_tracelog()\fR and \fBlttng_ust_vtracelog()\fR utility macros were developed to make user space tracing super simple, albeit with notable disadvantages compared to custom, full\-fledged tracepoint providers:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+All generated events have the same provider/event names\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+There\(cqs no static type checking\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+The only event field with user data you actually get, named
+\fBmsg\fR, is a string potentially containing the values you passed to the macro using your own format\&. This also means that you cannot use filtering using a custom expression at run time because there are no isolated fields\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Since
+\fBlttng_ust_tracelog()\fR
+and
+\fBlttng_ust_vtracelog()\fR
+use C standard library\(cqs
+\fBvasprintf\fR(3)
+function in the background to format the strings at run time, their expected performance is lower than using custom tracepoint providers with typed fields, which do not require a conversion to a string\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Generally, a string containing the textual representation of the user data fields is not as compact as binary fields in the resulting trace\&.
+.RE
+.sp
+Thus, \fBlttng_ust_tracelog()\fR/\fBlttng_ust_vtracelog()\fR are useful for quick prototyping and debugging, but should not be considered for any permanent/serious application instrumentation\&.
+.sp
+\fBlttng_ust_vtracelog()\fR does not have a \fBSTAP_PROBEV()\fR call, because \fBSTAP_PROBEV()\fR does not support \fBva_list\fR\&. If you need it, you should emit this call yourself\&.
+.sp
+See \fBlttng-ust\fR(3) to learn more about custom tracepoint providers\&.
+.SH "BUGS"
+.sp
+If you encounter any issue or usability problem, please report it on the LTTng bug tracker <https://bugs.lttng.org/projects/lttng-ust>\&.
+.SH "RESOURCES"
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+LTTng project website <http://lttng.org>
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+LTTng documentation <http://lttng.org/docs>
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Git repositories <http://git.lttng.org>
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+GitHub organization <http://github.com/lttng>
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Continuous integration <http://ci.lttng.org/>
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Mailing list <http://lists.lttng.org>
+for support and development:
+\fBlttng-dev@lists.lttng.org\fR
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+IRC channel <irc://irc.oftc.net/lttng>:
+\fB#lttng\fR
+on
+\fBirc.oftc.net\fR
+.RE
+.SH "COPYRIGHTS"
+.sp
+This macro is part of the LTTng\-UST project\&.
+.sp
+This macro is distributed under the GNU Lesser General Public License, version 2\&.1 <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html>\&. See the for more details\&.
+.SH "THANKS"
+.sp
+Thanks to Ericsson for funding this work, providing real\-life use cases, and testing\&.
+.sp
+Special thanks to Michel Dagenais and the DORSAL laboratory <http://www.dorsal.polymtl.ca/> at \('Ecole Polytechnique de Montr\('eal for the LTTng journey\&.
+.SH "AUTHORS"
+.sp
+LTTng\-UST was originally written by Mathieu Desnoyers, with additional contributions from various other people\&. It is currently maintained by Mathieu Desnoyers <mailto:mathieu.desnoyers@efficios.com>\&.
+.SH "SEE ALSO"
+.sp
+\fBlttng_ust_tracef\fR(3), \fBlttng_ust_vtracef\fR(3), \fBlttng-ust\fR(3), \fBlttng\fR(1), \fBprintf\fR(3)

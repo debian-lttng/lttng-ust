@@ -11,8 +11,8 @@ user space tracing helpers for any application.
 Prerequisites
 -------------
 
-LTTng-UST depends on **[liburcu](http://liburcu.org/) >= 0.11** at build and
-run times. It also optionally depends on libnuma.
+LTTng-UST depends on **[liburcu](http://liburcu.org/) >= 0.12** at build
+time. It also optionally depends on libnuma.
 
 
 Building
@@ -25,10 +25,11 @@ portability. Here are some things you should have on your system in order to
 compile the Git repository tree:
 
   - [GNU Autotools](http://www.gnu.org/software/autoconf/)
-    (**Automake >= 1.10**, **Autoconf >= 2.50**,
-    **Autoheader >= 2.50**;
+    (**Automake >= 1.12**, **Autoconf >= 2.69**,
+    **Autoheader >= 2.69**;
     make sure your system-wide `automake` points to a recent version!)
   - **[GNU Libtool](https://www.gnu.org/software/libtool/) >= 2.2**
+  - **[pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config/)**
 
 
 ### Optional dependencies
@@ -91,11 +92,11 @@ This method links the tracepoint provider with the application,
 either directly or through a static library (`.a`):
 
   1. Into exactly one unit (C/C++ source file) of your _application_,
-     define `TRACEPOINT_DEFINE` and include the tracepoint provider
+     define `LTTNG_UST_TRACEPOINT_DEFINE` and include the tracepoint provider
      header.
   2. Include the tracepoint provider header into all C/C++ files using
      the provider and insert tracepoints using the `tracepoint()` macro.
-  3. Use `-I.` when compiling the unit defining `TRACEPOINT_DEFINE`
+  3. Use `-I.` when compiling the unit defining `LTTNG_UST_TRACEPOINT_DEFINE`
      (e.g., `tp.c`).
   4. Link the application with `-ldl` on Linux, or with `-lc` on BSD,
      and with `-llttng-ust`.
@@ -123,7 +124,7 @@ This method decouples the tracepoint provider from the application,
 making it dynamically loadable.
 
   1. Into exactly one unit of your _application_, define
-     `TRACEPOINT_DEFINE` _and_ `TRACEPOINT_PROBE_DYNAMIC_LINKAGE`,
+     `LTTNG_UST_TRACEPOINT_DEFINE` _and_ `LTTNG_UST_TRACEPOINT_PROBE_DYNAMIC_LINKAGE`,
      then include the tracepoint provider header.
   2. Include the tracepoint provider header into all C/C++ files using
      the provider and insert tracepoints using the `tracepoint()` macro.
@@ -170,6 +171,10 @@ human-readable text log.
     variable `LTTNG_UST_DEBUG` when launching the user application. It
     can also be enabled at build time by compiling LTTng-UST with
     `-DLTTNG_UST_DEBUG`.
+  - `liblttng-ust` abort on critical can be activated by setting the
+    environment variable `LTTNG_UST_ABORT_ON_CRITICAL` when launching the user
+    application. It can also be enabled at build time by compiling LTTng-UST with
+    `-DLTTNG_UST_ABORT_ON_CRITICAL`.
   - The environment variable `LTTNG_UST_REGISTER_TIMEOUT` can be used to
     specify how long the applications should wait for the session
     daemon  _registration done_ command before proceeding to execute the
@@ -189,7 +194,7 @@ human-readable text log.
 
 Since LTTng-UST 2.3, both tracepoints and tracepoint providers can be
 compiled in C++. To compile tracepoint probes in C++, you need
-G++ >= 4.7 or Clang.
+G++ >= 4.7 or Clang. The C++ compilers need to support C++11.
 
 
 Contact
