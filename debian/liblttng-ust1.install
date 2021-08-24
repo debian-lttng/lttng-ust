@@ -1,0 +1,9 @@
+usr/lib/*/liblttng-ust.so.1*
+usr/lib/*/liblttng-ust-dl.so.1*
+usr/lib/*/liblttng-ust-fd.so.1*
+usr/lib/*/liblttng-ust-fork.so.1*
+usr/lib/*/liblttng-ust-tracepoint.so.1*
+usr/lib/*/liblttng-ust-cyg-profile.so.1*
+usr/lib/*/liblttng-ust-cyg-profile-fast.so.1*
+usr/lib/*/liblttng-ust-pthread-wrapper.so.1*
+usr/lib/*/liblttng-ust-libc-wrapper.so.1*

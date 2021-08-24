@@ -21,14 +21,27 @@ Vcs-Git: https://salsa.debian.org/debian/ust.git
 Vcs-Browser: https://salsa.debian.org/debian/ust
 Homepage: https://lttng.org/
 
-Package: liblttng-ust0
+Package: liblttng-ust-common1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: LTTng 2.0 Userspace Tracer (common library)
+ The userspace tracer is designed to provide detailed information about
+ userspace activity. Like the kernel tracer, performance is the main goal.
+ Tracing does not require system calls or traps. UST instrumentation points may
+ be added in any userspace code including signal handlers and libraries.
+ .
+ This package contains the common library used by the tracing and control
+ libraries.
+
+Package: liblttng-ust1
 Architecture: linux-any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends},
-  liblttng-ust-ctl4 (= ${binary:Version})
-Conflicts: liblttng-ust2
-Replaces: liblttng-ust2
+  liblttng-ust-common1 (= ${binary:Version}),
+  liblttng-ust-ctl5 (= ${binary:Version})
 Description: LTTng 2.0 Userspace Tracer (tracing libraries)
  The userspace tracer is designed to provide detailed information about
  userspace activity. Like the kernel tracer, performance is the main goal.
@@ -38,13 +51,12 @@ Description: LTTng 2.0 Userspace Tracer (tracing libraries)
  This package contains the actual userspace tracing library that must be linked
  to the instrumented programs.
 
-Package: liblttng-ust-ctl4
+Package: liblttng-ust-ctl5
 Architecture: linux-any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Conflicts: liblttng-ust2
-Replaces: liblttng-ust2
+Depends: ${shlibs:Depends}, ${misc:Depends},
+  liblttng-ust-common1 (= ${binary:Version})
 Description: LTTng 2.0 Userspace Tracer (trace control library)
  The userspace tracer is designed to provide detailed information about
  userspace activity. Like the kernel tracer, performance is the main goal.
@@ -59,13 +71,10 @@ Section: libdevel
 Architecture: linux-any
 Multi-Arch: same
 Depends: ${misc:Depends},
-  liblttng-ust0 (= ${binary:Version}), liblttng-ust-ctl4 (= ${binary:Version}),
-  liblttng-ust-python-agent0 (= ${binary:Version}), liburcu-dev (>= 0.8.4),
+  liblttng-ust1 (= ${binary:Version}), liblttng-ust-ctl5 (= ${binary:Version}),
+  liblttng-ust-python-agent1 (= ${binary:Version}), liburcu-dev (>= 0.12~),
   uuid-dev
 Recommends: python3
-Conflicts: liblttng-ust2
-Replaces: liblttng-ust2
-Breaks: liblttng-ust0 (<< 2.3.0)
 Description: LTTng 2.0 Userspace Tracer (development files)
  The userspace tracer is designed to provide detailed information about
  userspace activity. Like the kernel tracer, performance is the main goal.
@@ -141,12 +150,12 @@ Description: LTTng 2.0 Userspace Tracer (Java agent JNI interface)
  .
  This package contains the native side of the Java agent for lttng-ust.
 
-Package: liblttng-ust-python-agent0
+Package: liblttng-ust-python-agent1
 Architecture: linux-any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends},
-  liblttng-ust0 (= ${binary:Version})
+  liblttng-ust1 (= ${binary:Version})
 Description: LTTng 2.0 Userspace Tracer (Python agent native library)
  The userspace tracer is designed to provide detailed information about
  userspace activity. Like the kernel tracer, performance is the main goal.
@@ -160,8 +169,8 @@ Section: python
 Architecture: all
 Multi-Arch: foreign
 Depends: ${misc:Depends}, ${python3:Depends},
-  liblttng-ust-python-agent0 (>= ${source:Version}),
-  liblttng-ust-python-agent0 (<< ${source:Version}.1~)
+  liblttng-ust-python-agent1 (>= ${source:Version}),
+  liblttng-ust-python-agent1 (<< ${source:Version}.1~)
 Description: LTTng 2.0 Userspace Tracer (Python 3 UST agent)
  The userspace tracer is designed to provide detailed information about
  userspace activity. Like the kernel tracer, performance is the main goal.
