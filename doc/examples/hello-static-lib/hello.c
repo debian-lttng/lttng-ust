@@ -1,20 +1,8 @@
 /*
- * Copyright (C) 2009  Pierre-Marc Fournier
- * Copyright (C) 2011  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+ * SPDX-License-Identifier: LGPL-2.1-only
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; version 2.1 of
- * the License.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+ * Copyright (C) 2009 Pierre-Marc Fournier
+ * Copyright (C) 2011 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
  */
 
 #include <stdio.h>
@@ -29,15 +17,17 @@
 #include <arpa/inet.h>
 #include <stdlib.h>
 
-#define TRACEPOINT_DEFINE
+#define LTTNG_UST_TRACEPOINT_DEFINE
 #include "ust_tests_hello.h"
 
-void inthandler(int sig)
+static
+void inthandler(int sig __attribute__((unused)))
 {
 	printf("in SIGUSR1 handler\n");
-	tracepoint(ust_tests_hello, tptest_sighandler);
+	lttng_ust_tracepoint(ust_tests_hello, tptest_sighandler);
 }
 
+static
 int init_int_handler(void)
 {
 	int result;
@@ -86,7 +76,7 @@ int main(int argc, char **argv)
 	fprintf(stderr, "Tracing... ");
 	for (i = 0; i < 1000000; i++) {
 		netint = htonl(i);
-		tracepoint(ust_tests_hello, tptest, i, netint, values,
+		lttng_ust_tracepoint(ust_tests_hello, tptest, i, netint, values,
 			   text, strlen(text), dbl, flt);
 	}
 	fprintf(stderr, " done.\n");

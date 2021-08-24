@@ -1,21 +1,16 @@
+# SPDX-License-Identifier: MIT
+#
 # Copyright (C) 2011-2012  Matthew Khouzam <matthew.khouzam@ericsson.com>
 # Copyright (C) 2012  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 # Copyright (C) 2012  Yannick Brosseau <yannick.brosseau@gmail.com>
-#
-# THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY EXPRESSED
-# OR IMPLIED.  ANY USE IS AT YOUR OWN RISK.
-#
-# Permission is hereby granted to use or copy this program for any
-# purpose,  provided the above notices are retained on all copies.
-# Permission to modify the code and to distribute modified code is
-# granted, provided the above notices are retained, and a notice that
-# the code was modified is included with the above copyright notice.
 #
 # This makefile is not using automake so that people can see how to make
 # simply. It builds a program with a statically embedded tracepoint
 # provider probe.
 #
 # This makefile is purposefully kept simple to support GNU and BSD make.
+
+PYTHON := python
 
 LIBS = -ldl -llttng-ust		#On Linux
 #LIBS = -lc -llttng-ust		#On BSD
@@ -44,9 +39,8 @@ sample.o: sample.c sample_tracepoint.h
 	@if $(AM_V_P); then set -x; else echo "  CC       $@"; fi; \
 		CPPFLAGS="$(AM_CPPFLAGS) $(CPPFLAGS)" \
 		CFLAGS="$(AM_CFLAGS) $(CFLAGS)" \
-		LDFLAGS="$(AM_LDFLAGS) $(LDFLAGS)" \
 		CC="$(CC)" \
-		$(LTTNG_GEN_TP_PATH)lttng-gen-tp -o $@ $<
+		$(PYTHON) $(LTTNG_GEN_TP_PATH)lttng-gen-tp -o $@ $<
 
 # The following rule can be used to generate all files instead of having one
 # for each file type. Note that the sample.o has a dependency on the
@@ -56,11 +50,11 @@ sample.o: sample.c sample_tracepoint.h
 
 %.h: %.tp
 	@if $(AM_V_P); then set -x; else echo "  GEN      $@"; fi; \
-		$(LTTNG_GEN_TP_PATH)lttng-gen-tp -o $@ $<
+		$(PYTHON) $(LTTNG_GEN_TP_PATH)lttng-gen-tp -o $@ $<
 
 %.c: %.tp
 	@if $(AM_V_P); then set -x; else echo "  GEN      $@"; fi; \
-		$(LTTNG_GEN_TP_PATH)lttng-gen-tp -o $@ $<
+		$(PYTHON)  $(LTTNG_GEN_TP_PATH)lttng-gen-tp -o $@ $<
 
 .PHONY: clean
 clean:

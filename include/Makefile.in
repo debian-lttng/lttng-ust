@@ -14,6 +14,12 @@
 
 @SET_MAKE@
 
+# SPDX-License-Identifier: LGPL-2.1-only
+
+###                    ###
+### Public API headers ###
+###                    ###
+
 VPATH = @srcdir@
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
@@ -91,9 +97,14 @@ host_triplet = @host@
 target_triplet = @target@
 subdir = include
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/ax_c___attribute__.m4 \
+am__aclocal_m4_deps = $(top_srcdir)/m4/ae_config_feature.m4 \
+	$(top_srcdir)/m4/ae_in_git_repo.m4 \
+	$(top_srcdir)/m4/ax_append_compile_flags.m4 \
+	$(top_srcdir)/m4/ax_append_flag.m4 \
+	$(top_srcdir)/m4/ax_c___attribute__.m4 \
 	$(top_srcdir)/m4/ax_check_class.m4 \
-	$(top_srcdir)/m4/ax_check_classpath.m4 \
+	$(top_srcdir)/m4/ax_check_compile_flag.m4 \
+	$(top_srcdir)/m4/ax_cxx_compile_stdcxx.m4 \
 	$(top_srcdir)/m4/ax_java_options.m4 \
 	$(top_srcdir)/m4/ax_jni_include_dir.m4 \
 	$(top_srcdir)/m4/ax_prog_jar.m4 \
@@ -102,20 +113,24 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/ax_c___attribute__.m4 \
 	$(top_srcdir)/m4/ax_prog_javac.m4 \
 	$(top_srcdir)/m4/ax_prog_javac_works.m4 \
 	$(top_srcdir)/m4/ax_prog_javah.m4 \
+	$(top_srcdir)/m4/ax_pthread.m4 \
+	$(top_srcdir)/m4/ax_require_defined.m4 \
 	$(top_srcdir)/m4/ax_sys_weak_alias.m4 \
 	$(top_srcdir)/m4/ax_try_compile_java.m4 \
 	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/pprint.m4 \
-	$(top_srcdir)/m4/rw_prog_cxx_works.m4 \
-	$(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/lttng_pthread_getname_np.m4 \
+	$(top_srcdir)/m4/lttng_pthread_setname_np.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/m4/pprint.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(nobase_include_HEADERS) \
-	$(noinst_HEADERS) $(am__DIST_COMMON)
+	$(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/config.h \
-	$(top_builddir)/include/lttng/ust-config.h
+CONFIG_HEADER = $(top_builddir)/src/common/config.h \
+	$(top_builddir)/include/lttng/ust-config.h \
+	$(top_builddir)/include/lttng/ust-version.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_@AM_V@)
@@ -165,8 +180,7 @@ am__uninstall_files_from_dir = { \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
 am__installdirs = "$(DESTDIR)$(includedir)" "$(DESTDIR)$(includedir)"
-HEADERS = $(nobase_include_HEADERS) $(nobase_nodist_include_HEADERS) \
-	$(noinst_HEADERS)
+HEADERS = $(nobase_include_HEADERS) $(nobase_nodist_include_HEADERS)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -191,6 +205,8 @@ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AM_CFLAGS = @AM_CFLAGS@
+AM_CPPFLAGS = @AM_CPPFLAGS@
+AM_CXXFLAGS = @AM_CXXFLAGS@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
 ASCIIDOC = @ASCIIDOC@
@@ -198,11 +214,11 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
-BUILD_GEN_TP_EXAMPLES = @BUILD_GEN_TP_EXAMPLES@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CLASSPATH = @CLASSPATH@
+CMAKE = @CMAKE@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -222,8 +238,9 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
+FOLD = @FOLD@
 GREP = @GREP@
-HAVE_CMAKE = @HAVE_CMAKE@
+HAVE_CXX11 = @HAVE_CXX11@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -246,14 +263,12 @@ LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 LTTNG_UST_CTL_LIBRARY_VERSION = @LTTNG_UST_CTL_LIBRARY_VERSION@
-LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS = @LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS@
 LTTNG_UST_LIBRARY_VERSION = @LTTNG_UST_LIBRARY_VERSION@
+LTTNG_UST_LIB_SONAME_MAJOR = @LTTNG_UST_LIB_SONAME_MAJOR@
 LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAINT = @MAINT@
-MAJOR_VERSION = @MAJOR_VERSION@
 MAKEINFO = @MAKEINFO@
 MANIFEST_TOOL = @MANIFEST_TOOL@
-MINOR_VERSION = @MINOR_VERSION@
 MKDIR_P = @MKDIR_P@
 NM = @NM@
 NMEDIT = @NMEDIT@
@@ -268,8 +283,13 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
-PATCHLEVEL_VERSION = @PATCHLEVEL_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
+PTHREAD_CC = @PTHREAD_CC@
+PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
+PTHREAD_LIBS = @PTHREAD_LIBS@
 PYTHON = @PYTHON@
 PYTHON_EXEC_PREFIX = @PYTHON_EXEC_PREFIX@
 PYTHON_PLATFORM = @PYTHON_PLATFORM@
@@ -280,6 +300,8 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
+URCU_CFLAGS = @URCU_CFLAGS@
+URCU_LIBS = @URCU_LIBS@
 VERSION = @VERSION@
 WEAK_ALIAS = @WEAK_ALIAS@
 WEAK_ALIAS_CROSSFILE = @WEAK_ALIAS_CROSSFILE@
@@ -298,6 +320,7 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
+ax_pthread_config = @ax_pthread_config@
 bindir = @bindir@
 build = @build@
 build_alias = @build_alias@
@@ -357,40 +380,32 @@ nobase_include_HEADERS = \
 	lttng/ust-tracepoint-event-reset.h \
 	lttng/ust-tracepoint-event-write.h \
 	lttng/ust-tracepoint-event-nowrite.h \
+	lttng/ust-api-compat.h \
+	lttng/ust-arch.h \
 	lttng/ust-events.h \
+	lttng/ust-common.h \
 	lttng/ust-ctl.h \
 	lttng/ust-abi.h \
-	lttng/ringbuffer-abi.h \
 	lttng/ust-tracer.h \
 	lttng/ust-compiler.h \
-	lttng/ust.h \
+	lttng/ust-fork.h \
 	lttng/ust-endian.h \
-	lttng/ringbuffer-config.h \
-	lttng/align.h \
-	lttng/bug.h \
+	lttng/ust-ringbuffer-context.h \
+	lttng/ust-utils.h \
 	lttng/ust-error.h \
 	lttng/tracef.h \
-	lttng/lttng-ust-tracef.h \
+	lttng/tp/lttng-ust-tracef.h \
 	lttng/tracelog.h \
-	lttng/lttng-ust-tracelog.h \
+	lttng/tp/lttng-ust-tracelog.h \
 	lttng/ust-clock.h \
 	lttng/ust-getcpu.h \
-	lttng/ust-elf.h
-
-
-# note: usterr-signal-safe.h, core.h and share.h need namespace cleanup.
-noinst_HEADERS = \
-	usterr-signal-safe.h \
-	ust_snprintf.h \
-	ust-comm.h \
-	ust-fd.h \
-	lttng/ust-tid.h \
-	lttng/bitfield.h \
-	lttng/ust-dlfcn.h \
-	lttng/ust-dynamic-type.h \
-	lttng/ust-context-provider.h \
-	helper.h \
-	share.h
+	lttng/ust-libc-wrapper.h \
+	lttng/ust-thread.h \
+	lttng/urcu/pointer.h \
+	lttng/urcu/urcu-ust.h \
+	lttng/urcu/static/pointer.h \
+	lttng/urcu/static/urcu-ust.h \
+	lttng/ust-sigbus.h
 
 
 # Auto-generated by configure.

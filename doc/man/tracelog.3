@@ -2,12 +2,12 @@
 .\"     Title: tracelog
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: DocBook XSL Stylesheets v1.79.1 <http://docbook.sf.net/>
-.\"      Date: 02/17/2021
+.\"      Date: 08/02/2021
 .\"    Manual: LTTng Manual
-.\"    Source: LTTng 2.12.1
+.\"    Source: LTTng 2.13.0
 .\"  Language: English
 .\"
-.TH "TRACELOG" "3" "02/17/2021" "LTTng 2\&.12\&.1" "LTTng Manual"
+.TH "TRACELOG" "3" "08/02/2021" "LTTng 2\&.13\&.0" "LTTng Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -39,307 +39,12 @@ tracelog \- LTTng\-UST printf(3)\-like interface with a log level
 #define \fBtracelog\fR(\fIlevel\fR, \fIfmt\fR, \&...)
 .fi
 .sp
-Link with \fB-llttng-ust\fR\&.
+Link with \fB-llttng-ust -llttng-ust-common\fR\&.
 .SH "DESCRIPTION"
 .sp
-The LTTng\-UST \fBtracelog()\fR API allows you to trace your application with the help of a simple \fBprintf\fR(3)\-like macro, with an additional parameter for the desired log level\&. The \fIfmt\fR argument is passed directly to the \fIfmt\fR parameter of \fBvasprintf\fR(3), as well as the optional parameters following \fIfmt\fR\&.
+The \fBtracelog()\fR macro is part of version\ \&0 of the LTTng\-UST API (see the \(lqCompatibility with previous APIs\(rq section of \fBlttng-ust\fR(3))\&.
 .sp
-The purpose of \fBtracelog()\fR is to ease the migration from logging to tracing\&.
-.sp
-The available values for the \fIlevel\fR parameter are:
-.PP
-\fBTRACE_EMERG\fR
-.RS 4
-System is unusable\&.
-.RE
-.PP
-\fBTRACE_ALERT\fR
-.RS 4
-Action must be taken immediately\&.
-.RE
-.PP
-\fBTRACE_CRIT\fR
-.RS 4
-Critical conditions\&.
-.RE
-.PP
-\fBTRACE_ERR\fR
-.RS 4
-Error conditions\&.
-.RE
-.PP
-\fBTRACE_WARNING\fR
-.RS 4
-Warning conditions\&.
-.RE
-.PP
-\fBTRACE_NOTICE\fR
-.RS 4
-Normal, but significant, condition\&.
-.RE
-.PP
-\fBTRACE_INFO\fR
-.RS 4
-Informational message\&.
-.RE
-.PP
-\fBTRACE_DEBUG_SYSTEM\fR
-.RS 4
-Debug information with system\-level scope (set of programs)\&.
-.RE
-.PP
-\fBTRACE_DEBUG_PROGRAM\fR
-.RS 4
-Debug information with program\-level scope (set of processes)\&.
-.RE
-.PP
-\fBTRACE_DEBUG_PROCESS\fR
-.RS 4
-Debug information with process\-level scope (set of modules)\&.
-.RE
-.PP
-\fBTRACE_DEBUG_MODULE\fR
-.RS 4
-Debug information with module (executable/library) scope (set of units)\&.
-.RE
-.PP
-\fBTRACE_DEBUG_UNIT\fR
-.RS 4
-Debug information with compilation unit scope (set of functions)\&.
-.RE
-.PP
-\fBTRACE_DEBUG_FUNCTION\fR
-.RS 4
-Debug information with function\-level scope\&.
-.RE
-.PP
-\fBTRACE_DEBUG_LINE\fR
-.RS 4
-Debug information with line\-level scope (default log level)\&.
-.RE
-.PP
-\fBTRACE_DEBUG\fR
-.RS 4
-Debug\-level message\&.
-.RE
-.sp
-To use \fBtracelog()\fR, include \fB<lttng/tracelog.h>\fR where you need it, and link your application with \fBliblttng-ust\fR\&. See the \fIEXAMPLE\fR section below for a complete usage example\&.
-.sp
-Once your application is instrumented with \fBtracelog()\fR calls and ready to run, use \fBlttng-enable-event\fR(1) to enable the \fBlttng_ust_tracelog:*\fR event\&. You can isolate specific log levels with the \fB--loglevel\fR and \fB--loglevel-only\fR options of this command\&.
-.sp
-The \fBtracelog()\fR events contain the following fields:
-.TS
-allbox tab(:);
-ltB ltB.
-T{
-Field name
-T}:T{
-Description
-T}
-.T&
-lt lt
-lt lt
-lt lt
-lt lt.
-T{
-.sp
-\fBline\fR
-T}:T{
-.sp
-Line in source file where \fBtracelog()\fR was called\&.
-T}
-T{
-.sp
-\fBfile\fR
-T}:T{
-.sp
-Source file from which \fBtracelog()\fR was called\&.
-T}
-T{
-.sp
-\fBfunc\fR
-T}:T{
-.sp
-Function name from which \fBtracelog()\fR was called\&.
-T}
-T{
-.sp
-\fBmsg\fR
-T}:T{
-.sp
-Formatted string output\&.
-T}
-.TE
-.sp 1
-.sp
-If you do not need to attach a specific log level to a \fBtracelog()\fR call, use \fBtracef\fR(3) instead\&.
-.sp
-See also the \fILIMITATIONS\fR section below for important limitations to consider when using \fBtracelog()\fR\&.
-.SH "EXAMPLE"
-.sp
-Here\(cqs a usage example of \fBtracelog()\fR:
-.sp
-.if n \{\
-.RS 4
-.\}
-.nf
-#include <stdlib\&.h>
-#include <lttng/tracelog\&.h>
-
-int main(int argc, char *argv[])
-{
-    int i;
-
-    if (argc < 2) {
-        tracelog(TRACE_CRIT, "Not enough arguments: %d", argc);
-        return EXIT_FAILURE;
-    }
-
-    tracelog(TRACE_INFO, "Starting app with %d arguments", argc);
-
-    for (i = 0; i < argc; i++) {
-        tracelog(TRACE_DEBUG, "Argument %d: %s", i, argv[i]);
-    }
-
-    tracelog(TRACE_INFO, "Exiting app");
-
-    return EXIT_SUCCESS;
-}
-.fi
-.if n \{\
-.RE
-.\}
-.sp
-This C source file, saved as \fBapp.c\fR, can be compiled into a program like this:
-.sp
-.if n \{\
-.RS 4
-.\}
-.nf
-$ cc \-o app app\&.c \-llttng\-ust
-.fi
-.if n \{\
-.RE
-.\}
-.sp
-You can create an LTTng tracing session, enable all the \fBtracelog()\fR events, and start the created tracing session like this:
-.sp
-.if n \{\
-.RS 4
-.\}
-.nf
-$ lttng create my\-session
-$ lttng enable\-event \-\-userspace \*(Aqlttng_ust_tracelog:*\*(Aq
-$ lttng start
-.fi
-.if n \{\
-.RE
-.\}
-.sp
-Or you can enable \fBtracelog()\fR events matching a log level at least as severe as a given log level:
-.sp
-.if n \{\
-.RS 4
-.\}
-.nf
-$ lttng enable\-event \-\-userspace \*(Aqlttng_ust_tracelog:*\*(Aq \e
-                   \-\-loglevel=TRACE_INFO
-.fi
-.if n \{\
-.RE
-.\}
-.sp
-Next, start the program to be traced:
-.sp
-.if n \{\
-.RS 4
-.\}
-.nf
-$ \&./app a few arguments passed to this application
-.fi
-.if n \{\
-.RE
-.\}
-.sp
-Finally, stop the tracing session, and inspect the recorded events:
-.sp
-.if n \{\
-.RS 4
-.\}
-.nf
-$ lttng stop
-$ lttng view
-.fi
-.if n \{\
-.RE
-.\}
-.SH "LIMITATIONS"
-.sp
-The \fBtracelog()\fR utility macro was developed to make user space tracing super simple, albeit with notable disadvantages compared to custom, full\-fledged tracepoint providers:
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-All generated events have the same provider/event names\&.
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-There\(cqs no static type checking\&.
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-The only event field with user data you actually get, named
-\fBmsg\fR, is a string potentially containing the values you passed to the macro using your own format\&. This also means that you cannot use filtering using a custom expression at run time because there are no isolated fields\&.
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-Since
-\fBtracelog()\fR
-uses C standard library\(cqs
-\fBvasprintf\fR(3)
-function in the background to format the strings at run time, its expected performance is lower than using custom tracepoint providers with typed fields, which do not require a conversion to a string\&.
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-Generally, a string containing the textual representation of the user data fields is not as compact as binary fields in the resulting trace\&.
-.RE
-.sp
-Thus, \fBtracelog()\fR is useful for quick prototyping and debugging, but should not be considered for any permanent/serious application instrumentation\&.
-.sp
-See \fBlttng-ust\fR(3) to learn more about custom tracepoint providers\&.
+Prefer using \fBlttng_ust_tracelog\fR(3) which is part of version\ \&1 of the API and has the \fBlttng_ust_\fR namespace\&.
 .SH "BUGS"
 .sp
 If you encounter any issue or usability problem, please report it on the LTTng bug tracker <https://bugs.lttng.org/projects/lttng-ust>\&.
@@ -430,7 +135,7 @@ on
 .sp
 This macro is part of the LTTng\-UST project\&.
 .sp
-This macro is distributed under the GNU Lesser General Public License, version 2\&.1 <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html>\&. See the \fBCOPYING\fR <https://github.com/lttng/lttng-ust/blob/v2.12.1/COPYING> file for more details\&.
+This macro is distributed under the GNU Lesser General Public License, version 2\&.1 <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html>\&. See the for more details\&.
 .SH "THANKS"
 .sp
 Thanks to Ericsson for funding this work, providing real\-life use cases, and testing\&.
@@ -441,4 +146,4 @@ Special thanks to Michel Dagenais and the DORSAL laboratory <http://www.dorsal.p
 LTTng\-UST was originally written by Mathieu Desnoyers, with additional contributions from various other people\&. It is currently maintained by Mathieu Desnoyers <mailto:mathieu.desnoyers@efficios.com>\&.
 .SH "SEE ALSO"
 .sp
-\fBtracef\fR(3), \fBlttng-ust\fR(3), \fBlttng\fR(1), \fBprintf\fR(3)
+\fBlttng_ust_tracelog\fR(3), \fBlttng_ust_vtracelog\fR(3)

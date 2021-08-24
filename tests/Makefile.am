@@ -1,17 +1,36 @@
-SUBDIRS = utils hello same_line_tracepoint snprintf benchmark ust-elf \
-		ctf-types test-app-ctx gcc-weak-hidden hello-many
+# SPDX-License-Identifier: LGPL-2.1-only
 
-if CXX_WORKS
-SUBDIRS += hello.cxx
+SUBDIRS = utils unit compile benchmark regression
+
+LOG_DRIVER_FLAGS = --merge --comments
+LOG_DRIVER = env AM_TAP_AWK='$(AWK)' \
+	UST_TESTS_SRCDIR='$(abs_top_srcdir)/tests' \
+	UST_TESTS_BUILDDIR='$(abs_top_builddir)/tests' \
+	$(SHELL) $(srcdir)/utils/tap-driver.sh
+
+# Unit tests
+
+TESTS = \
+	unit/libringbuffer/test_shm \
+	unit/gcc-weak-hidden/test_gcc_weak_hidden \
+	unit/libmsgpack/test_msgpack \
+	unit/pthread_name/test_pthread_name \
+	unit/snprintf/test_snprintf \
+	unit/ust-elf/test_ust_elf \
+	unit/ust-error/test_ust_error \
+	unit/ust-utils/test_ust_utils
+
+if HAVE_CXX
+TESTS += \
+	unit/ust-utils/test_ust_utils_cxx
 endif
 
-LOG_DRIVER_FLAGS='--merge'
-LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) \
-	$(top_srcdir)/config/tap-driver.sh
+# Regression tests
 
-TESTS = snprintf/test_snprintf \
-	ust-elf/test_ust_elf \
-	gcc-weak-hidden/test_gcc_weak_hidden
+TESTS += \
+	regression/abi0-conflict/test_abi0_conflict
+
+EXTRA_DIST = README
 
 check-loop:
 	while [ 0 ]; do \

@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#
+# SPDX-License-Identifier: MIT
 #
 # The -cp path should be changed to the lttng ust JUL jar file on your system
 # or locally to the project. Same goes for the Java library path in order to
@@ -14,9 +15,9 @@ JAVA_OPTIONS=""
 cd $DIR
 
 if [ -f "$DIR/.intree" ]; then
-	CLASSPATH="../../../liblttng-ust-java-agent/java/lttng-ust-agent-common/$JARFILE_COMMON"
-	CLASSPATH="$CLASSPATH:../../../liblttng-ust-java-agent/java/lttng-ust-agent-jul/$JARFILE_JUL"
-	LIBPATH="../../../liblttng-ust-java-agent/jni/jul/.libs"
+	CLASSPATH="../../../lib/lttng-ust-java-agent/java/lttng-ust-agent-common/$JARFILE_COMMON"
+	CLASSPATH="$CLASSPATH:../../../lib/lttng-ust-java-agent/java/lttng-ust-agent-jul/$JARFILE_JUL"
+	LIBPATH="../../../lib/lttng-ust-java-agent/jni/jul/.libs"
 else
 	CLASSPATH="/usr/local/share/java/$JARFILE_COMMON:/usr/share/java/$JARFILE_COMMON"
 	CLASSPATH="$CLASSPATH:/usr/local/share/java/$JARFILE_JUL:/usr/share/java/$JARFILE_JUL"

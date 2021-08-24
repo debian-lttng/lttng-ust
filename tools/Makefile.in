@@ -14,6 +14,8 @@
 
 @SET_MAKE@
 
+# SPDX-License-Identifier: LGPL-2.1-only
+
 VPATH = @srcdir@
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
@@ -91,9 +93,14 @@ host_triplet = @host@
 target_triplet = @target@
 subdir = tools
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/ax_c___attribute__.m4 \
+am__aclocal_m4_deps = $(top_srcdir)/m4/ae_config_feature.m4 \
+	$(top_srcdir)/m4/ae_in_git_repo.m4 \
+	$(top_srcdir)/m4/ax_append_compile_flags.m4 \
+	$(top_srcdir)/m4/ax_append_flag.m4 \
+	$(top_srcdir)/m4/ax_c___attribute__.m4 \
 	$(top_srcdir)/m4/ax_check_class.m4 \
-	$(top_srcdir)/m4/ax_check_classpath.m4 \
+	$(top_srcdir)/m4/ax_check_compile_flag.m4 \
+	$(top_srcdir)/m4/ax_cxx_compile_stdcxx.m4 \
 	$(top_srcdir)/m4/ax_java_options.m4 \
 	$(top_srcdir)/m4/ax_jni_include_dir.m4 \
 	$(top_srcdir)/m4/ax_prog_jar.m4 \
@@ -102,20 +109,24 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/ax_c___attribute__.m4 \
 	$(top_srcdir)/m4/ax_prog_javac.m4 \
 	$(top_srcdir)/m4/ax_prog_javac_works.m4 \
 	$(top_srcdir)/m4/ax_prog_javah.m4 \
+	$(top_srcdir)/m4/ax_pthread.m4 \
+	$(top_srcdir)/m4/ax_require_defined.m4 \
 	$(top_srcdir)/m4/ax_sys_weak_alias.m4 \
 	$(top_srcdir)/m4/ax_try_compile_java.m4 \
 	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/pprint.m4 \
-	$(top_srcdir)/m4/rw_prog_cxx_works.m4 \
-	$(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/lttng_pthread_getname_np.m4 \
+	$(top_srcdir)/m4/lttng_pthread_setname_np.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/m4/pprint.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(dist_bin_SCRIPTS) \
 	$(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/config.h \
-	$(top_builddir)/include/lttng/ust-config.h
+CONFIG_HEADER = $(top_builddir)/src/common/config.h \
+	$(top_builddir)/include/lttng/ust-config.h \
+	$(top_builddir)/include/lttng/ust-version.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
@@ -172,6 +183,8 @@ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AM_CFLAGS = @AM_CFLAGS@
+AM_CPPFLAGS = @AM_CPPFLAGS@
+AM_CXXFLAGS = @AM_CXXFLAGS@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
 ASCIIDOC = @ASCIIDOC@
@@ -179,11 +192,11 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
-BUILD_GEN_TP_EXAMPLES = @BUILD_GEN_TP_EXAMPLES@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CLASSPATH = @CLASSPATH@
+CMAKE = @CMAKE@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -203,8 +216,9 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
+FOLD = @FOLD@
 GREP = @GREP@
-HAVE_CMAKE = @HAVE_CMAKE@
+HAVE_CXX11 = @HAVE_CXX11@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -227,14 +241,12 @@ LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 LTTNG_UST_CTL_LIBRARY_VERSION = @LTTNG_UST_CTL_LIBRARY_VERSION@
-LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS = @LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS@
 LTTNG_UST_LIBRARY_VERSION = @LTTNG_UST_LIBRARY_VERSION@
+LTTNG_UST_LIB_SONAME_MAJOR = @LTTNG_UST_LIB_SONAME_MAJOR@
 LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAINT = @MAINT@
-MAJOR_VERSION = @MAJOR_VERSION@
 MAKEINFO = @MAKEINFO@
 MANIFEST_TOOL = @MANIFEST_TOOL@
-MINOR_VERSION = @MINOR_VERSION@
 MKDIR_P = @MKDIR_P@
 NM = @NM@
 NMEDIT = @NMEDIT@
@@ -249,8 +261,13 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
-PATCHLEVEL_VERSION = @PATCHLEVEL_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
+PTHREAD_CC = @PTHREAD_CC@
+PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
+PTHREAD_LIBS = @PTHREAD_LIBS@
 PYTHON = @PYTHON@
 PYTHON_EXEC_PREFIX = @PYTHON_EXEC_PREFIX@
 PYTHON_PLATFORM = @PYTHON_PLATFORM@
@@ -261,6 +278,8 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
+URCU_CFLAGS = @URCU_CFLAGS@
+URCU_LIBS = @URCU_LIBS@
 VERSION = @VERSION@
 WEAK_ALIAS = @WEAK_ALIAS@
 WEAK_ALIAS_CROSSFILE = @WEAK_ALIAS_CROSSFILE@
@@ -279,6 +298,7 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
+ax_pthread_config = @ax_pthread_config@
 bindir = @bindir@
 build = @build@
 build_alias = @build_alias@
@@ -330,7 +350,6 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 dist_bin_SCRIPTS = lttng-gen-tp
-EXTRA_DIST = lttng-gen-tp
 all: all-am
 
 .SUFFIXES:
@@ -446,7 +465,7 @@ distdir-am: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(SCRIPTS) all-local
+all-am: Makefile $(SCRIPTS)
 installdirs:
 	for dir in "$(DESTDIR)$(bindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
@@ -483,7 +502,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool clean-local mostlyclean-am
+clean-am: clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
 	-rm -f Makefile
@@ -549,35 +568,21 @@ uninstall-am: uninstall-dist_binSCRIPTS
 
 .MAKE: install-am install-strip
 
-.PHONY: all all-am all-local check check-am clean clean-generic \
-	clean-libtool clean-local cscopelist-am ctags-am distclean \
-	distclean-generic distclean-libtool distdir dvi dvi-am html \
-	html-am info info-am install install-am install-data \
-	install-data-am install-dist_binSCRIPTS install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags-am uninstall uninstall-am uninstall-dist_binSCRIPTS
+.PHONY: all all-am check check-am clean clean-generic clean-libtool \
+	cscopelist-am ctags-am distclean distclean-generic \
+	distclean-libtool distdir dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am \
+	install-dist_binSCRIPTS install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic \
+	mostlyclean-libtool pdf pdf-am ps ps-am tags-am uninstall \
+	uninstall-am uninstall-dist_binSCRIPTS
 
 .PRECIOUS: Makefile
 
-
-all-local:
-	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
-		for script in $(EXTRA_DIST); do \
-			cp -f $(srcdir)/$$script $(builddir); \
-		done; \
-	fi
-
-clean-local:
-	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
-		for script in $(EXTRA_DIST); do \
-			rm -f $(builddir)/$$script; \
-		done; \
-	fi
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

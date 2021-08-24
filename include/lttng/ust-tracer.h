@@ -1,50 +1,45 @@
+/*
+ * SPDX-License-Identifier: MIT
+ *
+ * Copyright (C) 2005-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+ *
+ * This contains the core definitions for the Linux Trace Toolkit.
+ */
+
 #ifndef _LTTNG_UST_TRACER_H
 #define _LTTNG_UST_TRACER_H
 
-/*
- * Copyright (C) 2005-2011 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
- *
- * This contains the core definitions for the Linux Trace Toolkit.
- *
- * Copyright 2011-2012 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
-#include <lttng/ust-config.h>
+#include <lttng/ust-arch.h>
+#include <lttng/ust-compiler.h>
+#include <lttng/ust-utils.h>
 #include <lttng/ust-version.h>
 
-#ifndef LTTNG_UST_HAVE_EFFICIENT_UNALIGNED_ACCESS
-/* Align data on its natural alignment */
-#define RING_BUFFER_ALIGN
+/*
+ * On architectures without efficient unaligned accesses, the layout of
+ * the ringbuffer's content respects the natural alignment of the
+ * system. Only pack its content on architectures we know have efficient
+ * unaligned memory access.
+ *
+ * Whether to pack the ring buffer contents or not is part of the ABI
+ * between the probe providers and the tracer, and is selected by the
+ * lttng/ust-arch.h header.
+ */
+#ifndef LTTNG_UST_ARCH_HAS_EFFICIENT_UNALIGNED_ACCESS
+#define LTTNG_UST_RING_BUFFER_NATURAL_ALIGN
 #endif
 
-#ifndef CHAR_BIT
-#define CHAR_BIT 8
-#endif
-
-#ifdef RING_BUFFER_ALIGN
-#define lttng_alignof(type)	__alignof__(type)
+#ifdef LTTNG_UST_RING_BUFFER_NATURAL_ALIGN
+#define lttng_ust_rb_alignof(type)	__alignof__(type)
 #else
-#define lttng_alignof(type)	1
+#define lttng_ust_rb_alignof(type)	1
 #endif
 
-#define lttng_is_signed_type(type)           ((type) -1 < (type) 0)
+/*
+ * Concatenate lttng ust shared libraries name with their major version number.
+ */
+#define LTTNG_UST_LIB_SONAME "liblttng-ust.so." lttng_ust_stringify(LTTNG_UST_LIB_SONAME_MAJOR)
+#define LTTNG_UST_TRACEPOINT_LIB_SONAME "liblttng-ust-tracepoint.so." lttng_ust_stringify(LTTNG_UST_LIB_SONAME_MAJOR)
+#define LTTNG_UST_CTL_LIB_SONAME "liblttng-ust-ctl.so." lttng_ust_stringify(LTTNG_UST_CTL_LIB_SONAME_MAJOR)
+
 
 #endif /* _LTTNG_UST_TRACER_H */
