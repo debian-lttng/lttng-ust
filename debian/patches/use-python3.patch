@@ -1,13 +1,11 @@
 Description: use python3
 Author: Dimitri John Ledkov <xnox@ubuntu.com>
 
-Index: ust-2.5.1-1ubuntu1/tools/lttng-gen-tp
-===================================================================
---- ust-2.5.1-1ubuntu1.orig/tools/lttng-gen-tp
-+++ ust-2.5.1-1ubuntu1/tools/lttng-gen-tp
+--- a/tools/lttng-gen-tp
++++ b/tools/lttng-gen-tp
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env python
 +#!/usr/bin/python3
  #
- # Copyright (c)  2012 Yannick Brosseau <yannick.brosseau@gmail.com>
+ # SPDX-License-Identifier: GPL-2.0-only
  #

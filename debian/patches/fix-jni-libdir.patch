@@ -1,22 +1,23 @@
 Description: Fix incompatible java bytecode format
 Author: Michael Jeanson <mjeanson@ubuntu.com>
 
---- a/liblttng-ust-java/Makefile.am
-+++ b/liblttng-ust-java/Makefile.am
-@@ -8,7 +8,8 @@
+--- a/src/lib/lttng-ust-java/Makefile.am
++++ b/src/lib/lttng-ust-java/Makefile.am
+@@ -10,7 +10,8 @@
  BUILT_SOURCES = org_lttng_ust_LTTngUst.h
  
- AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include $(JNI_CPPFLAGS)
+ AM_CPPFLAGS += -I$(builddir) -I$(srcdir) $(JNI_CPPFLAGS)
 -lib_LTLIBRARIES = liblttng-ust-java.la
 +jnilib_LTLIBRARIES = liblttng-ust-java.la
 +jnilibdir = $(libdir)/jni
  liblttng_ust_java_la_SOURCES = LTTngUst.c lttng_ust_java.h
  nodist_liblttng_ust_java_la_SOURCES = org_lttng_ust_LTTngUst.h
  
---- a/liblttng-ust-java-agent/jni/jul/Makefile.am
-+++ b/liblttng-ust-java-agent/jni/jul/Makefile.am
-@@ -1,6 +1,7 @@
- AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include $(JNI_CPPFLAGS)
+--- a/src/lib/lttng-ust-java-agent/jni/jul/Makefile.am
++++ b/src/lib/lttng-ust-java-agent/jni/jul/Makefile.am
+@@ -2,7 +2,8 @@
+ 
+ AM_CPPFLAGS += -I$(builddir) -I$(srcdir) $(JNI_CPPFLAGS)
  
 -lib_LTLIBRARIES = liblttng-ust-jul-jni.la
 +jnilib_LTLIBRARIES = liblttng-ust-jul-jni.la
@@ -24,10 +25,11 @@ Author: Michael Jeanson <mjeanson@ubuntu.com>
  liblttng_ust_jul_jni_la_SOURCES = lttng_ust_jul.c \
  	lttng_ust_jul.h
  
---- a/liblttng-ust-java-agent/jni/log4j/Makefile.am
-+++ b/liblttng-ust-java-agent/jni/log4j/Makefile.am
-@@ -1,6 +1,7 @@
- AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include $(JNI_CPPFLAGS)
+--- a/src/lib/lttng-ust-java-agent/jni/log4j/Makefile.am
++++ b/src/lib/lttng-ust-java-agent/jni/log4j/Makefile.am
+@@ -2,7 +2,8 @@
+ 
+ AM_CPPFLAGS += -I$(builddir) -I$(srcdir) $(JNI_CPPFLAGS)
  
 -lib_LTLIBRARIES = liblttng-ust-log4j-jni.la
 +jnilib_LTLIBRARIES = liblttng-ust-log4j-jni.la
@@ -35,10 +37,11 @@ Author: Michael Jeanson <mjeanson@ubuntu.com>
  liblttng_ust_log4j_jni_la_SOURCES = lttng_ust_log4j.c \
  	lttng_ust_log4j.h
  
---- a/liblttng-ust-java-agent/jni/common/Makefile.am
-+++ b/liblttng-ust-java-agent/jni/common/Makefile.am
-@@ -1,6 +1,7 @@
- AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include $(JNI_CPPFLAGS)
+--- a/src/lib/lttng-ust-java-agent/jni/common/Makefile.am
++++ b/src/lib/lttng-ust-java-agent/jni/common/Makefile.am
+@@ -2,7 +2,8 @@
+ 
+ AM_CPPFLAGS += -I$(builddir) -I$(srcdir) $(JNI_CPPFLAGS)
  
 -lib_LTLIBRARIES = liblttng-ust-context-jni.la
 +jnilib_LTLIBRARIES = liblttng-ust-context-jni.la
