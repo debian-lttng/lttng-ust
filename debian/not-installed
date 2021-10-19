@@ -1,0 +1,5 @@
+usr/lib/*/*.la
+usr/lib/*/jni/*.la
+usr/share/doc/lttng-ust/LICENSE
+# Installed by jh_installlibs
+usr/share/java/*.jar
