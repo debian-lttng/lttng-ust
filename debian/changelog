@@ -1,3 +1,9 @@
+ust (2.13.0-2~ubuntu20.04.1) focal; urgency=medium
+
+  * [4481e58] Prepare branch for focal
+
+ -- Michael Jeanson <mjeanson@debian.org>  Fri, 22 Oct 2021 11:51:47 -0400
+
 ust (2.13.0-2) unstable; urgency=medium
 
   * [d05e027] Add missing builddep on pkg-config
