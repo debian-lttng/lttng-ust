@@ -1,3 +1,9 @@
+ust (2.13.0-2) unstable; urgency=medium
+
+  * [d05e027] Add missing builddep on pkg-config
+
+ -- Michael Jeanson <mjeanson@debian.org>  Fri, 22 Oct 2021 11:33:57 -0400
+
 ust (2.13.0-1) unstable; urgency=medium
 
   * [4b18941] Bump watch file version to 4
