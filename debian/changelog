@@ -1,3 +1,9 @@
+ust (2.13.0-2~ubuntu18.04.1) bionic; urgency=medium
+
+  * [70f3fd9] Prepare branch for bionic
+
+ -- Michael Jeanson <mjeanson@debian.org>  Fri, 22 Oct 2021 11:58:59 -0400
+
 ust (2.13.0-2) unstable; urgency=medium
 
   * [d05e027] Add missing builddep on pkg-config
