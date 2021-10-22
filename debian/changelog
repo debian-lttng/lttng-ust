@@ -1,3 +1,15 @@
+ust (2.13.0-1) unstable; urgency=medium
+
+  * [4b18941] Bump watch file version to 4
+  * [8f5b2a1] New upstream version 2.13.0
+  * [44e63fd] Refreshed patches for 2.13
+  * [da58f5e] SONAME bump from 0 to 1
+  * [df1ca78] Update copyright file
+  * [1943815] Add lintian overrides for prebuilt test artifacts
+  * [12ba374] Update to debhelper compat 12
+
+ -- Michael Jeanson <mjeanson@debian.org>  Fri, 22 Oct 2021 10:54:21 -0400
+
 ust (2.12.1-1) unstable; urgency=medium
 
   * [3b6a5b7] New upstream version 2.12.1
