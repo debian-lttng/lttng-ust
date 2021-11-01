@@ -1,3 +1,9 @@
+ust (2.13.0-3) unstable; urgency=medium
+
+  * [162fee1] d/symbols: m68k and riscv64 use compiler tls for urcu
+
+ -- Michael Jeanson <mjeanson@debian.org>  Mon, 01 Nov 2021 14:57:56 -0400
+
 ust (2.13.0-2) unstable; urgency=medium
 
   * [d05e027] Add missing builddep on pkg-config
