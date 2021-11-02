@@ -1,3 +1,9 @@
+ust (2.13.0-2~ubuntu20.04.2) focal; urgency=medium
+
+  * [ae4fdce] Disable ABI tests
+
+ -- Michael Jeanson <mjeanson@debian.org>  Tue, 02 Nov 2021 12:26:39 -0400
+
 ust (2.13.0-2~ubuntu20.04.1) focal; urgency=medium
 
   * [4481e58] Prepare branch for focal
