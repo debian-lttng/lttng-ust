@@ -1,2 +1,3 @@
+disable-abi-tests.patch
 fix-jni-libdir.patch
 use-python3.patch
