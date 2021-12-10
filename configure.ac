@@ -8,7 +8,7 @@ dnl Process this file with autoconf to produce a configure script.
 # Project version information
 m4_define([ust_version_major], [2])
 m4_define([ust_version_minor], [13])
-m4_define([ust_version_patch], [0])
+m4_define([ust_version_patch], [1])
 m4_define([ust_version_dev_stage], [])
 m4_define([ust_version], ust_version_major[.]ust_version_minor[.]ust_version_patch[]ust_version_dev_stage)
 m4_define([ust_version_name], [[Nordicité]])
@@ -404,7 +404,9 @@ AE_IF_FEATURE_ENABLED([java-agent-all], [
 
 # The numa integration requires libnuma
 AE_IF_FEATURE_ENABLED([numa], [
-  AC_CHECK_LIB([numa], [numa_available], [], [
+  AC_CHECK_LIB([numa], [numa_available], [
+    AC_DEFINE([HAVE_LIBNUMA], [1], [Define to 1 if libnuma is available.])
+  ], [
     AC_MSG_ERROR([dnl
 libnuma is not available. Please either install it (e.g. libnuma-dev) or use
 [LDFLAGS]=-Ldir to specify the right location, or use --disable-numa configure
