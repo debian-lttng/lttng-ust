@@ -2,6 +2,8 @@ liblttng-ust-common.so.1 liblttng-ust-common1 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  (arch=m68k,riscv64)__tls_access_lttng_ust_urcu_reader@Base 2.13.0
  lttng_ust_add_fd_to_tracker@Base 2.13.0
+ lttng_ust_cancelstate_disable_pop@Base 2.13.1
+ lttng_ust_cancelstate_disable_push@Base 2.13.1
  lttng_ust_common_alloc_tls@Base 2.13.0
  lttng_ust_common_ctor@Base 2.13.0
  lttng_ust_delete_fd_from_tracker@Base 2.13.0
