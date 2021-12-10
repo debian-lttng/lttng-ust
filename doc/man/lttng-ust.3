@@ -2,12 +2,12 @@
 .\"     Title: lttng-ust
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: DocBook XSL Stylesheets v1.79.1 <http://docbook.sf.net/>
-.\"      Date: 08/02/2021
+.\"      Date: 12/10/2021
 .\"    Manual: LTTng Manual
-.\"    Source: LTTng 2.13.0
+.\"    Source: LTTng 2.13.1
 .\"  Language: English
 .\"
-.TH "LTTNG\-UST" "3" "08/02/2021" "LTTng 2\&.13\&.0" "LTTng Manual"
+.TH "LTTNG\-UST" "3" "12/10/2021" "LTTng 2\&.13\&.1" "LTTng Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -211,7 +211,7 @@ All APIs are available\&.
 API version\ \&\fIN\fR, and all the following existing APIs, are available\&. Previous APIs are not available (not compiled)\&.
 .RE
 .sp
-The following table shows the mapping from LTTng\-UST versions (up to LTTng\-UST\ \&2\&.13\&.0) to available API versions:
+The following table shows the mapping from LTTng\-UST versions (up to LTTng\-UST\ \&2\&.13\&.1) to available API versions:
 .TS
 allbox tab(:);
 ltB ltB.
@@ -2158,6 +2158,11 @@ This option can be useful in workloads generating very large trace data throughp
 Setting this environment variable may significantly affect application timings\&.
 .sp .5v
 .RE
+.RE
+.PP
+\fBLTTNG_UST_ABORT_ON_CRITICAL\fR
+.RS 4
+If set, abort the instrumented application on a critical error message\&.
 .RE
 .PP
 \fBLTTNG_UST_CLOCK_PLUGIN\fR

@@ -161,7 +161,8 @@ am__DEPENDENCIES_1 =
 liblttng_ust_common_la_DEPENDENCIES =  \
 	$(top_builddir)/src/common/libcommon.la $(am__DEPENDENCIES_1)
 am_liblttng_ust_common_la_OBJECTS = clock.lo fd-tracker.lo getcpu.lo \
-	ust-common.lo lttng-ust-urcu.lo lttng-ust-urcu-pointer.lo
+	ust-common.lo lttng-ust-urcu.lo lttng-ust-urcu-pointer.lo \
+	ust-cancelstate.lo
 liblttng_ust_common_la_OBJECTS = $(am_liblttng_ust_common_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -188,7 +189,8 @@ depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/clock.Plo ./$(DEPDIR)/fd-tracker.Plo \
 	./$(DEPDIR)/getcpu.Plo ./$(DEPDIR)/lttng-ust-urcu-pointer.Plo \
-	./$(DEPDIR)/lttng-ust-urcu.Plo ./$(DEPDIR)/ust-common.Plo
+	./$(DEPDIR)/lttng-ust-urcu.Plo ./$(DEPDIR)/ust-cancelstate.Plo \
+	./$(DEPDIR)/ust-common.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -415,7 +417,8 @@ liblttng_ust_common_la_SOURCES = \
 	getcpu.h \
 	ust-common.c \
 	lttng-ust-urcu.c \
-	lttng-ust-urcu-pointer.c
+	lttng-ust-urcu-pointer.c \
+	ust-cancelstate.c
 
 liblttng_ust_common_la_LIBADD = \
 	$(top_builddir)/src/common/libcommon.la \
@@ -505,6 +508,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getcpu.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-ust-urcu-pointer.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng-ust-urcu.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ust-cancelstate.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ust-common.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -673,6 +677,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/getcpu.Plo
 	-rm -f ./$(DEPDIR)/lttng-ust-urcu-pointer.Plo
 	-rm -f ./$(DEPDIR)/lttng-ust-urcu.Plo
+	-rm -f ./$(DEPDIR)/ust-cancelstate.Plo
 	-rm -f ./$(DEPDIR)/ust-common.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -724,6 +729,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/getcpu.Plo
 	-rm -f ./$(DEPDIR)/lttng-ust-urcu-pointer.Plo
 	-rm -f ./$(DEPDIR)/lttng-ust-urcu.Plo
+	-rm -f ./$(DEPDIR)/ust-cancelstate.Plo
 	-rm -f ./$(DEPDIR)/ust-common.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
