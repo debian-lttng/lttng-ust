@@ -1,3 +1,10 @@
+ust (2.13.1-1) unstable; urgency=medium
+
+  * [fb6e972] New upstream version 2.13.1
+  * [13ccf7e] Update symbols for 2.13.1
+
+ -- Michael Jeanson <mjeanson@debian.org>  Fri, 10 Dec 2021 16:28:57 -0500
+
 ust (2.13.0-3) unstable; urgency=medium
 
   * [162fee1] d/symbols: m68k and riscv64 use compiler tls for urcu
