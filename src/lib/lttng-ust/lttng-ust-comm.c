@@ -38,6 +38,7 @@
 #include <lttng/ust-thread.h>
 #include <lttng/ust-tracer.h>
 #include <lttng/ust-common.h>
+#include <lttng/ust-cancelstate.h>
 #include <urcu/tls-compat.h>
 #include "lib/lttng-ust/futex.h"
 #include "common/ustcomm.h"
@@ -125,14 +126,10 @@ int lttng_ust_loaded __attribute__((weak));
 int ust_lock(void)
 {
 	sigset_t sig_all_blocked, orig_mask;
-	int ret, oldstate;
+	int ret;
 
-	ret = pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &oldstate);
-	if (ret) {
-		ERR("pthread_setcancelstate: %s", strerror(ret));
-	}
-	if (oldstate != PTHREAD_CANCEL_ENABLE) {
-		ERR("pthread_setcancelstate: unexpected oldstate");
+	if (lttng_ust_cancelstate_disable_push()) {
+		ERR("lttng_ust_cancelstate_disable_push");
 	}
 	sigfillset(&sig_all_blocked);
 	ret = pthread_sigmask(SIG_SETMASK, &sig_all_blocked, &orig_mask);
@@ -161,14 +158,10 @@ int ust_lock(void)
 void ust_lock_nocheck(void)
 {
 	sigset_t sig_all_blocked, orig_mask;
-	int ret, oldstate;
+	int ret;
 
-	ret = pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &oldstate);
-	if (ret) {
-		ERR("pthread_setcancelstate: %s", strerror(ret));
-	}
-	if (oldstate != PTHREAD_CANCEL_ENABLE) {
-		ERR("pthread_setcancelstate: unexpected oldstate");
+	if (lttng_ust_cancelstate_disable_push()) {
+		ERR("lttng_ust_cancelstate_disable_push");
 	}
 	sigfillset(&sig_all_blocked);
 	ret = pthread_sigmask(SIG_SETMASK, &sig_all_blocked, &orig_mask);
@@ -189,7 +182,7 @@ void ust_lock_nocheck(void)
 void ust_unlock(void)
 {
 	sigset_t sig_all_blocked, orig_mask;
-	int ret, oldstate;
+	int ret;
 
 	sigfillset(&sig_all_blocked);
 	ret = pthread_sigmask(SIG_SETMASK, &sig_all_blocked, &orig_mask);
@@ -202,12 +195,8 @@ void ust_unlock(void)
 	if (ret) {
 		ERR("pthread_sigmask: %s", strerror(ret));
 	}
-	ret = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &oldstate);
-	if (ret) {
-		ERR("pthread_setcancelstate: %s", strerror(ret));
-	}
-	if (oldstate != PTHREAD_CANCEL_DISABLE) {
-		ERR("pthread_setcancelstate: unexpected oldstate");
+	if (lttng_ust_cancelstate_disable_pop()) {
+		ERR("lttng_ust_cancelstate_disable_pop");
 	}
 }
 
@@ -259,7 +248,7 @@ struct sock_info {
 	int statedump_pending;
 	int initial_statedump_done;
 	/* Keep procname for statedump */
-	char procname[LTTNG_UST_ABI_PROCNAME_LEN];
+	char procname[LTTNG_UST_CONTEXT_PROCNAME_LEN];
 };
 
 /* Socket from app (connect) to session daemon (listen) for communication */
@@ -482,7 +471,7 @@ int setup_global_apps(void)
 	}
 
 	global_apps.allowed = 1;
-	lttng_pthread_getname_np(global_apps.procname, LTTNG_UST_ABI_PROCNAME_LEN);
+	lttng_pthread_getname_np(global_apps.procname, LTTNG_UST_CONTEXT_PROCNAME_LEN);
 error:
 	return ret;
 }
@@ -528,7 +517,7 @@ int setup_local_apps(void)
 		goto end;
 	}
 
-	lttng_pthread_getname_np(local_apps.procname, LTTNG_UST_ABI_PROCNAME_LEN);
+	lttng_pthread_getname_np(local_apps.procname, LTTNG_UST_CONTEXT_PROCNAME_LEN);
 end:
 	return ret;
 }
@@ -1459,8 +1448,7 @@ void cleanup_sock_info(struct sock_info *sock_info, int exiting)
 		}
 		sock_info->root_handle = -1;
 	}
-	sock_info->registration_done = 0;
-	sock_info->initial_statedump_done = 0;
+
 
 	/*
 	 * wait_shm_mmap, socket and notify socket are used by listener
@@ -1471,6 +1459,9 @@ void cleanup_sock_info(struct sock_info *sock_info, int exiting)
 	 */
 	if (exiting)
 		return;
+
+	sock_info->registration_done = 0;
+	sock_info->initial_statedump_done = 0;
 
 	if (sock_info->socket != -1) {
 		ret = ustcomm_close_unix_sock(sock_info->socket);

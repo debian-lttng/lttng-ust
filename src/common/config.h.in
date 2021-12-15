@@ -49,7 +49,7 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define to 1 if you have the `numa' library (-lnuma). */
+/* Define to 1 if libnuma is available. */
 #undef HAVE_LIBNUMA
 
 /* Define to 1 if you have the <limits.h> header file. */
