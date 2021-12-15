@@ -1,3 +1,10 @@
+ust (2.13.1-1~ubuntu18.04.1) bionic; urgency=medium
+
+  * [fb6e972] New upstream version 2.13.1
+  * [5d21c8f] Update symbols for 2.13.1
+
+ -- Michael Jeanson <mjeanson@debian.org>  Wed, 15 Dec 2021 16:57:38 -0500
+
 ust (2.13.0-2~ubuntu18.04.2) bionic; urgency=medium
 
   * [db26e2f] Disable ABI tests
