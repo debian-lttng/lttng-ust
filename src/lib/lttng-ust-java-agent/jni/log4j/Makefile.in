@@ -91,6 +91,10 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
+@ENABLE_JAVA_AGENT_WITH_LOG4J_TRUE@am__append_1 = lttng_ust_log4j.c
+@ENABLE_JAVA_AGENT_WITH_LOG4J_TRUE@am__append_2 = org_lttng_ust_agent_log4j_LttngLog4jApi.h
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@am__append_3 = lttng_ust_log4j2.c
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@am__append_4 = org_lttng_ust_agent_log4j2_LttngLog4j2Api.h
 subdir = src/lib/lttng-ust-java-agent/jni/log4j
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ae_config_feature.m4 \
@@ -160,8 +164,16 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 liblttng_ust_log4j_jni_la_DEPENDENCIES =  \
 	$(top_builddir)/src/lib/lttng-ust/liblttng-ust.la \
 	$(top_builddir)/src/lib/lttng-ust-java-agent/jni/common/liblttng-ust-context-jni.la
-am_liblttng_ust_log4j_jni_la_OBJECTS = lttng_ust_log4j.lo
-nodist_liblttng_ust_log4j_jni_la_OBJECTS =
+am__liblttng_ust_log4j_jni_la_SOURCES_DIST = lttng_ust_log4j_tp.c \
+	lttng_ust_log4j_tp.h lttng_ust_log4j.c lttng_ust_log4j2.c
+@ENABLE_JAVA_AGENT_WITH_LOG4J_TRUE@am__objects_1 = lttng_ust_log4j.lo
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@am__objects_2 =  \
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@	lttng_ust_log4j2.lo
+am_liblttng_ust_log4j_jni_la_OBJECTS = lttng_ust_log4j_tp.lo \
+	$(am__objects_1) $(am__objects_2)
+am__objects_3 =
+nodist_liblttng_ust_log4j_jni_la_OBJECTS = $(am__objects_3) \
+	$(am__objects_3)
 liblttng_ust_log4j_jni_la_OBJECTS =  \
 	$(am_liblttng_ust_log4j_jni_la_OBJECTS) \
 	$(nodist_liblttng_ust_log4j_jni_la_OBJECTS)
@@ -184,7 +196,9 @@ am__v_at_1 =
 DEFAULT_INCLUDES = 
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/lttng_ust_log4j.Plo
+am__depfiles_remade = ./$(DEPDIR)/lttng_ust_log4j.Plo \
+	./$(DEPDIR)/lttng_ust_log4j2.Plo \
+	./$(DEPDIR)/lttng_ust_log4j_tp.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -206,7 +220,7 @@ am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(liblttng_ust_log4j_jni_la_SOURCES) \
 	$(nodist_liblttng_ust_log4j_jni_la_SOURCES)
-DIST_SOURCES = $(liblttng_ust_log4j_jni_la_SOURCES)
+DIST_SOURCES = $(am__liblttng_ust_log4j_jni_la_SOURCES_DIST)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -403,10 +417,10 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = liblttng-ust-log4j-jni.la
-liblttng_ust_log4j_jni_la_SOURCES = lttng_ust_log4j.c \
-	lttng_ust_log4j.h
-
-nodist_liblttng_ust_log4j_jni_la_SOURCES = org_lttng_ust_agent_log4j_LttngLog4jApi.h
+liblttng_ust_log4j_jni_la_SOURCES = lttng_ust_log4j_tp.c \
+	lttng_ust_log4j_tp.h $(am__append_1) $(am__append_3)
+nodist_liblttng_ust_log4j_jni_la_SOURCES = $(am__append_2) \
+	$(am__append_4)
 liblttng_ust_log4j_jni_la_LIBADD = -lc \
 	$(top_builddir)/src/lib/lttng-ust/liblttng-ust.la \
 	$(top_builddir)/src/lib/lttng-ust-java-agent/jni/common/liblttng-ust-context-jni.la
@@ -490,6 +504,8 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng_ust_log4j.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng_ust_log4j2.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lttng_ust_log4j_tp.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -653,6 +669,8 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/lttng_ust_log4j.Plo
+	-rm -f ./$(DEPDIR)/lttng_ust_log4j2.Plo
+	-rm -f ./$(DEPDIR)/lttng_ust_log4j_tp.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -699,6 +717,8 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/lttng_ust_log4j.Plo
+	-rm -f ./$(DEPDIR)/lttng_ust_log4j2.Plo
+	-rm -f ./$(DEPDIR)/lttng_ust_log4j_tp.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
