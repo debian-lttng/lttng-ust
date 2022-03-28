@@ -92,6 +92,7 @@ host_triplet = @host@
 target_triplet = @target@
 @ENABLE_JAVA_AGENT_WITH_JUL_TRUE@am__append_1 = lttng-ust-agent-jul
 @ENABLE_JAVA_AGENT_WITH_LOG4J_TRUE@am__append_2 = lttng-ust-agent-log4j
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@am__append_3 = lttng-ust-agent-log4j2
 subdir = src/lib/lttng-ust-java-agent/java
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ae_config_feature.m4 \
@@ -184,7 +185,8 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 DIST_SUBDIRS = lttng-ust-agent-common lttng-ust-agent-all \
-	lttng-ust-agent-jul lttng-ust-agent-log4j
+	lttng-ust-agent-jul lttng-ust-agent-log4j \
+	lttng-ust-agent-log4j2
 am__DIST_COMMON = $(srcdir)/Makefile.in
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 am__relativize = \
@@ -382,7 +384,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = lttng-ust-agent-common lttng-ust-agent-all $(am__append_1) \
-	$(am__append_2)
+	$(am__append_2) $(am__append_3)
 all: all-recursive
 
 .SUFFIXES:

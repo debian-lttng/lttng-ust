@@ -133,6 +133,9 @@ DIST_COMMON = $(srcdir)/Makefile.am $(dist_doc_examples_DATA) \
 	$(dist_doc_examples_hello_static_lib_DATA) \
 	$(am__dist_doc_examples_java_jul_DATA_DIST) \
 	$(am__dist_doc_examples_java_log4j_DATA_DIST) \
+	$(am__dist_doc_examples_java_log4j2_basic_DATA_DIST) \
+	$(am__dist_doc_examples_java_log4j2_ctx_DATA_DIST) \
+	$(am__dist_doc_examples_java_log4j2_prog_DATA_DIST) \
 	$(am__dist_doc_examples_python_DATA_DIST) $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/src/common/config.h \
@@ -198,13 +201,26 @@ am__installdirs = "$(DESTDIR)$(doc_examplesdir)" \
 	"$(DESTDIR)$(doc_examples_hello_static_libdir)" \
 	"$(DESTDIR)$(doc_examples_java_juldir)" \
 	"$(DESTDIR)$(doc_examples_java_log4jdir)" \
+	"$(DESTDIR)$(doc_examples_java_log4j2_basicdir)" \
+	"$(DESTDIR)$(doc_examples_java_log4j2_ctxdir)" \
+	"$(DESTDIR)$(doc_examples_java_log4j2_progdir)" \
 	"$(DESTDIR)$(doc_examples_pythondir)"
 am__dist_doc_examples_java_jul_DATA_DIST = java-jul/Makefile \
 	java-jul/Hello.java java-jul/run \
 	java-jul/ApplicationContextExample.java \
 	java-jul/FilterChangeListenerExample.java java-jul/README
 am__dist_doc_examples_java_log4j_DATA_DIST = java-log4j/Makefile \
-	java-log4j/Hello.java java-log4j/run
+	java-log4j/HelloLog4j.java java-log4j/run
+am__dist_doc_examples_java_log4j2_basic_DATA_DIST =  \
+	java-log4j2-basic/Makefile java-log4j2-basic/HelloLog4j2.java \
+	java-log4j2-basic/log4j2.xml java-log4j2-basic/run
+am__dist_doc_examples_java_log4j2_ctx_DATA_DIST =  \
+	java-log4j2-ctx/Makefile java-log4j2-ctx/HelloLog4j2Ctx.java \
+	java-log4j2-ctx/log4j2.ctx1.xml \
+	java-log4j2-ctx/log4j2.ctx2.xml java-log4j2-ctx/run
+am__dist_doc_examples_java_log4j2_prog_DATA_DIST =  \
+	java-log4j2-prog/Makefile \
+	java-log4j2-prog/HelloLog4j2Prog.java java-log4j2-prog/run
 am__dist_doc_examples_python_DATA_DIST = python/hello.py
 DATA = $(dist_doc_examples_DATA) \
 	$(dist_doc_examples_clock_override_DATA) \
@@ -217,6 +233,9 @@ DATA = $(dist_doc_examples_DATA) \
 	$(dist_doc_examples_hello_static_lib_DATA) \
 	$(dist_doc_examples_java_jul_DATA) \
 	$(dist_doc_examples_java_log4j_DATA) \
+	$(dist_doc_examples_java_log4j2_basic_DATA) \
+	$(dist_doc_examples_java_log4j2_ctx_DATA) \
+	$(dist_doc_examples_java_log4j2_prog_DATA) \
 	$(dist_doc_examples_python_DATA)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 am__DIST_COMMON = $(srcdir)/Makefile.in README
@@ -411,10 +430,32 @@ doc_examples_cmakedir = ${docdir}/examples/cmake-multiple-shared-libraries
 @ENABLE_JAVA_AGENT_WITH_JUL_TRUE@SUBDIRS_JUL = java-jul
 @ENABLE_JAVA_AGENT_WITH_LOG4J_TRUE@doc_examples_java_log4jdir = ${docdir}/examples/java-log4j
 @ENABLE_JAVA_AGENT_WITH_LOG4J_TRUE@dist_doc_examples_java_log4j_DATA = java-log4j/Makefile \
-@ENABLE_JAVA_AGENT_WITH_LOG4J_TRUE@				  java-log4j/Hello.java \
-@ENABLE_JAVA_AGENT_WITH_LOG4J_TRUE@				  java-log4j/run
+@ENABLE_JAVA_AGENT_WITH_LOG4J_TRUE@				    java-log4j/HelloLog4j.java \
+@ENABLE_JAVA_AGENT_WITH_LOG4J_TRUE@				    java-log4j/run
 
 @ENABLE_JAVA_AGENT_WITH_LOG4J_TRUE@SUBDIRS_LOG4J = java-log4j
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@doc_examples_java_log4j2_basicdir = ${docdir}/examples/java-log4j2-basic
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@dist_doc_examples_java_log4j2_basic_DATA = \
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@	java-log4j2-basic/Makefile \
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@	java-log4j2-basic/HelloLog4j2.java \
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@	java-log4j2-basic/log4j2.xml \
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@	java-log4j2-basic/run
+
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@doc_examples_java_log4j2_ctxdir = ${docdir}/examples/java-log4j2-ctx
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@dist_doc_examples_java_log4j2_ctx_DATA = \
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@	java-log4j2-ctx/Makefile \
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@	java-log4j2-ctx/HelloLog4j2Ctx.java \
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@	java-log4j2-ctx/log4j2.ctx1.xml \
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@	java-log4j2-ctx/log4j2.ctx2.xml \
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@	java-log4j2-ctx/run
+
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@doc_examples_java_log4j2_progdir = ${docdir}/examples/java-log4j2-prog
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@dist_doc_examples_java_log4j2_prog_DATA = \
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@	java-log4j2-prog/Makefile \
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@	java-log4j2-prog/HelloLog4j2Prog.java \
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@	java-log4j2-prog/run
+
+@ENABLE_JAVA_AGENT_WITH_LOG4J2_TRUE@SUBDIRS_LOG4J2 = java-log4j2-basic java-log4j2-prog
 @ENABLE_PYTHON_AGENT_TRUE@doc_examples_pythondir = ${docdir}/examples/python
 @ENABLE_PYTHON_AGENT_TRUE@dist_doc_examples_python_DATA = python/hello.py
 @HAVE_CMAKE_TRUE@@HAVE_CXX_TRUE@SUBDIRS_CMAKE = cmake-multiple-shared-libraries
@@ -771,6 +812,69 @@ uninstall-dist_doc_examples_java_log4jDATA:
 	@list='$(dist_doc_examples_java_log4j_DATA)'; test -n "$(doc_examples_java_log4jdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(doc_examples_java_log4jdir)'; $(am__uninstall_files_from_dir)
+install-dist_doc_examples_java_log4j2_basicDATA: $(dist_doc_examples_java_log4j2_basic_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(dist_doc_examples_java_log4j2_basic_DATA)'; test -n "$(doc_examples_java_log4j2_basicdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(doc_examples_java_log4j2_basicdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(doc_examples_java_log4j2_basicdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(doc_examples_java_log4j2_basicdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(doc_examples_java_log4j2_basicdir)" || exit $$?; \
+	done
+
+uninstall-dist_doc_examples_java_log4j2_basicDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_doc_examples_java_log4j2_basic_DATA)'; test -n "$(doc_examples_java_log4j2_basicdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(doc_examples_java_log4j2_basicdir)'; $(am__uninstall_files_from_dir)
+install-dist_doc_examples_java_log4j2_ctxDATA: $(dist_doc_examples_java_log4j2_ctx_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(dist_doc_examples_java_log4j2_ctx_DATA)'; test -n "$(doc_examples_java_log4j2_ctxdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(doc_examples_java_log4j2_ctxdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(doc_examples_java_log4j2_ctxdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(doc_examples_java_log4j2_ctxdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(doc_examples_java_log4j2_ctxdir)" || exit $$?; \
+	done
+
+uninstall-dist_doc_examples_java_log4j2_ctxDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_doc_examples_java_log4j2_ctx_DATA)'; test -n "$(doc_examples_java_log4j2_ctxdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(doc_examples_java_log4j2_ctxdir)'; $(am__uninstall_files_from_dir)
+install-dist_doc_examples_java_log4j2_progDATA: $(dist_doc_examples_java_log4j2_prog_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(dist_doc_examples_java_log4j2_prog_DATA)'; test -n "$(doc_examples_java_log4j2_progdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(doc_examples_java_log4j2_progdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(doc_examples_java_log4j2_progdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(doc_examples_java_log4j2_progdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(doc_examples_java_log4j2_progdir)" || exit $$?; \
+	done
+
+uninstall-dist_doc_examples_java_log4j2_progDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_doc_examples_java_log4j2_prog_DATA)'; test -n "$(doc_examples_java_log4j2_progdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(doc_examples_java_log4j2_progdir)'; $(am__uninstall_files_from_dir)
 install-dist_doc_examples_pythonDATA: $(dist_doc_examples_python_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(dist_doc_examples_python_DATA)'; test -n "$(doc_examples_pythondir)" || list=; \
@@ -836,7 +940,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(DATA) all-local
 installdirs:
-	for dir in "$(DESTDIR)$(doc_examplesdir)" "$(DESTDIR)$(doc_examples_clock_overridedir)" "$(DESTDIR)$(doc_examples_cmakedir)" "$(DESTDIR)$(doc_examples_demodir)" "$(DESTDIR)$(doc_examples_demo_tracefdir)" "$(DESTDIR)$(doc_examples_demo_tracelogdir)" "$(DESTDIR)$(doc_examples_easy_ustdir)" "$(DESTDIR)$(doc_examples_gen_tpdir)" "$(DESTDIR)$(doc_examples_getcpu_overridedir)" "$(DESTDIR)$(doc_examples_hello_static_libdir)" "$(DESTDIR)$(doc_examples_java_juldir)" "$(DESTDIR)$(doc_examples_java_log4jdir)" "$(DESTDIR)$(doc_examples_pythondir)"; do \
+	for dir in "$(DESTDIR)$(doc_examplesdir)" "$(DESTDIR)$(doc_examples_clock_overridedir)" "$(DESTDIR)$(doc_examples_cmakedir)" "$(DESTDIR)$(doc_examples_demodir)" "$(DESTDIR)$(doc_examples_demo_tracefdir)" "$(DESTDIR)$(doc_examples_demo_tracelogdir)" "$(DESTDIR)$(doc_examples_easy_ustdir)" "$(DESTDIR)$(doc_examples_gen_tpdir)" "$(DESTDIR)$(doc_examples_getcpu_overridedir)" "$(DESTDIR)$(doc_examples_hello_static_libdir)" "$(DESTDIR)$(doc_examples_java_juldir)" "$(DESTDIR)$(doc_examples_java_log4jdir)" "$(DESTDIR)$(doc_examples_java_log4j2_basicdir)" "$(DESTDIR)$(doc_examples_java_log4j2_ctxdir)" "$(DESTDIR)$(doc_examples_java_log4j2_progdir)" "$(DESTDIR)$(doc_examples_pythondir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -900,6 +1004,9 @@ install-data-am: install-dist_doc_examplesDATA \
 	install-dist_doc_examples_getcpu_overrideDATA \
 	install-dist_doc_examples_hello_static_libDATA \
 	install-dist_doc_examples_java_julDATA \
+	install-dist_doc_examples_java_log4j2_basicDATA \
+	install-dist_doc_examples_java_log4j2_ctxDATA \
+	install-dist_doc_examples_java_log4j2_progDATA \
 	install-dist_doc_examples_java_log4jDATA \
 	install-dist_doc_examples_pythonDATA
 
@@ -956,6 +1063,9 @@ uninstall-am: uninstall-dist_doc_examplesDATA \
 	uninstall-dist_doc_examples_getcpu_overrideDATA \
 	uninstall-dist_doc_examples_hello_static_libDATA \
 	uninstall-dist_doc_examples_java_julDATA \
+	uninstall-dist_doc_examples_java_log4j2_basicDATA \
+	uninstall-dist_doc_examples_java_log4j2_ctxDATA \
+	uninstall-dist_doc_examples_java_log4j2_progDATA \
 	uninstall-dist_doc_examples_java_log4jDATA \
 	uninstall-dist_doc_examples_pythonDATA
 
@@ -976,6 +1086,9 @@ uninstall-am: uninstall-dist_doc_examplesDATA \
 	install-dist_doc_examples_getcpu_overrideDATA \
 	install-dist_doc_examples_hello_static_libDATA \
 	install-dist_doc_examples_java_julDATA \
+	install-dist_doc_examples_java_log4j2_basicDATA \
+	install-dist_doc_examples_java_log4j2_ctxDATA \
+	install-dist_doc_examples_java_log4j2_progDATA \
 	install-dist_doc_examples_java_log4jDATA \
 	install-dist_doc_examples_pythonDATA install-dvi \
 	install-dvi-am install-exec install-exec-am install-html \
@@ -995,6 +1108,9 @@ uninstall-am: uninstall-dist_doc_examplesDATA \
 	uninstall-dist_doc_examples_getcpu_overrideDATA \
 	uninstall-dist_doc_examples_hello_static_libDATA \
 	uninstall-dist_doc_examples_java_julDATA \
+	uninstall-dist_doc_examples_java_log4j2_basicDATA \
+	uninstall-dist_doc_examples_java_log4j2_ctxDATA \
+	uninstall-dist_doc_examples_java_log4j2_progDATA \
 	uninstall-dist_doc_examples_java_log4jDATA \
 	uninstall-dist_doc_examples_pythonDATA
 
@@ -1003,7 +1119,7 @@ uninstall-am: uninstall-dist_doc_examplesDATA \
 
 all-local:
 	$(AM_V_at)if [ x"$(srcdir)" != x"$(builddir)" ]; then \
-		for subdir in $(SUBDIRS_PROXY) $(SUBDIRS_JUL) $(SUBDIRS_LOG4J) $(SUBDIRS_CMAKE); do \
+		for subdir in $(SUBDIRS_PROXY) $(SUBDIRS_JUL) $(SUBDIRS_LOG4J) $(SUBDIRS_LOG4J2) $(SUBDIRS_CMAKE); do \
 			cp -pfR $(srcdir)/$$subdir $(builddir); \
 			chmod -R u+w $(builddir)/$$subdir; \
 		done; \
@@ -1065,6 +1181,18 @@ all-local:
 			) || exit 1; \
 		done; \
 	fi; \
+	if [ x"$(SUBDIRS_LOG4J2)" != x"" ]; then \
+		for subdir in $(SUBDIRS_LOG4J2); do \
+			( \
+				cd $$subdir && \
+				$(MAKE) all \
+					CLASSPATH="$(CLASSPATH)" \
+					JAVA_CLASSPATH_OVERRIDE_LOG4J2="../../../src/lib/lttng-ust-java-agent/java/lttng-ust-agent-log4j2" \
+					JAVA_CLASSPATH_OVERRIDE_COMMON="../../../src/lib/lttng-ust-java-agent/java/lttng-ust-agent-common" \
+					$(AM_MAKEFLAGS) \
+			) || exit 1; \
+		done; \
+	fi; \
 	if [ x"$(SUBDIRS_CMAKE)" != x"" ]; then \
 		for subdir in $(SUBDIRS_CMAKE); do \
 			( \
@@ -1106,6 +1234,13 @@ clean-local:
 			fi; \
 		done; \
 	fi; \
+	if [ x"$(SUBDIRS_LOG4J2)" != x"" ]; then \
+		for subdir in $(SUBDIRS_LOG4J2); do \
+			if [ -d $$subdir ]; then \
+				(cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) clean && cd ..) || exit 1; \
+			fi; \
+		done; \
+	fi; \
 	if [ x"$(SUBDIRS_CMAKE)" != x"" ]; then \
 		for subdir in $(SUBDIRS_CMAKE); do \
 			if [ -d $$subdir ]; then \
@@ -1114,7 +1249,7 @@ clean-local:
 		done; \
 	fi; \
 	if [ x"$(srcdir)" != x"$(builddir)" ]; then \
-		for subdir in $(SUBDIRS_PROXY) $(SUBDIRS_JUL) $(SUBDIRS_LOG4J) $(SUBDIRS_CMAKE); do \
+		for subdir in $(SUBDIRS_PROXY) $(SUBDIRS_JUL) $(SUBDIRS_LOG4J) $(SUBDIRS_LOG4J2) $(SUBDIRS_CMAKE); do \
 			rm -rf $(builddir)/$$subdir; \
 		done; \
 	fi;
