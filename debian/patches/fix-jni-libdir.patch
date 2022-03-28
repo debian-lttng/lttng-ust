@@ -34,9 +34,9 @@ Author: Michael Jeanson <mjeanson@ubuntu.com>
 -lib_LTLIBRARIES = liblttng-ust-log4j-jni.la
 +jnilib_LTLIBRARIES = liblttng-ust-log4j-jni.la
 +jnilibdir = $(libdir)/jni
- liblttng_ust_log4j_jni_la_SOURCES = lttng_ust_log4j.c \
- 	lttng_ust_log4j.h
- 
+ liblttng_ust_log4j_jni_la_SOURCES = \
+ 	lttng_ust_log4j_tp.c \
+ 	lttng_ust_log4j_tp.h
 --- a/src/lib/lttng-ust-java-agent/jni/common/Makefile.am
 +++ b/src/lib/lttng-ust-java-agent/jni/common/Makefile.am
 @@ -2,7 +2,8 @@
