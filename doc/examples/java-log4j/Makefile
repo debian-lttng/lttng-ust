@@ -37,7 +37,7 @@ JC = javac -classpath "$(CLASSPATH):$(LOG4J_CP):$(COMMON_CP):."
 .java.class:
 	$(JC) $(JFLAGS) $*.java
 
-CLASSES = Hello.java
+CLASSES = HelloLog4j.java
 
 all: classes
 
@@ -45,4 +45,4 @@ classes: $(CLASSES:.java=.class)
 
 .PHONY: clean
 clean:
-	$(RM) *.class
+	$(RM) $(CLASSES:.java=.class)
