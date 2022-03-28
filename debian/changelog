@@ -1,3 +1,11 @@
+ust (2.13.2-1) unstable; urgency=medium
+
+  * [52c4ecd] New upstream version 2.13.2
+  * [1e10379] Refresh patches
+  * [4e70775] Update debian/copyright
+
+ -- Michael Jeanson <mjeanson@debian.org>  Mon, 28 Mar 2022 17:09:53 -0400
+
 ust (2.13.1-1) unstable; urgency=medium
 
   * [fb6e972] New upstream version 2.13.1
