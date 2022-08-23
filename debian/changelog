@@ -1,3 +1,12 @@
+ust (2.13.4-1) unstable; urgency=medium
+
+  * [99d1f58] New upstream version 2.13.4
+  * [cfbad03] Update source lintian overrides
+  * [7f34a28] Update debian copyright
+  * [5690f4a] Bump standards version to 4.6.1.0
+
+ -- Michael Jeanson <mjeanson@debian.org>  Tue, 23 Aug 2022 14:44:23 -0400
+
 ust (2.13.3-1) unstable; urgency=medium
 
   * [92abdd1] New upstream version 2.13.3
