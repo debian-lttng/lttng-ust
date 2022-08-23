@@ -1,20 +1,28 @@
 # Test suite artifacts
-ust source: source-contains-prebuilt-binary tests/unit/ust-elf/data/aarch64_be/main.elf
-ust source: source-contains-prebuilt-binary tests/unit/ust-elf/data/aarch64_be/main.elf.debug
-ust source: source-contains-prebuilt-binary tests/unit/ust-elf/data/armeb/main.elf
-ust source: source-contains-prebuilt-binary tests/unit/ust-elf/data/armeb/main.elf.debug
-ust source: source-contains-prebuilt-binary tests/unit/ust-elf/data/pic/hello.exec
-ust source: source-contains-prebuilt-binary tests/unit/ust-elf/data/pic/hello.pic
-ust source: source-contains-prebuilt-binary tests/unit/ust-elf/data/pic/hello.pie
-ust source: source-contains-prebuilt-binary tests/unit/ust-elf/data/x86/main.elf
-ust source: source-contains-prebuilt-binary tests/unit/ust-elf/data/x86/main.elf.debug
-ust source: source-contains-prebuilt-binary tests/unit/ust-elf/data/x86_64/main.elf
-ust source: source-contains-prebuilt-binary tests/unit/ust-elf/data/x86_64/main.elf.debug
+ust source: source-contains-prebuilt-binary [tests/unit/ust-elf/data/aarch64_be/main.elf]
+ust source: source-contains-prebuilt-binary [tests/unit/ust-elf/data/aarch64_be/main.elf.debug]
+ust source: source-contains-prebuilt-binary [tests/unit/ust-elf/data/armeb/main.elf]
+ust source: source-contains-prebuilt-binary [tests/unit/ust-elf/data/armeb/main.elf.debug]
+ust source: source-contains-prebuilt-binary [tests/unit/ust-elf/data/pic/hello.exec]
+ust source: source-contains-prebuilt-binary [tests/unit/ust-elf/data/pic/hello.pic]
+ust source: source-contains-prebuilt-binary [tests/unit/ust-elf/data/pic/hello.pie]
+ust source: source-contains-prebuilt-binary [tests/unit/ust-elf/data/x86/main.elf]
+ust source: source-contains-prebuilt-binary [tests/unit/ust-elf/data/x86/main.elf.debug]
+ust source: source-contains-prebuilt-binary [tests/unit/ust-elf/data/x86_64/main.elf]
+ust source: source-contains-prebuilt-binary [tests/unit/ust-elf/data/x86_64/main.elf.debug]
+ust source: binary-with-bad-dynamic-table [tests/unit/ust-elf/data/aarch64_be/main.elf.debug]
+ust source: binary-with-bad-dynamic-table [tests/unit/ust-elf/data/armeb/main.elf.debug]
+ust source: binary-with-bad-dynamic-table [tests/unit/ust-elf/data/x86/main.elf.debug]
+ust source: binary-with-bad-dynamic-table [tests/unit/ust-elf/data/x86_64/main.elf.debug]
+ust source: elf-error In program headers: Unable to find program interpreter name [tests/unit/ust-elf/data/aarch64_be/main.elf.debug]
+ust source: elf-error In program headers: Unable to find program interpreter name [tests/unit/ust-elf/data/armeb/main.elf.debug]
+ust source: elf-error In program headers: Unable to find program interpreter name [tests/unit/ust-elf/data/x86/main.elf.debug]
+ust source: elf-error In program headers: Unable to find program interpreter name [tests/unit/ust-elf/data/x86_64/main.elf.debug]
 # Source for pre-build artifacts is located in tests/unit/ust-elf/data/main.c
-ust source: source-is-missing tests/unit/ust-elf/data/aarch64_be/main.elf.debug
-ust source: source-is-missing tests/unit/ust-elf/data/armeb/main.elf.debug
-ust source: source-is-missing tests/unit/ust-elf/data/pic/hello.exec
-ust source: source-is-missing tests/unit/ust-elf/data/pic/hello.pic
-ust source: source-is-missing tests/unit/ust-elf/data/pic/hello.pie
-ust source: source-is-missing tests/unit/ust-elf/data/x86/main.elf.debug
-ust source: source-is-missing tests/unit/ust-elf/data/x86_64/main.elf.debug
+ust source: source-is-missing [tests/unit/ust-elf/data/aarch64_be/main.elf.debug]
+ust source: source-is-missing [tests/unit/ust-elf/data/armeb/main.elf.debug]
+ust source: source-is-missing [tests/unit/ust-elf/data/pic/hello.exec]
+ust source: source-is-missing [tests/unit/ust-elf/data/pic/hello.pic]
+ust source: source-is-missing [tests/unit/ust-elf/data/pic/hello.pie]
+ust source: source-is-missing [tests/unit/ust-elf/data/x86/main.elf.debug]
+ust source: source-is-missing [tests/unit/ust-elf/data/x86_64/main.elf.debug]
