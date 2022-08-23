@@ -6,108 +6,267 @@
  */
 
 #define _LGPL_SOURCE
+#include <assert.h>
+#include <ctype.h>
+#include <dirent.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <limits.h>
 #include <unistd.h>
 #include <pthread.h>
-
-#include <urcu/compiler.h>
-
-#include "common/smp.h"
-
-static int num_possible_cpus_cache;
-
-#if (defined(__GLIBC__) || defined( __UCLIBC__))
-static void _get_num_possible_cpus(void)
-{
-	int result;
-
-	/* On Linux, when some processors are offline
-	 * _SC_NPROCESSORS_CONF counts the offline
-	 * processors, whereas _SC_NPROCESSORS_ONLN
-	 * does not. If we used _SC_NPROCESSORS_ONLN,
-	 * getcpu() could return a value greater than
-	 * this sysconf, in which case the arrays
-	 * indexed by processor would overflow.
-	 */
-	result = sysconf(_SC_NPROCESSORS_CONF);
-	if (result == -1)
-		return;
-	num_possible_cpus_cache = result;
-}
-
-#else
-
-/*
- * The MUSL libc implementation of the _SC_NPROCESSORS_CONF sysconf does not
- * return the number of configured CPUs in the system but relies on the cpu
- * affinity mask of the current task.
- *
- * So instead we use a strategy similar to GLIBC's, counting the cpu
- * directories in "/sys/devices/system/cpu" and fallback on the value from
- * sysconf if it fails.
- */
-
-#include <dirent.h>
-#include <limits.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 
+#include <urcu/compiler.h>
+
+#include "common/logging.h"
+#include "common/smp.h"
+
 #define __max(a,b) ((a)>(b)?(a):(b))
 
-static void _get_num_possible_cpus(void)
+static int possible_cpus_array_len_cache;
+
+/*
+ * Get the highest CPU id from sysfs.
+ *
+ * Iterate on all the folders in "/sys/devices/system/cpu" that start with
+ * "cpu" followed by an integer, keep the highest CPU id encountered during
+ * this iteration and add 1 to get a number of CPUs.
+ *
+ * Returns the highest CPU id, or -1 on error.
+ */
+int get_max_cpuid_from_sysfs(void)
 {
-	int result, count = 0;
+	return _get_max_cpuid_from_sysfs("/sys/devices/system/cpu");
+}
+
+int _get_max_cpuid_from_sysfs(const char *path)
+{
+	long max_cpuid = -1;
+
 	DIR *cpudir;
 	struct dirent *entry;
 
-	cpudir = opendir("/sys/devices/system/cpu");
+	assert(path);
+
+	cpudir = opendir(path);
 	if (cpudir == NULL)
 		goto end;
 
 	/*
-	 * Count the number of directories named "cpu" followed by and
-	 * integer. This is the same strategy as glibc uses.
+	 * Iterate on all directories named "cpu" followed by an integer.
 	 */
 	while ((entry = readdir(cpudir))) {
 		if (entry->d_type == DT_DIR &&
 			strncmp(entry->d_name, "cpu", 3) == 0) {
 
 			char *endptr;
-			unsigned long cpu_num;
+			long cpu_id;
 
-			cpu_num = strtoul(entry->d_name + 3, &endptr, 10);
-			if ((cpu_num < ULONG_MAX) && (endptr != entry->d_name + 3)
+			cpu_id = strtol(entry->d_name + 3, &endptr, 10);
+			if ((cpu_id < LONG_MAX) && (endptr != entry->d_name + 3)
 					&& (*endptr == '\0')) {
-				count++;
+				if (cpu_id > max_cpuid)
+					max_cpuid = cpu_id;
 			}
 		}
 	}
 
-end:
-	/*
-	 * Get the sysconf value as a fallback. Keep the highest number.
-	 */
-	result = __max(sysconf(_SC_NPROCESSORS_CONF), count);
+	if (closedir(cpudir))
+		PERROR("closedir");
 
 	/*
-	 * If both methods failed, don't store the value.
+	 * If the max CPU id is out of bound, set it to -1 so it results in a
+	 * CPU num of 0.
 	 */
-	if (result < 1)
-		return;
-	num_possible_cpus_cache = result;
+	if (max_cpuid < 0 || max_cpuid > INT_MAX)
+		max_cpuid = -1;
+
+end:
+	return max_cpuid;
 }
-#endif
 
 /*
- * Returns the total number of CPUs in the system. If the cache is not yet
- * initialized, get the value from the system through sysconf and cache it.
+ * As a fallback to parsing the CPU mask in "/sys/devices/system/cpu/possible",
+ * iterate on all the folders in "/sys/devices/system/cpu" that start with
+ * "cpu" followed by an integer, keep the highest CPU id encountered during
+ * this iteration and add 1 to get a number of CPUs.
  *
- * If the sysconf call fails, don't populate the cache and return 0.
+ * Then get the value from sysconf(_SC_NPROCESSORS_CONF) as a fallback and
+ * return the highest one.
+ *
+ * On Linux, using the value from sysconf can be unreliable since the way it
+ * counts CPUs varies between C libraries and even between versions of the same
+ * library. If we used it directly, getcpu() could return a value greater than
+ * this sysconf, in which case the arrays indexed by processor would overflow.
+ *
+ * As another example, the MUSL libc implementation of the _SC_NPROCESSORS_CONF
+ * sysconf does not return the number of configured CPUs in the system but
+ * relies on the cpu affinity mask of the current task.
+ *
+ * Returns 0 or less on error.
  */
-int num_possible_cpus(void)
+int get_num_possible_cpus_fallback(void)
 {
-	if (caa_unlikely(!num_possible_cpus_cache))
-		_get_num_possible_cpus();
+	/*
+	 * Get the sysconf value as a last resort. Keep the highest number.
+	 */
+	return __max(sysconf(_SC_NPROCESSORS_CONF), get_max_cpuid_from_sysfs() + 1);
+}
 
-	return num_possible_cpus_cache;
+/*
+ * Get the CPU possible mask string from sysfs.
+ *
+ * buf: the buffer where the mask will be read.
+ * max_bytes: the maximum number of bytes to write in the buffer.
+ *
+ * Returns the number of bytes read or -1 on error.
+ */
+int get_possible_cpu_mask_from_sysfs(char *buf, size_t max_bytes)
+{
+	return get_cpu_mask_from_sysfs(buf, max_bytes,
+			"/sys/devices/system/cpu/possible");
+}
+
+/*
+ * Get a CPU mask string from sysfs.
+ *
+ * buf: the buffer where the mask will be read.
+ * max_bytes: the maximum number of bytes to write in the buffer.
+ * path: file path to read the mask from.
+ *
+ * Returns the number of bytes read or -1 on error.
+ */
+int get_cpu_mask_from_sysfs(char *buf, size_t max_bytes, const char *path)
+{
+	ssize_t bytes_read = 0;
+	size_t total_bytes_read = 0;
+	int fd = -1, ret = -1;
+
+	assert(path);
+
+	if (buf == NULL)
+		goto end;
+
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		goto end;
+
+	do {
+		bytes_read = read(fd, buf + total_bytes_read,
+				max_bytes - total_bytes_read);
+
+		if (bytes_read < 0) {
+			if (errno == EINTR) {
+				continue;	/* retry operation */
+			} else {
+				goto end;
+			}
+		}
+
+		total_bytes_read += bytes_read;
+		assert(total_bytes_read <= max_bytes);
+	} while (max_bytes > total_bytes_read && bytes_read > 0);
+
+	/*
+	 * Make sure the mask read is a null terminated string.
+	 */
+	if (total_bytes_read < max_bytes)
+		buf[total_bytes_read] = '\0';
+	else
+		buf[max_bytes - 1] = '\0';
+
+	if (total_bytes_read > INT_MAX)
+		goto end;
+	ret = (int) total_bytes_read;
+end:
+	if (fd >= 0 && close(fd) < 0)
+		PERROR("close");
+	return ret;
+}
+
+/*
+ * Get the highest CPU id from a CPU mask.
+ *
+ * pmask: the mask to parse.
+ * len: the len of the mask excluding '\0'.
+ *
+ * Returns the highest CPU id from the mask or -1 on error.
+ */
+int get_max_cpuid_from_mask(const char *pmask, size_t len)
+{
+	ssize_t i;
+	unsigned long cpu_index;
+	char *endptr;
+
+	/* We need at least one char to read */
+	if (len < 1)
+		goto error;
+
+	/* Start from the end to read the last CPU index. */
+	for (i = len - 1; i > 0; i--) {
+		/* Break when we hit the first separator. */
+		if ((pmask[i] == ',') || (pmask[i] == '-')) {
+			i++;
+			break;
+		}
+	}
+
+	cpu_index = strtoul(&pmask[i], &endptr, 10);
+
+	if ((&pmask[i] != endptr) && (cpu_index < INT_MAX))
+		return (int) cpu_index;
+
+error:
+	return -1;
+}
+
+static void update_possible_cpus_array_len_cache(void)
+{
+	int ret;
+	char buf[LTTNG_UST_CPUMASK_SIZE];
+
+	/* Get the possible cpu mask from sysfs, fallback to sysconf. */
+	ret = get_possible_cpu_mask_from_sysfs((char *) &buf, LTTNG_UST_CPUMASK_SIZE);
+	if (ret <= 0)
+		goto fallback;
+
+	/* Parse the possible cpu mask, on failure fallback to sysconf. */
+	ret = get_max_cpuid_from_mask((char *) &buf, ret);
+	if (ret >= 0) {
+		/* Add 1 to convert from max cpuid to an array len. */
+		ret++;
+		goto end;
+	}
+
+fallback:
+	/* Fallback to sysconf. */
+	ret = get_num_possible_cpus_fallback();
+
+end:
+	/* If all methods failed, don't store the value. */
+	if (ret < 1)
+		return;
+
+	possible_cpus_array_len_cache = ret;
+}
+
+/*
+ * Returns the length of an array that could contain a per-CPU element for each
+ * possible CPU id for the lifetime of the process.
+ *
+ * We currently assume CPU ids are contiguous up the maximum CPU id.
+ *
+ * If the cache is not yet initialized, get the value from
+ * "/sys/devices/system/cpu/possible" or fallback to sysconf and cache it.
+ *
+ * If all methods fail, don't populate the cache and return 0.
+ */
+int get_possible_cpus_array_len(void)
+{
+	if (caa_unlikely(!possible_cpus_array_len_cache))
+		update_possible_cpus_array_len_cache();
+
+	return possible_cpus_array_len_cache;
 }

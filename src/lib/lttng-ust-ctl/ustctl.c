@@ -1257,7 +1257,7 @@ int lttng_ust_ctl_duplicate_ust_object_data(struct lttng_ust_abi_object_data **d
 			obj->u.channel.wakeup_fd =
 				dup(src->u.channel.wakeup_fd);
 			if (obj->u.channel.wakeup_fd < 0) {
-				ret = errno;
+				ret = -errno;
 				goto chan_error_wakeup_fd;
 			}
 		} else {
@@ -1293,7 +1293,7 @@ int lttng_ust_ctl_duplicate_ust_object_data(struct lttng_ust_abi_object_data **d
 			obj->u.stream.wakeup_fd =
 				dup(src->u.stream.wakeup_fd);
 			if (obj->u.stream.wakeup_fd < 0) {
-				ret = errno;
+				ret = -errno;
 				goto stream_error_wakeup_fd;
 			}
 		} else {
@@ -1305,7 +1305,7 @@ int lttng_ust_ctl_duplicate_ust_object_data(struct lttng_ust_abi_object_data **d
 			obj->u.stream.shm_fd =
 				dup(src->u.stream.shm_fd);
 			if (obj->u.stream.shm_fd < 0) {
-				ret = errno;
+				ret = -errno;
 				goto stream_error_shm_fd;
 			}
 		} else {
@@ -1344,7 +1344,7 @@ int lttng_ust_ctl_duplicate_ust_object_data(struct lttng_ust_abi_object_data **d
 			obj->u.counter_global.shm_fd =
 				dup(src->u.counter_global.shm_fd);
 			if (obj->u.counter_global.shm_fd < 0) {
-				ret = errno;
+				ret = -errno;
 				goto error_type;
 			}
 		}
@@ -1358,7 +1358,7 @@ int lttng_ust_ctl_duplicate_ust_object_data(struct lttng_ust_abi_object_data **d
 			obj->u.counter_cpu.shm_fd =
 				dup(src->u.counter_cpu.shm_fd);
 			if (obj->u.counter_cpu.shm_fd < 0) {
-				ret = errno;
+				ret = -errno;
 				goto error_type;
 			}
 		}
@@ -1384,7 +1384,7 @@ error:
 
 int lttng_ust_ctl_get_nr_stream_per_channel(void)
 {
-	return num_possible_cpus();
+	return get_possible_cpus_array_len();
 }
 
 struct lttng_ust_ctl_consumer_channel *
@@ -2901,7 +2901,7 @@ int lttng_ust_ctl_regenerate_statedump(int sock, int handle)
 
 int lttng_ust_ctl_get_nr_cpu_per_counter(void)
 {
-	return num_possible_cpus();
+	return get_possible_cpus_array_len();
 }
 
 struct lttng_ust_ctl_daemon_counter *

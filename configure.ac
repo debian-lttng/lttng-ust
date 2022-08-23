@@ -8,7 +8,7 @@ dnl Process this file with autoconf to produce a configure script.
 # Project version information
 m4_define([ust_version_major], [2])
 m4_define([ust_version_minor], [13])
-m4_define([ust_version_patch], [3])
+m4_define([ust_version_patch], [4])
 m4_define([ust_version_dev_stage], [])
 m4_define([ust_version], ust_version_major[.]ust_version_minor[.]ust_version_patch[]ust_version_dev_stage)
 m4_define([ust_version_name], [[Nordicité]])
@@ -162,6 +162,7 @@ m4_define([WARN_FLAGS_LIST], [ dnl
   -Wno-sign-compare dnl
   -Wno-missing-field-initializers dnl
   -Wno-null-dereference dnl
+  -Wno-gnu dnl Disable warnings for GNU extensions on Clang
 ])
 
 # Pass -Werror as an extra flag during the test: this is needed to make the
@@ -656,6 +657,7 @@ AC_CONFIG_FILES([
   tests/regression/abi0-conflict/Makefile
   tests/regression/Makefile
   tests/unit/gcc-weak-hidden/Makefile
+  tests/unit/libcommon/Makefile
   tests/unit/libmsgpack/Makefile
   tests/unit/libringbuffer/Makefile
   tests/unit/Makefile
