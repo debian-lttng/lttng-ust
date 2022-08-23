@@ -598,6 +598,10 @@ LOG_DRIVER = env AM_TAP_AWK='$(AWK)' \
 # Regression tests
 TESTS = unit/libringbuffer/test_shm \
 	unit/gcc-weak-hidden/test_gcc_weak_hidden \
+	unit/libcommon/test_get_cpu_mask_from_sysfs \
+	unit/libcommon/test_get_max_cpuid_from_mask \
+	unit/libcommon/test_get_max_cpuid_from_sysfs \
+	unit/libcommon/test_get_possible_cpus_array_len \
 	unit/libmsgpack/test_msgpack \
 	unit/pthread_name/test_pthread_name \
 	unit/snprintf/test_snprintf unit/ust-elf/test_ust_elf \
@@ -894,6 +898,34 @@ unit/libringbuffer/test_shm.log: unit/libringbuffer/test_shm
 unit/gcc-weak-hidden/test_gcc_weak_hidden.log: unit/gcc-weak-hidden/test_gcc_weak_hidden
 	@p='unit/gcc-weak-hidden/test_gcc_weak_hidden'; \
 	b='unit/gcc-weak-hidden/test_gcc_weak_hidden'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+unit/libcommon/test_get_cpu_mask_from_sysfs.log: unit/libcommon/test_get_cpu_mask_from_sysfs
+	@p='unit/libcommon/test_get_cpu_mask_from_sysfs'; \
+	b='unit/libcommon/test_get_cpu_mask_from_sysfs'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+unit/libcommon/test_get_max_cpuid_from_mask.log: unit/libcommon/test_get_max_cpuid_from_mask
+	@p='unit/libcommon/test_get_max_cpuid_from_mask'; \
+	b='unit/libcommon/test_get_max_cpuid_from_mask'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+unit/libcommon/test_get_max_cpuid_from_sysfs.log: unit/libcommon/test_get_max_cpuid_from_sysfs
+	@p='unit/libcommon/test_get_max_cpuid_from_sysfs'; \
+	b='unit/libcommon/test_get_max_cpuid_from_sysfs'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+unit/libcommon/test_get_possible_cpus_array_len.log: unit/libcommon/test_get_possible_cpus_array_len
+	@p='unit/libcommon/test_get_possible_cpus_array_len'; \
+	b='unit/libcommon/test_get_possible_cpus_array_len'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
