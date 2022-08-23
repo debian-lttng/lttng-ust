@@ -11,7 +11,7 @@ License: LGPL-2.1
 Files: debian/*
 Copyright: 2011-2013, Alexandre Montplaisir <alexmonthy@voxpopuli.im>
            2010-2013, Jon Bernard <jbernard@debian.org>
-           2015-2019, Michael Jeanson <mjeanson@debian.org>
+           2015-2022, Michael Jeanson <mjeanson@debian.org>
 License: GPL-3
 
 Files: doc/*
