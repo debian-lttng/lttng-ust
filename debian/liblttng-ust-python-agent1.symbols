@@ -1,5 +1,5 @@
 liblttng-ust-python-agent.so.1 liblttng-ust-python-agent1 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
- __start_lttng_ust_tracepoints_ptrs@Base 2.13.0
- __stop_lttng_ust_tracepoints_ptrs@Base 2.13.0
+ (optional=lto)__start_lttng_ust_tracepoints_ptrs@Base 2.13.0
+ (optional=lto)__stop_lttng_ust_tracepoints_ptrs@Base 2.13.0
  py_tracepoint@Base 2.13.0
