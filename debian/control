@@ -3,11 +3,11 @@ Priority: optional
 Maintainer: Jon Bernard <jbernard@debian.org>
 Uploaders: Michael Jeanson <mjeanson@debian.org>
 Build-Depends: debhelper-compat (= 12),
-  default-jdk <!nojava> | default-jdk-headless <!nojava>,
+  default-jdk [!hppa] <!nojava> | default-jdk-headless [!hppa] <!nojava>,
   dh-python,
   dpkg-dev (>= 1.16.1),
-  javahelper <!nojava>,
-  liblog4j1.2-java <!nojava>,
+  javahelper [!hppa] <!nojava>,
+  liblog4j1.2-java [!hppa] <!nojava>,
   libnuma-dev,
   liburcu-dev (>= 0.12~),
   pkg-config,
