@@ -1,3 +1,12 @@
+ust (2.13.5-1) unstable; urgency=medium
+
+  * [cfba21e] New upstream version 2.13.5
+  * [d010dfc] Mark LTO optional symbols (Closes: #1015698)
+  * [f3bb02e] Disable java on hppa (Closes: #1010875)
+  * [5e3f226] Refresh jni libdir patch
+
+ -- Michael Jeanson <mjeanson@debian.org>  Tue, 11 Oct 2022 10:40:04 -0400
+
 ust (2.13.4-1) unstable; urgency=medium
 
   * [99d1f58] New upstream version 2.13.4
