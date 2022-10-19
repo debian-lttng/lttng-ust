@@ -1582,14 +1582,14 @@ open_write:
 	pid = fork();
 	URCU_TLS(lttng_ust_nest_count)--;
 	if (pid > 0) {
-		int status;
+		int status, wait_ret;
 
 		/*
 		 * Parent: wait for child to return, in which case the
 		 * shared memory map will have been created.
 		 */
-		pid = wait(&status);
-		if (pid < 0 || !WIFEXITED(status) || WEXITSTATUS(status) != 0) {
+		wait_ret = waitpid(pid, &status, 0);
+		if (wait_ret < 0 || !WIFEXITED(status) || WEXITSTATUS(status) != 0) {
 			wait_shm_fd = -1;
 			goto end;
 		}
@@ -1757,18 +1757,25 @@ void wait_for_sessiond(struct sock_info *sock_info)
 
 	DBG("Waiting for %s apps sessiond", sock_info->name);
 	/* Wait for futex wakeup */
-	if (uatomic_read((int32_t *) sock_info->wait_shm_mmap))
-		goto end_wait;
-
-	while (lttng_ust_futex_async((int32_t *) sock_info->wait_shm_mmap,
-			FUTEX_WAIT, 0, NULL, NULL, 0)) {
+	while (!uatomic_read((int32_t *) sock_info->wait_shm_mmap)) {
+		if (!lttng_ust_futex_async((int32_t *) sock_info->wait_shm_mmap, FUTEX_WAIT, 0, NULL, NULL, 0)) {
+			/*
+			 * Prior queued wakeups queued by unrelated code
+			 * using the same address can cause futex wait to
+			 * return 0 even through the futex value is still
+			 * 0 (spurious wakeups). Check the value again
+			 * in user-space to validate whether it really
+			 * differs from 0.
+			 */
+			continue;
+		}
 		switch (errno) {
-		case EWOULDBLOCK:
+		case EAGAIN:
 			/* Value already changed. */
 			goto end_wait;
 		case EINTR:
 			/* Retry if interrupted by signal. */
-			break;	/* Get out of switch. */
+			break;	/* Get out of switch. Check again. */
 		case EFAULT:
 			wait_poll_fallback = 1;
 			DBG(

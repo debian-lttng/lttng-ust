@@ -30,6 +30,8 @@
 #define CAPTURE_BUFFER_SIZE \
 	(PIPE_BUF - sizeof(struct lttng_ust_abi_event_notifier_notification) - 1)
 
+#define MSG_WRITE_NIL_LEN 1
+
 struct lttng_event_notifier_notification {
 	int notification_fd;
 	uint64_t event_notifier_token;
@@ -39,27 +41,50 @@ struct lttng_event_notifier_notification {
 };
 
 static
-void capture_enum(struct lttng_msgpack_writer *writer,
+int capture_enum(struct lttng_msgpack_writer *writer,
 		struct lttng_interpreter_output *output)
 {
-	lttng_msgpack_begin_map(writer, 2);
-	lttng_msgpack_write_str(writer, "type");
-	lttng_msgpack_write_str(writer, "enum");
+	int ret;
 
-	lttng_msgpack_write_str(writer, "value");
+	ret = lttng_msgpack_begin_map(writer, 2);
+	if (ret) {
+		goto end;
+	}
+	ret = lttng_msgpack_write_str(writer, "type");
+	if (ret) {
+		goto end;
+	}
+	ret = lttng_msgpack_write_str(writer, "enum");
+	if (ret) {
+		goto end;
+	}
+	ret = lttng_msgpack_write_str(writer, "value");
+	if (ret) {
+		goto end;
+	}
 
 	switch (output->type) {
 	case LTTNG_INTERPRETER_TYPE_SIGNED_ENUM:
-		lttng_msgpack_write_signed_integer(writer, output->u.s);
+		ret = lttng_msgpack_write_signed_integer(writer, output->u.s);
+		if (ret) {
+			goto end;
+		}
 		break;
 	case LTTNG_INTERPRETER_TYPE_UNSIGNED_ENUM:
-		lttng_msgpack_write_signed_integer(writer, output->u.u);
+		ret = lttng_msgpack_write_signed_integer(writer, output->u.u);
+		if (ret) {
+			goto end;
+		}
 		break;
 	default:
-		abort();
+		CRIT("Unknown enum output type\n");
+		ret = -1;
+		goto end;
 	}
 
-	lttng_msgpack_end_map(writer);
+	ret = lttng_msgpack_end_map(writer);
+end:
+	return ret;
 }
 
 static
@@ -105,7 +130,8 @@ int64_t capture_sequence_element_signed(uint8_t *ptr,
 		break;
 	}
 	default:
-		abort();
+		CRIT("Unknown sequence element size\n");
+		value = 0;
 	}
 
 	return value;
@@ -154,24 +180,27 @@ uint64_t capture_sequence_element_unsigned(uint8_t *ptr,
 		break;
 	}
 	default:
-		abort();
+		CRIT("Unknown sequence element size\n");
+		value = 0;
 	}
 
 	return value;
 }
 
 static
-void capture_sequence(struct lttng_msgpack_writer *writer,
+int capture_sequence(struct lttng_msgpack_writer *writer,
 		struct lttng_interpreter_output *output)
 {
 	const struct lttng_ust_type_integer *integer_type;
 	const struct lttng_ust_type_common *nested_type;
 	uint8_t *ptr;
 	bool signedness;
-	int i;
+	int i, ret;
 
-	lttng_msgpack_begin_array(writer, output->u.sequence.nr_elem);
-
+	ret = lttng_msgpack_begin_array(writer, output->u.sequence.nr_elem);
+	if (ret) {
+		goto end;
+	}
 	ptr = (uint8_t *) output->u.sequence.ptr;
 	nested_type = output->u.sequence.nested_type;
 	switch (nested_type->type) {
@@ -183,17 +212,21 @@ void capture_sequence(struct lttng_msgpack_writer *writer,
 		integer_type = lttng_ust_get_type_integer(lttng_ust_get_type_enum(nested_type)->container_type);
 		break;
 	default:
-		/* Capture of array of non-integer are not supported. */
-		abort();
+		CRIT("Capture of array of non-integer are not supported\n");
+		ret = -1;
+		goto end;
 	}
 	signedness = integer_type->signedness;
 	for (i = 0; i < output->u.sequence.nr_elem; i++) {
 		if (signedness) {
-			lttng_msgpack_write_signed_integer(writer,
+			ret = lttng_msgpack_write_signed_integer(writer,
 				capture_sequence_element_signed(ptr, integer_type));
 		} else {
-			lttng_msgpack_write_unsigned_integer(writer,
+			ret = lttng_msgpack_write_unsigned_integer(writer,
 				capture_sequence_element_unsigned(ptr, integer_type));
+		}
+		if (ret) {
+			goto end;
 		}
 
 		/*
@@ -209,14 +242,17 @@ void capture_sequence(struct lttng_msgpack_writer *writer,
 		ptr += (integer_type->size / CHAR_BIT) ;
 	}
 
-	lttng_msgpack_end_array(writer);
+	ret = lttng_msgpack_end_array(writer);
+end:
+	return ret;
 }
 
 static
-void notification_init(struct lttng_event_notifier_notification *notif,
+int notification_init(struct lttng_event_notifier_notification *notif,
 		const struct lttng_ust_event_notifier *event_notifier)
 {
 	struct lttng_msgpack_writer *writer = &notif->writer;
+	int ret = 0;
 
 	notif->event_notifier_token = event_notifier->priv->parent.user_token;
 	notif->notification_fd = event_notifier->priv->group->notification_fd;
@@ -226,48 +262,56 @@ void notification_init(struct lttng_event_notifier_notification *notif,
 		lttng_msgpack_writer_init(writer, notif->capture_buf,
 				CAPTURE_BUFFER_SIZE);
 
-		lttng_msgpack_begin_array(writer, event_notifier->priv->num_captures);
+		ret = lttng_msgpack_begin_array(writer, event_notifier->priv->num_captures);
+		if (ret) {
+			goto end;
+		}
 		notif->has_captures = true;
 	}
+end:
+	return ret;
 }
 
 static
-void notification_append_capture(
+int notification_append_capture(
 		struct lttng_event_notifier_notification *notif,
 		struct lttng_interpreter_output *output)
 {
 	struct lttng_msgpack_writer *writer = &notif->writer;
+	int ret;
 
 	switch (output->type) {
 	case LTTNG_INTERPRETER_TYPE_S64:
-		lttng_msgpack_write_signed_integer(writer, output->u.s);
+		ret = lttng_msgpack_write_signed_integer(writer, output->u.s);
 		break;
 	case LTTNG_INTERPRETER_TYPE_U64:
-		lttng_msgpack_write_unsigned_integer(writer, output->u.u);
+		ret = lttng_msgpack_write_unsigned_integer(writer, output->u.u);
 		break;
 	case LTTNG_INTERPRETER_TYPE_DOUBLE:
-		lttng_msgpack_write_double(writer, output->u.d);
+		ret = lttng_msgpack_write_double(writer, output->u.d);
 		break;
 	case LTTNG_INTERPRETER_TYPE_STRING:
-		lttng_msgpack_write_str(writer, output->u.str.str);
+		ret = lttng_msgpack_write_str(writer, output->u.str.str);
 		break;
 	case LTTNG_INTERPRETER_TYPE_SEQUENCE:
-		capture_sequence(writer, output);
+		ret = capture_sequence(writer, output);
 		break;
 	case LTTNG_INTERPRETER_TYPE_SIGNED_ENUM:
 	case LTTNG_INTERPRETER_TYPE_UNSIGNED_ENUM:
-		capture_enum(writer, output);
+		ret = capture_enum(writer, output);
 		break;
 	default:
-		abort();
+		CRIT("Unknown capture output type\n");
+		ret = -1;
 	}
+	return ret;
 }
 
 static
-void notification_append_empty_capture(
+int notification_append_empty_capture(
 		struct lttng_event_notifier_notification *notif)
 {
-	lttng_msgpack_write_nil(&notif->writer);
+	return lttng_msgpack_write_nil(&notif->writer);
 }
 
 static void record_error(const struct lttng_ust_event_notifier *event_notifier)
@@ -359,6 +403,17 @@ void notification_send(struct lttng_event_notifier_notification *notif,
 	}
 }
 
+/*
+ * Validate that the buffer has enough room to hold empty capture fields.
+ */
+static
+bool validate_buffer_len(struct lttng_event_notifier_notification *notif, size_t captures_left)
+{
+	if (notif->writer.end_write_pos - notif->writer.write_pos < MSG_WRITE_NIL_LEN * captures_left)
+		return false;
+	return true;
+}
+
 void lttng_event_notifier_notification_send(
 		const struct lttng_ust_event_notifier *event_notifier,
 		const char *stack_data,
@@ -370,8 +425,14 @@ void lttng_event_notifier_notification_send(
 	 * allocation in this context.
 	 */
 	struct lttng_event_notifier_notification notif = {0};
+	size_t captures_left;
 
-	notification_init(&notif, event_notifier);
+	if (notification_init(&notif, event_notifier))
+		goto error;
+
+	captures_left = event_notifier->priv->num_captures;
+	if (!validate_buffer_len(&notif, captures_left))
+		goto error;
 
 	if (caa_unlikely(notif_ctx->eval_capture)) {
 		struct lttng_ust_bytecode_runtime *capture_bc_runtime;
@@ -385,18 +446,41 @@ void lttng_event_notifier_notification_send(
 		cds_list_for_each_entry_rcu(capture_bc_runtime,
 				&event_notifier->priv->capture_bytecode_runtime_head, node) {
 			struct lttng_interpreter_output output;
+			uint8_t *save_pos;
+			int ret = -1;
 
+			lttng_msgpack_save_writer_pos(&notif.writer, &save_pos);
 			if (capture_bc_runtime->interpreter_func(capture_bc_runtime,
 					stack_data, probe_ctx, &output) == LTTNG_UST_BYTECODE_INTERPRETER_OK)
-				notification_append_capture(&notif, &output);
-			else
-				notification_append_empty_capture(&notif);
+				ret = notification_append_capture(&notif, &output);
+			if (ret || !validate_buffer_len(&notif, captures_left)) {
+				/*
+				 * On append capture error or if the generated
+				 * buffer data would not leave enough room to
+				 * write empty capture fields for the remaining
+				 * fields, skip the field capture by restoring
+				 * the msgpack writer position and writing an
+				 * empty capture field.
+				 */
+				lttng_msgpack_restore_writer_pos(&notif.writer, save_pos);
+				ret = notification_append_empty_capture(&notif);
+				if (ret)
+					CRIT("Not enough space for empty capture field\n");
+			}
 		}
 	}
+
+	if (notif.has_captures && lttng_msgpack_end_array(&notif.writer))
+		goto error;
 
 	/*
 	 * Send the notification (including the capture buffer) to the
 	 * sessiond.
 	 */
 	notification_send(&notif, event_notifier);
+	return;
+
+error:
+	record_error(event_notifier);
+	return;
 }
