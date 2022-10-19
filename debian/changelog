@@ -1,3 +1,11 @@
+ust (2.13.5-1~ubuntu22.04.1) jammy; urgency=medium
+
+  * [cfba21e] New upstream version 2.13.5
+  * [8191724] Mark LTO optional symbols (Closes: #1015698)
+  * [867a84e] Refresh jni libdir patch
+
+ -- Michael Jeanson <mjeanson@debian.org>  Wed, 19 Oct 2022 13:52:05 -0400
+
 ust (2.13.3-1~ubuntu22.04.1) jammy; urgency=medium
 
   * [92abdd1] New upstream version 2.13.3
