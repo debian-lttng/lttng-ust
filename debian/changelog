@@ -1,3 +1,10 @@
+ust (2.13.5-1~ubuntu20.04.1) focal; urgency=medium
+
+  * [cfba21e] New upstream version 2.13.5
+  * [2178181] Refresh jni libdir patch
+
+ -- Michael Jeanson <mjeanson@debian.org>  Wed, 19 Oct 2022 13:56:51 -0400
+
 ust (2.13.3-1~ubuntu20.04.1) focal; urgency=medium
 
   * [92abdd1] New upstream version 2.13.3
