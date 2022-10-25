@@ -1,4 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: lttng-ust
+Upstream-Contact: https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 Files: *
 Copyright: 2009-2012, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
