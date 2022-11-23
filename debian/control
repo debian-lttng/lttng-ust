@@ -2,7 +2,7 @@ Source: ust
 Priority: optional
 Maintainer: Jon Bernard <jbernard@debian.org>
 Uploaders: Michael Jeanson <mjeanson@debian.org>
-Build-Depends: debhelper-compat (= 12),
+Build-Depends: debhelper-compat (= 13),
   default-jdk [!hppa] <!nojava> | default-jdk-headless [!hppa] <!nojava>,
   dh-python,
   javahelper [!hppa] <!nojava>,
