@@ -10,6 +10,16 @@
 
 #include <assert.h>
 
+/*
+ * By default, LTTng-UST uses the priority 150 for the tracepoint and probe
+ * provider constructors to trace tracepoints located within
+ * constructors/destructors with a higher priority value within the same
+ * module. This priority can be overridden by the application.
+ */
+#ifndef LTTNG_UST_CONSTRUCTOR_PRIO
+#define LTTNG_UST_CONSTRUCTOR_PRIO	150
+#endif
+
 #define lttng_ust_notrace __attribute__((no_instrument_function))
 
 /*
@@ -75,15 +85,17 @@
 /*
  * Evaluates the predicate and emit a compilation error on failure.
  *
- * If the predicate evaluates to true, this macro emits a typedef of an array
- * of size 0.
+ * If the predicate evaluates to true, this macro emits a function
+ * prototype with an argument type which is an array of size 0.
  *
- * If the predicate evaluates to false, this macro emits a typedef of an array
- * of negative size which is invalid in C and forces a compiler error. The msg
- * parameter is used in the tentative typedef so it is printed to the user.
+ * If the predicate evaluates to false, this macro emits a function
+ * prototype with an argument type which is an array of negative size
+ * which is invalid in C and forces a compiler error. The
+ * c_identifier_msg parameter is used as the argument identifier so it
+ * is printed to the user when the error is reported.
  */
 #define lttng_ust_static_assert(predicate, msg, c_identifier_msg)  \
-    typedef char lttng_ust_static_assert_##c_identifier_msg[2*!!(predicate)-1]
+	void lttng_ust_static_assert_proto(char c_identifier_msg[2*!!(predicate)-1])
 #endif
 
 /* Combine two tokens. */
@@ -93,11 +105,17 @@
 		LTTNG_UST_COMPILER__COMBINE_TOKENS(_tokena, _tokenb)
 /*
  * Wrap constructor and destructor functions to invoke them as functions with
- * the constructor/destructor GNU C attributes when building as C, or as the
- * constructor/destructor of a variable defined within an anonymous namespace
- * when building as C++.
+ * the constructor/destructor GNU C attributes, which ensures that those
+ * constructors/destructors are ordered before/after C++
+ * constructors/destructors.
+ *
+ * Wrap constructor and destructor functions as the constructor/destructor of a
+ * variable defined within an anonymous namespace when building as C++ with
+ * LTTNG_UST_ALLOCATE_COMPOUND_LITERAL_ON_HEAP defined. With this option,
+ * there are no guarantees that the events in C++ constructors/destructors will
+ * be traced.
  */
-#ifdef __cplusplus
+#if defined (__cplusplus) && defined (LTTNG_UST_ALLOCATE_COMPOUND_LITERAL_ON_HEAP)
 #define LTTNG_UST_DECLARE_CONSTRUCTOR_DESTRUCTOR(name, constructor_func,	\
 						 destructor_func, ...)		\
 namespace lttng {								\
@@ -126,17 +144,17 @@ const lttng::ust::details::LTTNG_UST_COMPILER_COMBINE_TOKENS(			\
 	lttng_ust_constructor_destructor_, name)				\
 		LTTNG_UST_COMPILER_COMBINE_TOKENS(name, registration_instance); \
 }
-#else /* __cplusplus */
+#else
 #define LTTNG_UST_DECLARE_CONSTRUCTOR_DESTRUCTOR(name, constructor_func,	\
 						 destructor_func, ...)		\
 	static void LTTNG_UST_COMPILER_COMBINE_TOKENS(lttng_ust_constructor_, name)(void) \
-		__attribute__((constructor)) __VA_ARGS__;			\
+		__attribute__((constructor(LTTNG_UST_CONSTRUCTOR_PRIO))) __VA_ARGS__; \
 	static void LTTNG_UST_COMPILER_COMBINE_TOKENS(lttng_ust_constructor_, name)(void) \
 	{									\
 		constructor_func();						\
 	}									\
 	static void LTTNG_UST_COMPILER_COMBINE_TOKENS(lttng_ust_destructor_, name)(void) \
-		__attribute__((destructor)) __VA_ARGS__;			\
+		__attribute__((destructor(LTTNG_UST_CONSTRUCTOR_PRIO))) __VA_ARGS__; \
 	static void LTTNG_UST_COMPILER_COMBINE_TOKENS(lttng_ust_destructor_, name)(void) \
 	{									\
 		destructor_func();						\
