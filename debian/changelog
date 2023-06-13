@@ -1,3 +1,9 @@
+ust (2.13.6-2) unstable; urgency=medium
+
+  * [ec5d2be] Set python install layout to 'deb'
+
+ -- Michael Jeanson <mjeanson@debian.org>  Tue, 13 Jun 2023 14:42:45 -0400
+
 ust (2.13.6-1) unstable; urgency=medium
 
   [ Debian Janitor ]
