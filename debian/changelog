@@ -1,3 +1,18 @@
+ust (2.13.6-1) unstable; urgency=medium
+
+  [ Debian Janitor ]
+  * [1bbb9e3] Set fields Upstream-Name, Upstream-Contact in debian/copyright.
+  * [2002ca8] Set upstream metadata fields: Bug-Submit (from ./configure).
+  * [9b6ee2f] Remove obsolete fields Contact, Name from
+    debian/upstream/metadata (already present in machine-readable
+    debian/copyright).
+  * [2e13d21] Remove constraints unnecessary since buster (oldstable)
+
+  [ Michael Jeanson ]
+  * [ed95f59] New upstream version 2.13.6
+
+ -- Michael Jeanson <mjeanson@debian.org>  Tue, 13 Jun 2023 14:18:25 -0400
+
 ust (2.13.5-1) unstable; urgency=medium
 
   * [cfba21e] New upstream version 2.13.5
