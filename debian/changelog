@@ -1,3 +1,9 @@
+ust (2.13.6-1~ubuntu22.04.1) jammy; urgency=medium
+
+  * [ed95f59] New upstream version 2.13.6
+
+ -- Michael Jeanson <mjeanson@debian.org>  Tue, 13 Jun 2023 16:52:15 -0400
+
 ust (2.13.5-1~ubuntu22.04.1) jammy; urgency=medium
 
   * [cfba21e] New upstream version 2.13.5
