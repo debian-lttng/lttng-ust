@@ -2,3 +2,8 @@
 include:
   - https://salsa.debian.org/salsa-ci-team/pipeline/raw/master/salsa-ci.yml
   - https://salsa.debian.org/salsa-ci-team/pipeline/raw/master/pipeline-jobs.yml
+
+variables:
+  SALSA_CI_LINTIAN_FAIL_WARNING: false
+  SALSA_CI_LINTIAN_SHOW_OVERRIDES: true
+  SALSA_CI_REPROTEST_ENABLE_DIFFOSCOPE: true
