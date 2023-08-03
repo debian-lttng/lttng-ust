@@ -1,0 +1,3 @@
+# RUNPATH required for JNI libraries
+liblttng-ust-agent-java-jni: custom-library-search-path RUNPATH /usr/lib/*/jni [usr/lib/*/jni/liblttng-ust-jul-jni.so.0.0.0]
+liblttng-ust-agent-java-jni: custom-library-search-path RUNPATH /usr/lib/*/jni [usr/lib/*/jni/liblttng-ust-log4j-jni.so.0.0.0]
