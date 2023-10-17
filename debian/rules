@@ -55,3 +55,7 @@ ifeq ($(shell dpkg-buildflags --get LDFLAGS | grep -q -- '-Wl,-Bsymbolic-functio
 else
 	dh_auto_test
 endif
+
+execute_after_dh_auto_clean:
+	rm -f src/python-lttngust/installed_files.txt
+	rm -rf src/python-lttngust/lttngust.egg-info

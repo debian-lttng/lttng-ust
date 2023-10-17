@@ -1,0 +1,11 @@
+Clean additionnal class files in the form of 'Class%InnerClass.class' created
+when a class contains inner classes.
+
+--- a/doc/examples/java-jul/Makefile
++++ b/doc/examples/java-jul/Makefile
+@@ -40,4 +40,4 @@
+ 
+ .PHONY: clean
+ clean:
+-	$(RM) $(CLASSES:.java=.class)
++	$(RM) $(CLASSES:.java=*.class)
