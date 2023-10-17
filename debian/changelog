@@ -1,3 +1,18 @@
+ust (2.13.6-3) unstable; urgency=medium
+
+  [ Michael Jeanson ]
+  * [33be613] Add lintian override for JNI RUNPATH
+
+  [ Andreas Hasenack ]
+  * [4202827] Adjust test if -Wl,-Bsymbolic-functions is used
+
+  [ Michael Jeanson ]
+  * [bd6978f] Update salsa-ci config
+  * [98d9799] Fix salsa-ci.yaml syntax
+  * [6709a6a] Fix clean target (Closes: #1047714)
+
+ -- Michael Jeanson <mjeanson@debian.org>  Tue, 17 Oct 2023 16:08:22 -0400
+
 ust (2.13.6-2) unstable; urgency=medium
 
   * [ec5d2be] Set python install layout to 'deb'
