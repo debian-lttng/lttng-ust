@@ -247,7 +247,12 @@ struct lttng_event_notifier_group {
 	void *owner;
 	int notification_fd;
 	struct cds_list_head node;		/* Event notifier group handle list */
-	struct cds_list_head enablers_head;
+
+	/* List of non-synchronized enablers */
+	struct cds_list_head unsync_enablers_head;
+	/* List of synchronized enablers */
+	struct cds_list_head sync_enablers_head;
+
 	struct cds_list_head event_notifiers_head; /* list of event_notifiers */
 	struct lttng_ust_event_notifier_ht event_notifiers_ht; /* hashtable of event_notifiers */
 	struct lttng_ust_ctx *ctx;		/* contexts for filters. */
@@ -331,13 +336,16 @@ struct lttng_ust_session_private {
 	struct cds_list_head events_head;	/* list of events */
 	struct cds_list_head node;		/* Session list */
 
-	/* List of enablers */
-	struct cds_list_head enablers_head;
+	/* List of non-synchronized enablers */
+	struct cds_list_head unsync_enablers_head;
+	/* List of synchronized enablers */
+	struct cds_list_head sync_enablers_head;
+
 	struct lttng_ust_event_ht events_ht;	/* ht of events */
 	void *owner;				/* object owner */
-	int tstate:1;				/* Transient enable state */
+	unsigned int tstate:1;			/* Transient enable state */
 
-	int statedump_pending:1;
+	unsigned int statedump_pending:1;
 
 	struct lttng_ust_enum_ht enums_ht;	/* ht of enumerations */
 	struct cds_list_head enums_head;
@@ -385,7 +393,7 @@ struct lttng_ust_channel_common_private {
 	struct lttng_ust_channel_common *pub;	/* Public channel interface */
 
 	int objd;				/* Object associated with channel. */
-	int tstate:1;				/* Transient enable state */
+	unsigned int tstate:1;			/* Transient enable state */
 };
 
 struct lttng_ust_channel_buffer_private {
