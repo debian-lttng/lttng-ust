@@ -99,6 +99,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/ae_config_feature.m4 \
 	$(top_srcdir)/m4/ax_c___attribute__.m4 \
 	$(top_srcdir)/m4/ax_check_class.m4 \
 	$(top_srcdir)/m4/ax_check_compile_flag.m4 \
+	$(top_srcdir)/m4/ax_compare_version.m4 \
 	$(top_srcdir)/m4/ax_cxx_compile_stdcxx.m4 \
 	$(top_srcdir)/m4/ax_java_options.m4 \
 	$(top_srcdir)/m4/ax_jni_include_dir.m4 \
@@ -331,6 +332,15 @@ STATIC_BINDINGS_DEPS = \
 	lttngust/debug.py \
 	lttngust/loghandler.py
 
+GENERATED_BINDINGS_DEPS = \
+	lttngust/version.py \
+	setup.py
+
+
+# For python < 3.12, force the use of distutils even if setuptools is
+# installed. For python >= 3.12, set the externally managed option to allow
+# installation in a directory which isn't in the current PYTHONPATH.
+@HAVE_PYTHON_312_OR_GREATER_TRUE@PY_INSTALL_OPTS = --single-version-externally-managed
 EXTRA_DIST = $(STATIC_BINDINGS_DEPS)
 CLEANFILES = \
 	build-python-bindings.stamp \
@@ -533,6 +543,7 @@ uninstall-am: uninstall-local
 
 .PRECIOUS: Makefile
 
+@HAVE_PYTHON_312_OR_GREATER_FALSE@export SETUPTOOLS_USE_DISTUTILS=stdlib
 
 all-local: build-python-bindings.stamp
 
@@ -547,7 +558,7 @@ copy-static-deps.stamp: $(addprefix $(srcdir)/, $(STATIC_BINDINGS_DEPS))
 # Use setup.py for the installation instead of Autoconf.
 # This ease the installation process and assure a *pythonic*
 # installation.
-build-python-bindings.stamp: copy-static-deps.stamp
+build-python-bindings.stamp: copy-static-deps.stamp $(GENERATED_BINDINGS_DEPS)
 	$(PYTHON) $(builddir)/setup.py build --force
 	touch $@
 
@@ -556,7 +567,7 @@ install-exec-local: build-python-bindings.stamp
 	if [ "$(DESTDIR)" != "" ]; then \
 		opts="$$opts --root=$(DESTDIR)"; \
 	fi; \
-	$(PYTHON) $(builddir)/setup.py install $$opts;
+	$(PYTHON) $(builddir)/setup.py install $(PY_INSTALL_OPTS) $$opts;
 
 clean-local:
 	rm -rf $(builddir)/build
