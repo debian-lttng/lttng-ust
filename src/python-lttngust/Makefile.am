@@ -10,6 +10,19 @@ STATIC_BINDINGS_DEPS = \
 	lttngust/debug.py \
 	lttngust/loghandler.py
 
+GENERATED_BINDINGS_DEPS = \
+	lttngust/version.py \
+	setup.py
+
+# For python < 3.12, force the use of distutils even if setuptools is
+# installed. For python >= 3.12, set the externally managed option to allow
+# installation in a directory which isn't in the current PYTHONPATH.
+if HAVE_PYTHON_312_OR_GREATER
+PY_INSTALL_OPTS = --single-version-externally-managed
+else
+export SETUPTOOLS_USE_DISTUTILS=stdlib
+endif
+
 all-local: build-python-bindings.stamp
 
 copy-static-deps.stamp: $(addprefix $(srcdir)/, $(STATIC_BINDINGS_DEPS))
@@ -23,7 +36,7 @@ copy-static-deps.stamp: $(addprefix $(srcdir)/, $(STATIC_BINDINGS_DEPS))
 # Use setup.py for the installation instead of Autoconf.
 # This ease the installation process and assure a *pythonic*
 # installation.
-build-python-bindings.stamp: copy-static-deps.stamp
+build-python-bindings.stamp: copy-static-deps.stamp $(GENERATED_BINDINGS_DEPS)
 	$(PYTHON) $(builddir)/setup.py build --force
 	touch $@
 
@@ -32,7 +45,7 @@ install-exec-local: build-python-bindings.stamp
 	if [ "$(DESTDIR)" != "" ]; then \
 		opts="$$opts --root=$(DESTDIR)"; \
 	fi; \
-	$(PYTHON) $(builddir)/setup.py install $$opts;
+	$(PYTHON) $(builddir)/setup.py install $(PY_INSTALL_OPTS) $$opts;
 
 clean-local:
 	rm -rf $(builddir)/build
