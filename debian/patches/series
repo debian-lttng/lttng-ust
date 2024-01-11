@@ -1,3 +1,2 @@
-clean-java-classes.patch
 fix-jni-libdir.patch
 use-python3.patch
