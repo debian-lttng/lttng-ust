@@ -1,3 +1,9 @@
+ust (2.13.7-1~ubuntu22.04.1) jammy; urgency=medium
+
+  * [5f3b9a6] New upstream version 2.13.7
+
+ -- Michael Jeanson <mjeanson@debian.org>  Thu, 11 Jan 2024 11:32:40 -0500
+
 ust (2.13.6-1~ubuntu22.04.1) jammy; urgency=medium
 
   * [ed95f59] New upstream version 2.13.6
