@@ -1,3 +1,10 @@
+ust (2.13.7-1) unstable; urgency=medium
+
+  * [5f3b9a6] New upstream version 2.13.7
+  * [280b137] Drop patch merged upstream
+
+ -- Michael Jeanson <mjeanson@debian.org>  Thu, 11 Jan 2024 10:55:32 -0500
+
 ust (2.13.6-3) unstable; urgency=medium
 
   [ Michael Jeanson ]
