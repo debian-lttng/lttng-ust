@@ -8,7 +8,7 @@ dnl Process this file with autoconf to produce a configure script.
 # Project version information
 m4_define([ust_version_major], [2])
 m4_define([ust_version_minor], [13])
-m4_define([ust_version_patch], [6])
+m4_define([ust_version_patch], [7])
 m4_define([ust_version_dev_stage], [])
 m4_define([ust_version], ust_version_major[.]ust_version_minor[.]ust_version_patch[]ust_version_dev_stage)
 m4_define([ust_version_name], [[Nordicité]])
@@ -482,6 +482,17 @@ Cannot find a suitable python interpreter. You can override it with the PYTHON
 environment variable.
     ])
   ])
+
+  AX_COMPARE_VERSION(["$PYTHON_VERSION"], [ge], ["3.12"], [
+    have_python_312_or_greater=yes
+    AC_MSG_CHECKING([for python setuptools])
+    AS_IF(["$PYTHON" -c "import setuptools" 2>/dev/null], [
+      AC_MSG_RESULT([yes])
+    ], [
+      AC_MSG_RESULT([no])
+      AC_MSG_ERROR([Python >= 3.12 removed 'distutils', the 'setuptools' module needs to be installed for the selected interpreter.])
+    ])
+  ])
 ])
 
 # Check for asciidoc and xmlto if we enabled building the man pages.
@@ -567,6 +578,7 @@ AM_CONDITIONAL([HAVE_CMAKE], [test "x$CMAKE" != "x"])
 AM_CONDITIONAL([HAVE_CXX], [test "$HAVE_CXX11" = "1"])
 AM_CONDITIONAL([HAVE_JAVAH], [test "x$JAVAH" != "x"])
 AM_CONDITIONAL([HAVE_PERF_EVENT], [test "x$ac_cv_header_linux_perf_event_h" = "xyes"])
+AM_CONDITIONAL([HAVE_PYTHON_312_OR_GREATER], [test "x$have_python_312_or_greater" = "xyes"])
 
 
 ##                                             ##

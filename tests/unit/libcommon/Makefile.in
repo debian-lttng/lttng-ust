@@ -105,6 +105,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/ae_config_feature.m4 \
 	$(top_srcdir)/m4/ax_c___attribute__.m4 \
 	$(top_srcdir)/m4/ax_check_class.m4 \
 	$(top_srcdir)/m4/ax_check_compile_flag.m4 \
+	$(top_srcdir)/m4/ax_compare_version.m4 \
 	$(top_srcdir)/m4/ax_cxx_compile_stdcxx.m4 \
 	$(top_srcdir)/m4/ax_java_options.m4 \
 	$(top_srcdir)/m4/ax_jni_include_dir.m4 \
