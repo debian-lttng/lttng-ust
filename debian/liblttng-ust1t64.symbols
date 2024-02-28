@@ -1,27 +1,27 @@
-liblttng-ust-cyg-profile-fast.so.1 liblttng-ust1 #MINVER#
+liblttng-ust-cyg-profile-fast.so.1 liblttng-ust1t64 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  __cyg_profile_func_enter@Base 2.13.0
  __cyg_profile_func_exit@Base 2.13.0
  (optional=lto)__start_lttng_ust_tracepoints_ptrs@Base 2.13.0
  (optional=lto)__stop_lttng_ust_tracepoints_ptrs@Base 2.13.0
-liblttng-ust-cyg-profile.so.1 liblttng-ust1 #MINVER#
+liblttng-ust-cyg-profile.so.1 liblttng-ust1t64 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  __cyg_profile_func_enter@Base 2.13.0
  __cyg_profile_func_exit@Base 2.13.0
  (optional=lto)__start_lttng_ust_tracepoints_ptrs@Base 2.13.0
  (optional=lto)__stop_lttng_ust_tracepoints_ptrs@Base 2.13.0
-liblttng-ust-dl.so.1 liblttng-ust1 #MINVER#
+liblttng-ust-dl.so.1 liblttng-ust1t64 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  (optional=lto)__start_lttng_ust_tracepoints_ptrs@Base 2.13.0
  (optional=lto)__stop_lttng_ust_tracepoints_ptrs@Base 2.13.0
  dlclose@Base 2.13.0
  dlmopen@Base 2.13.0
  dlopen@Base 2.13.0
-liblttng-ust-fd.so.1 liblttng-ust1 #MINVER#
+liblttng-ust-fd.so.1 liblttng-ust1t64 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  close@Base 2.13.0
  fclose@Base 2.13.0
-liblttng-ust-fork.so.1 liblttng-ust1 #MINVER#
+liblttng-ust-fork.so.1 liblttng-ust1t64 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  clone@Base 2.13.0
  daemon@Base 2.13.0
@@ -36,7 +36,7 @@ liblttng-ust-fork.so.1 liblttng-ust1 #MINVER#
  setreuid@Base 2.13.0
  setuid@Base 2.13.0
  unshare@Base 2.13.0
-liblttng-ust-libc-wrapper.so.1 liblttng-ust1 #MINVER#
+liblttng-ust-libc-wrapper.so.1 liblttng-ust1t64 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  (optional=lto)__start_lttng_ust_tracepoints_ptrs@Base 2.13.0
  (optional=lto)__stop_lttng_ust_tracepoints_ptrs@Base 2.13.0
@@ -47,14 +47,14 @@ liblttng-ust-libc-wrapper.so.1 liblttng-ust1 #MINVER#
  memalign@Base 2.13.0
  posix_memalign@Base 2.13.0
  realloc@Base 2.13.0
-liblttng-ust-pthread-wrapper.so.1 liblttng-ust1 #MINVER#
+liblttng-ust-pthread-wrapper.so.1 liblttng-ust1t64 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  (optional=lto)__start_lttng_ust_tracepoints_ptrs@Base 2.13.0
  (optional=lto)__stop_lttng_ust_tracepoints_ptrs@Base 2.13.0
  pthread_mutex_lock@Base 2.13.0
  pthread_mutex_trylock@Base 2.13.0
  pthread_mutex_unlock@Base 2.13.0
-liblttng-ust-tracepoint.so.1 liblttng-ust1 #MINVER#
+liblttng-ust-tracepoint.so.1 liblttng-ust1t64 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  lttng_ust_tp_disable_destructors@Base 2.13.0
  lttng_ust_tp_exit@Base 2.13.0
@@ -71,7 +71,7 @@ liblttng-ust-tracepoint.so.1 liblttng-ust1 #MINVER#
  lttng_ust_tracepoint_provider_register@Base 2.13.0
  lttng_ust_tracepoint_provider_unregister@Base 2.13.0
  tracepoint_register_lib@Base 2.13.0
-liblttng-ust.so.1 liblttng-ust1 #MINVER#
+liblttng-ust.so.1 liblttng-ust1t64 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  init_usterr@Base 2.13.0
  lttng_ust__tracef@Base 2.13.0

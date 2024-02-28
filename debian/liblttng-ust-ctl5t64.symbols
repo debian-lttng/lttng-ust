@@ -1,4 +1,4 @@
-liblttng-ust-ctl.so.5 liblttng-ust-ctl5 #MINVER#
+liblttng-ust-ctl.so.5 liblttng-ust-ctl5t64 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  lttng_ust_ctl_add_context@Base 2.13.0
  lttng_ust_ctl_calibrate@Base 2.13.0

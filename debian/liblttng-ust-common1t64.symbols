@@ -1,4 +1,4 @@
-liblttng-ust-common.so.1 liblttng-ust-common1 #MINVER#
+liblttng-ust-common.so.1 liblttng-ust-common1t64 #MINVER#
 * Build-Depends-Package: liblttng-ust-dev
  (arch=m68k,riscv64)__tls_access_lttng_ust_urcu_reader@Base 2.13.0
  lttng_ust_add_fd_to_tracker@Base 2.13.0

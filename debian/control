@@ -2,7 +2,7 @@ Source: ust
 Priority: optional
 Maintainer: Jon Bernard <jbernard@debian.org>
 Uploaders: Michael Jeanson <mjeanson@debian.org>
-Build-Depends: debhelper-compat (= 12),
+Build-Depends: dpkg-dev (>= 1.22.5), debhelper-compat (= 12),
   default-jdk [!hppa] <!nojava> | default-jdk-headless [!hppa] <!nojava>,
   dh-python,
   javahelper [!hppa] <!nojava>,
@@ -21,7 +21,10 @@ Vcs-Git: https://salsa.debian.org/debian/ust.git
 Vcs-Browser: https://salsa.debian.org/debian/ust
 Homepage: https://lttng.org/
 
-Package: liblttng-ust-common1
+Package: liblttng-ust-common1t64
+Provides: ${t64:Provides}
+Replaces: liblttng-ust-common1
+Breaks: liblttng-ust-common1 (<< ${source:Version})
 Architecture: linux-any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
@@ -35,13 +38,16 @@ Description: LTTng 2.0 Userspace Tracer (common library)
  This package contains the common library used by the tracing and control
  libraries.
 
-Package: liblttng-ust1
+Package: liblttng-ust1t64
+Provides: ${t64:Provides}
+Replaces: liblttng-ust1
+Breaks: liblttng-ust1 (<< ${source:Version})
 Architecture: linux-any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends},
-  liblttng-ust-common1 (= ${binary:Version}),
-  liblttng-ust-ctl5 (= ${binary:Version})
+  liblttng-ust-common1t64 (= ${binary:Version}),
+  liblttng-ust-ctl5t64 (= ${binary:Version})
 Description: LTTng 2.0 Userspace Tracer (tracing libraries)
  The userspace tracer is designed to provide detailed information about
  userspace activity. Like the kernel tracer, performance is the main goal.
@@ -51,12 +57,15 @@ Description: LTTng 2.0 Userspace Tracer (tracing libraries)
  This package contains the actual userspace tracing library that must be linked
  to the instrumented programs.
 
-Package: liblttng-ust-ctl5
+Package: liblttng-ust-ctl5t64
+Provides: ${t64:Provides}
+Replaces: liblttng-ust-ctl5
+Breaks: liblttng-ust-ctl5 (<< ${source:Version})
 Architecture: linux-any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends},
-  liblttng-ust-common1 (= ${binary:Version})
+  liblttng-ust-common1t64 (= ${binary:Version})
 Description: LTTng 2.0 Userspace Tracer (trace control library)
  The userspace tracer is designed to provide detailed information about
  userspace activity. Like the kernel tracer, performance is the main goal.
@@ -71,8 +80,8 @@ Section: libdevel
 Architecture: linux-any
 Multi-Arch: same
 Depends: ${misc:Depends},
-  liblttng-ust1 (= ${binary:Version}), liblttng-ust-ctl5 (= ${binary:Version}),
-  liblttng-ust-python-agent1 (= ${binary:Version}), liburcu-dev (>= 0.12~),
+  liblttng-ust1t64 (= ${binary:Version}), liblttng-ust-ctl5t64 (= ${binary:Version}),
+  liblttng-ust-python-agent1t64 (= ${binary:Version}), liburcu-dev (>= 0.12~),
   uuid-dev
 Recommends: python3
 Description: LTTng 2.0 Userspace Tracer (development files)
@@ -150,12 +159,15 @@ Description: LTTng 2.0 Userspace Tracer (Java agent JNI interface)
  .
  This package contains the native side of the Java agent for lttng-ust.
 
-Package: liblttng-ust-python-agent1
+Package: liblttng-ust-python-agent1t64
+Provides: ${t64:Provides}
+Replaces: liblttng-ust-python-agent1
+Breaks: liblttng-ust-python-agent1 (<< ${source:Version})
 Architecture: linux-any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends},
-  liblttng-ust1 (= ${binary:Version})
+  liblttng-ust1t64 (= ${binary:Version})
 Description: LTTng 2.0 Userspace Tracer (Python agent native library)
  The userspace tracer is designed to provide detailed information about
  userspace activity. Like the kernel tracer, performance is the main goal.
@@ -169,8 +181,8 @@ Section: python
 Architecture: all
 Multi-Arch: foreign
 Depends: ${misc:Depends}, ${python3:Depends},
-  liblttng-ust-python-agent1 (>= ${source:Version}),
-  liblttng-ust-python-agent1 (<< ${source:Version}.1~)
+  liblttng-ust-python-agent1t64 (>= ${source:Version}),
+  liblttng-ust-python-agent1t64 (<< ${source:Version}.1~)
 Description: LTTng 2.0 Userspace Tracer (Python 3 UST agent)
  The userspace tracer is designed to provide detailed information about
  userspace activity. Like the kernel tracer, performance is the main goal.
